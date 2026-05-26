@@ -1,0 +1,5 @@
+add_executable(test_stm32_transport main.cpp)
+target_link_libraries(test_stm32_transport PRIVATE arches_platform)
+target_include_directories(test_stm32_transport PRIVATE ${CMAKE_SOURCE_DIR}/src)
+add_test(NAME test_stm32_transport COMMAND test_stm32_transport)
+set_tests_properties(test_stm32_transport PROPERTIES TIMEOUT 60)

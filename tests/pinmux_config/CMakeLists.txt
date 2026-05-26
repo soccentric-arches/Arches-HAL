@@ -1,0 +1,5 @@
+add_executable(test_pinmux_config main.cpp)
+target_link_libraries(test_pinmux_config PRIVATE arches_platform)
+target_include_directories(test_pinmux_config PRIVATE ${CMAKE_SOURCE_DIR}/src)
+add_test(NAME test_pinmux_config COMMAND test_pinmux_config)
+set_tests_properties(test_pinmux_config PROPERTIES TIMEOUT 60)
