@@ -17,7 +17,7 @@
  *   <exe> one-shot                               run all tests once
  *   <exe> monitoring [interval_ms]               run indefinitely at interval (Ctrl+C stops)
  *   <exe> long-term  <interval_ms> <duration>    run for fixed duration
- *   <exe> monitor-test <interval_ms> <duration>  long-term + Pi5 sysfs hardware monitors
+ *   <exe> monitor-test <interval_ms> <duration>  long-term + Arches hardware monitors
  *   <exe> event <poll_ms> <criteria> [max_dur]   fire callback when criteria met
  *
  * Duration formats:  500ms  30s  5m  2h  1d   (plain number = milliseconds)
@@ -26,6 +26,7 @@
 #pragma once
 
 #include "lib_base.h"
+#include "platform_arches.h"
 
 #include <atomic>
 #include <csignal>
@@ -95,23 +96,42 @@ static long long trParseDuration(const std::string& s)
 // Built-in Raspberry Pi 5 hardware monitor items
 // ---------------------------------------------------------------------------
 
-static std::vector<MonitorItem> trPi5MonitorItems()
+static std::string trReadFirstExisting(const std::vector<std::string>& paths)
+{
+    for (const std::string& path : paths) {
+        const std::string value = trReadSysfs(path);
+        if (!value.empty()) {
+            return value;
+        }
+    }
+    return "";
+}
+
+static std::vector<MonitorItem> trArchesMonitorItems()
 {
     return {
         {"cpu_temp_C", []() {
-            std::string v = trReadSysfs("/sys/class/thermal/thermal_zone0/temp");
+            std::vector<std::string> paths;
+            for (const char* path : arches::platform::THERMAL_ZONE_PATHS) {
+                paths.emplace_back(path);
+            }
+            std::string v = trReadFirstExisting(paths);
             if (v.empty()) return std::string("N/A");
             std::ostringstream ss;
             ss << std::fixed << std::setprecision(1) << (std::stod(v) / 1000.0);
             return ss.str();
         }},
         {"cpu0_freq_MHz", []() {
-            std::string v = trReadSysfs("/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq");
+            std::string v = trReadSysfs(arches::platform::CPU_FREQ_PATH);
             if (v.empty()) return std::string("N/A");
             return std::to_string(std::stoll(v) / 1000);
         }},
         {"gpu_freq_MHz", []() {
-            std::string v = trReadSysfs("/sys/class/devfreq/fde00000.gpu/cur_freq");
+            std::vector<std::string> paths;
+            for (const char* path : arches::platform::GPU_FREQ_PATHS) {
+                paths.emplace_back(path);
+            }
+            std::string v = trReadFirstExisting(paths);
             if (v.empty()) return std::string("N/A");
             return std::to_string(std::stoll(v) / 1000000);
         }},
@@ -373,7 +393,7 @@ int runTestApp(const std::string& appName, int argc, char* argv[])
                   << "ms  duration=" << duration_ms << "ms"
                   << "  Ctrl+C to abort early\n";
         std::signal(SIGINT, testRunnerSigHandler);
-        tester.runMonitoringTest(interval_ms, duration_ms, trPi5MonitorItems(),
+        tester.runMonitoringTest(interval_ms, duration_ms, trArchesMonitorItems(),
                                   [](const MonitoringSnapshot& snap) {
                                       trPrintCycleHeader(snap.cycle, "monitor-test", false);
                                       trPrintMonitorData(snap.monitorData);

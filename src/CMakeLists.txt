@@ -8,6 +8,15 @@ install(TARGETS lib_base
 )
 install(FILES lib_base.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/acadia_hal)
 
+add_library(arches_platform stm32_transport.cpp stm32_transport.h platform_arches.h)
+target_include_directories(arches_platform PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(arches_platform PUBLIC Threads::Threads lib_base)
+install(TARGETS arches_platform
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+)
+install(FILES platform_arches.h stm32_transport.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/acadia_hal)
+
 # Add all feature libraries
 add_subdirectory(gpu_lib)
 add_subdirectory(cpu_lib)

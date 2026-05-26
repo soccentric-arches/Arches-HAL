@@ -10,10 +10,13 @@
 
 #include <chrono>
 #include <map>
+#include <memory>
 #include <mutex>
 #include <string>
 #include <thread>
 #include <vector>
+
+class Stm32Transport;
 
 /**
  * @enum GpioDirection
@@ -311,6 +314,9 @@ class GpioTesting : public TestBase
     std::map<int, GpioPin> gpioPins_;
     std::mutex gpioMutex_;
     const int NUM_TEST_PINS = 8; // Number of pins to test
+    std::unique_ptr<Stm32Transport> transport_;
+    bool transportBacked_{false};
+    std::string transportSummary_;
 
     // Helper methods
     bool initializeGpioPins();
@@ -323,6 +329,7 @@ class GpioTesting : public TestBase
     bool testInterruptGeneration(int pin);
     double measureInterruptLatency(int pin);
     bool testConcurrentAccess(int pin1, int pin2);
+    bool sendTransportCommand(std::uint8_t command, const std::vector<std::uint8_t>& payload, bool* value = nullptr);
 };
 
 #endif // GPIOTESTING_H

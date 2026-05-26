@@ -5,13 +5,40 @@
  * @copyright (C) Soccentric LLC */
 
 #include "gpio_lib.h"
-#include "../platform_rpi5.h"
+#include "../platform_arches.h"
+#include "../stm32_transport.h"
+
+namespace {
+
+std::uint8_t directionToByte(GpioDirection direction)
+{
+    return direction == GpioDirection::OUTPUT ? 1 : 0;
+}
+
+std::uint8_t pullModeToByte(GpioPullMode mode)
+{
+    switch (mode) {
+        case GpioPullMode::NONE:
+            return 0;
+        case GpioPullMode::PULL_UP:
+            return 1;
+        case GpioPullMode::PULL_DOWN:
+            return 2;
+    }
+    return 0;
+}
+
+} // namespace
 
 /**
  * @brief Constructor for GpioTesting
  */
 GpioTesting::GpioTesting()
 {
+    transport_ = std::make_unique<Stm32Transport>();
+    const Stm32ProbeResult probe = transport_->probe();
+    transportBacked_ = probe.transportReady;
+    transportSummary_ = probe.summary;
     initializeGpioPins();
 }
 
@@ -37,6 +64,12 @@ bool GpioTesting::initializeGpioPins()
         gpioPins_[i] = pin;
     }
 
+    if (transportBacked_) {
+        for (int i = 0; i < NUM_TEST_PINS; ++i) {
+            sendTransportCommand(arches::platform::STM32_CMD_GPIO_DIRECTION, {static_cast<std::uint8_t>(i), 0});
+        }
+    }
+
     return true;
 }
 
@@ -54,7 +87,9 @@ bool GpioTesting::setPinDirection(int pin, GpioDirection direction)
     }
     gpioPins_[pin].direction = direction;
     gpioPins_[pin].externallyDriven = false; // Reset external drive when changing direction
-    return true;
+    return !transportBacked_ || sendTransportCommand(
+        arches::platform::STM32_CMD_GPIO_DIRECTION,
+        {static_cast<std::uint8_t>(pin), directionToByte(direction)});
 }
 
 /**
@@ -70,7 +105,9 @@ bool GpioTesting::setPinValue(int pin, bool value)
         return false;
     }
     gpioPins_[pin].value = value;
-    return true;
+    return !transportBacked_ || sendTransportCommand(
+        arches::platform::STM32_CMD_GPIO_WRITE,
+        {static_cast<std::uint8_t>(pin), static_cast<std::uint8_t>(value ? 1 : 0)});
 }
 
 /**
@@ -84,6 +121,13 @@ bool GpioTesting::getPinValue(int pin, bool& value)
     std::lock_guard<std::mutex> lock(gpioMutex_);
     if (gpioPins_.find(pin) == gpioPins_.end()) {
         return false;
+    }
+
+    if (transportBacked_) {
+        bool remoteValue = false;
+        if (sendTransportCommand(arches::platform::STM32_CMD_GPIO_READ, {static_cast<std::uint8_t>(pin)}, &remoteValue)) {
+            gpioPins_[pin].value = remoteValue;
+        }
     }
 
     // If pin is externally driven, return the actual pin value
@@ -119,7 +163,22 @@ bool GpioTesting::setPinPullMode(int pin, GpioPullMode mode)
     }
     gpioPins_[pin].pullMode = mode;
     gpioPins_[pin].externallyDriven = false; // Reset external drive when changing pull mode
-    return true;
+    return !transportBacked_ || sendTransportCommand(
+        arches::platform::STM32_CMD_GPIO_PULL,
+        {static_cast<std::uint8_t>(pin), pullModeToByte(mode)});
+}
+
+bool GpioTesting::sendTransportCommand(std::uint8_t command, const std::vector<std::uint8_t>& payload, bool* value)
+{
+    if (!transport_) {
+        return false;
+    }
+
+    const Stm32RoundTripResult result = transport_->roundTrip({command, payload, 0});
+    if (value != nullptr && result.status == hal::Status::PASS && result.response.size() >= 2) {
+        *value = result.response[1] != 0;
+    }
+    return result.status == hal::Status::PASS;
 }
 
 /**
