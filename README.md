@@ -145,4 +145,6 @@ make help
 
 
 
-git clone git@github.com:SiliconCentric/Acadia-HAL.git ; cd Acadia-HAL/ ;  rm -rf .git ;  mv * ../ ;  cd .. ;   rm -rf Acadia-HAL/
+
+ git add . ;  git commit -am "Initial commit" ; git push origin --all
+
