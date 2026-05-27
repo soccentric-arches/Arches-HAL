@@ -1,0 +1,2 @@
+/usr/bin/ar qc ../../lib/libsoftware_interface_lib.a CMakeFiles/software_interface_lib.dir/software_interface_lib.cpp.o
+/usr/bin/ranlib ../../lib/libsoftware_interface_lib.a

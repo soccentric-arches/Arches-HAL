@@ -1,0 +1,2 @@
+/usr/bin/ar qc ../../lib/libdebug_and_development_interfaces.a CMakeFiles/debug_and_development_interfaces.dir/debug_and_development_interfaces.cpp.o
+/usr/bin/ranlib ../../lib/libdebug_and_development_interfaces.a

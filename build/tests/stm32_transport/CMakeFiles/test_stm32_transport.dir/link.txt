@@ -1,0 +1,1 @@
+/usr/bin/c++  -Wall -Wextra -Wpedantic -Werror -O3 -DNDEBUG CMakeFiles/test_stm32_transport.dir/main.cpp.o -o ../../bin/test_stm32_transport  ../../lib/libarches_platform.a ../../lib/liblib_base.a 

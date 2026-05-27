@@ -1,0 +1,1 @@
+/usr/bin/c++  -Wall -Wextra -Wpedantic -Werror -O3 -DNDEBUG CMakeFiles/test_camera_interfaces.dir/main.cpp.o -o ../../bin/test_camera_interfaces  ../../lib/libcamera_interfaces_lib.a ../../lib/liblib_base.a 

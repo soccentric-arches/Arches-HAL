@@ -1,0 +1,2 @@
+/usr/bin/ar qc ../../lib/libdeep_learning_accelerator_lib.a CMakeFiles/deep_learning_accelerator_lib.dir/deep_learning_accelerator_lib.cpp.o
+/usr/bin/ranlib ../../lib/libdeep_learning_accelerator_lib.a

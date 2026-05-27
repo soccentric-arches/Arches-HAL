@@ -1,0 +1,1 @@
+/usr/bin/c++  -Wall -Wextra -Wpedantic -Werror -O3 -DNDEBUG CMakeFiles/test_system_memory.dir/main.cpp.o -o ../../bin/test_system_memory  ../../lib/libsystem_memory_lib.a ../../lib/liblib_base.a 

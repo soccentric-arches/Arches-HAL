@@ -1,0 +1,2 @@
+/usr/bin/ar qc ../../lib/libvision_accelerator_lib.a CMakeFiles/vision_accelerator_lib.dir/vision_accelerator_lib.cpp.o
+/usr/bin/ranlib ../../lib/libvision_accelerator_lib.a

@@ -1,0 +1,2 @@
+/usr/bin/ar qc ../../lib/libaudio_interfaces.a CMakeFiles/audio_interfaces.dir/audio_interfaces.cpp.o
+/usr/bin/ranlib ../../lib/libaudio_interfaces.a

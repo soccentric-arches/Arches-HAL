@@ -1,0 +1,2 @@
+/usr/bin/ar qc ../lib/libhal_protos_client.a CMakeFiles/hal_protos_client.dir/client/hal_client.cpp.o
+/usr/bin/ranlib ../lib/libhal_protos_client.a

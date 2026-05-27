@@ -1,0 +1,1 @@
+/usr/bin/c++  -Wall -Wextra -Wpedantic -Werror -O3 -DNDEBUG CMakeFiles/test_debug_and_development_interfaces.dir/main.cpp.o -o ../../bin/test_debug_and_development_interfaces  ../../lib/libdebug_and_development_interfaces.a ../../lib/liblib_base.a 

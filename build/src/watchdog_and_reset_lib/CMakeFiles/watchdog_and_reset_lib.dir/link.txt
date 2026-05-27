@@ -1,0 +1,2 @@
+/usr/bin/ar qc ../../lib/libwatchdog_and_reset_lib.a CMakeFiles/watchdog_and_reset_lib.dir/watchdog_and_reset_lib.cpp.o
+/usr/bin/ranlib ../../lib/libwatchdog_and_reset_lib.a

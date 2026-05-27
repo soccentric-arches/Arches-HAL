@@ -1,0 +1,2 @@
+/usr/bin/ar qc ../../lib/libvideo_encode_decode_lib.a CMakeFiles/video_encode_decode_lib.dir/video_encode_decode_lib.cpp.o
+/usr/bin/ranlib ../../lib/libvideo_encode_decode_lib.a

@@ -1,0 +1,1 @@
+/usr/bin/c++  -Wall -Wextra -Wpedantic -Werror -O3 -DNDEBUG CMakeFiles/test_mcu_interface.dir/main.cpp.o -o ../../bin/test_mcu_interface  ../../lib/libmcu_interface_lib.a ../../lib/libarches_platform.a ../../lib/liblib_base.a 

@@ -1,0 +1,2 @@
+/usr/bin/ar qc ../../lib/libenvironmental_lib.a CMakeFiles/environmental_lib.dir/environmental_lib.cpp.o
+/usr/bin/ranlib ../../lib/libenvironmental_lib.a

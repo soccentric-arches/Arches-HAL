@@ -159,7 +159,7 @@ TestOutput SerializerDeserializerTesting::testDataIntegrity()
                            : "[INFO] Frame capture failed (camera may not be streaming)");
 
     // Clean up
-    system("rm -f /tmp/serdes_frame.raw 2>/dev/null");
+    { [[maybe_unused]] int _r = system("rm -f /tmp/serdes_frame.raw 2>/dev/null"); }
 
     {
         TestOutput _out;

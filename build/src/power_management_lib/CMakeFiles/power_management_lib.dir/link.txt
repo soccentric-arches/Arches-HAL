@@ -1,0 +1,2 @@
+/usr/bin/ar qc ../../lib/libpower_management_lib.a CMakeFiles/power_management_lib.dir/power_management_lib.cpp.o
+/usr/bin/ranlib ../../lib/libpower_management_lib.a

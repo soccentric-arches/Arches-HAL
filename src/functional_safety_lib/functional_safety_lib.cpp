@@ -303,7 +303,7 @@ TestOutput FunctionalSafetyTesting::testFaultInjectionTesting()
                                (bootStatus != 0 ? " (prior WD reset)" : " (no prior WD reset)"));
 #endif
             // Safe close
-            write(fd, "V", 1);
+            { [[maybe_unused]] ssize_t _r = write(fd, "V", 1); }
             close(fd);
         }
     }

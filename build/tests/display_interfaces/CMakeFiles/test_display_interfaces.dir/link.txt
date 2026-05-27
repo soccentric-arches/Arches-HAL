@@ -1,0 +1,1 @@
+/usr/bin/c++  -Wall -Wextra -Wpedantic -Werror -O3 -DNDEBUG CMakeFiles/test_display_interfaces.dir/main.cpp.o -o ../../bin/test_display_interfaces  ../../lib/libdisplay_interfaces.a ../../lib/liblib_base.a 

@@ -1,0 +1,2 @@
+/usr/bin/ar qc ../lib/libhal_protos_server.a CMakeFiles/hal_protos_server.dir/server/hal_service_impl.cpp.o CMakeFiles/hal_protos_server.dir/server/module_registry_all.cpp.o
+/usr/bin/ranlib ../lib/libhal_protos_server.a

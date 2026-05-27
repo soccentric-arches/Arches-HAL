@@ -1,0 +1,2 @@
+/usr/bin/ar qc ../../lib/libdisplay_interfaces.a CMakeFiles/display_interfaces.dir/display_interfaces.cpp.o
+/usr/bin/ranlib ../../lib/libdisplay_interfaces.a

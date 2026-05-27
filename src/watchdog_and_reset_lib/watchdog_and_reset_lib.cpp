@@ -104,7 +104,7 @@ TestOutput WatchdogAndResetTesting::testWatchdogTimerFunctionality()
                            (bootStatus ? "WATCHDOG RESET" : "normal boot"));
 
         // Write 'V' to disable watchdog on close (magic close)
-        write(fd, "V", 1);
+        { [[maybe_unused]] ssize_t _r = write(fd, "V", 1); }
         close(fd);
         data.push_back("PASS: Watchdog opened and queried successfully.");
     } else {
@@ -202,7 +202,7 @@ TestOutput WatchdogAndResetTesting::testWatchdogResetGeneration()
             bool canPretimeout = (info.options & WDIOF_PRETIMEOUT) != 0;
             data.push_back("WDIOF_PRETIMEOUT support: " + std::string(canPretimeout ? "YES" : "no"));
         }
-        write(fd, "V", 1);
+        { [[maybe_unused]] ssize_t _r = write(fd, "V", 1); }
         close(fd);
         data.push_back("PASS: Watchdog reset capability verified.");
     } else {
@@ -254,7 +254,7 @@ TestOutput WatchdogAndResetTesting::testWatchdogInterruptGeneration()
         if (ioctl(fd, WDIOC_GETPRETIMEOUT, &pretimeout) == 0)
             data.push_back("Pretimeout: " + std::to_string(pretimeout) + " s");
 
-        write(fd, "V", 1);
+        { [[maybe_unused]] ssize_t _r = write(fd, "V", 1); }
         close(fd);
     }
 
@@ -404,7 +404,7 @@ TestOutput WatchdogAndResetTesting::testWatchdogReset()
                 else
                     data.push_back("  -> No watchdog reset on last boot.");
             }
-            write(fd, "V", 1);
+            { [[maybe_unused]] ssize_t _r = write(fd, "V", 1); }
             close(fd);
         }
     }

@@ -1,0 +1,2 @@
+/usr/bin/ar qc ../../lib/libthermal_management_lib.a CMakeFiles/thermal_management_lib.dir/thermal_management_lib.cpp.o
+/usr/bin/ranlib ../../lib/libthermal_management_lib.a

@@ -1,0 +1,2 @@
+/usr/bin/ar qc ../lib/libarches_platform.a CMakeFiles/arches_platform.dir/stm32_transport.cpp.o
+/usr/bin/ranlib ../lib/libarches_platform.a

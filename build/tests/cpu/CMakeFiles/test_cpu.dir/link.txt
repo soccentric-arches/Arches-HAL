@@ -1,0 +1,1 @@
+/usr/bin/c++  -Wall -Wextra -Wpedantic -Werror -O3 -DNDEBUG CMakeFiles/test_cpu.dir/main.cpp.o -o ../../bin/test_cpu  ../../lib/libcpu_lib.a ../../lib/liblib_base.a 
