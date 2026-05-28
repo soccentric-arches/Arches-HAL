@@ -1,0 +1,239 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Build directories
+# ─────────────────────────────────────────────────────────────────────────────
+build/
+build-*/
+out/
+out-*/
+cmake-build-*/
+_CPack_Packages/
+install/
+install-*/
+dist/
+
+# ─────────────────────────────────────────────────────────────────────────────
+# CMake
+# ─────────────────────────────────────────────────────────────────────────────
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+cmake_install.cmake
+CTestTestfile.cmake
+CPackConfig.cmake
+CPackSourceConfig.cmake
+Testing/
+compile_commands.json
+*.cmake.in.out
+Makefile.in.cmake
+
+# Keep top-level Makefile (project uses one) but ignore generated ones in build dirs
+# (build/ is already ignored)
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Compiled object / binary artifacts
+# ─────────────────────────────────────────────────────────────────────────────
+*.o
+*.obj
+*.lo
+*.slo
+*.ko
+*.a
+*.la
+*.lai
+*.so
+*.so.*
+*.dylib
+*.dll
+*.exe
+*.out
+*.app
+*.pdb
+*.ilk
+*.exp
+*.map
+*.gch
+*.pch
+
+# Static / dynamic archives
+*.lib
+*.def
+
+# Dependency files
+*.d
+*.dep
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Protobuf / gRPC generated files
+# ─────────────────────────────────────────────────────────────────────────────
+*.pb.cc
+*.pb.h
+*.grpc.pb.cc
+*.grpc.pb.h
+*_pb2.py
+*_pb2_grpc.py
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Packaging (DEB / RPM / IPK)
+# ─────────────────────────────────────────────────────────────────────────────
+*.deb
+*.rpm
+*.ipk
+*.tar.gz
+*.tar.bz2
+*.tar.xz
+*.tgz
+*.zip
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Coverage / profiling
+# ─────────────────────────────────────────────────────────────────────────────
+*.gcno
+*.gcda
+*.gcov
+coverage/
+coverage.info
+lcov.info
+*.profraw
+*.profdata
+callgrind.out.*
+massif.out.*
+perf.data*
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Sanitizer / debug artifacts
+# ─────────────────────────────────────────────────────────────────────────────
+*.dSYM/
+core
+core.*
+vgcore.*
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Doxygen
+# ─────────────────────────────────────────────────────────────────────────────
+Doxyfile
+docs/html/
+docs/latex/
+docs/xml/
+docs/man/
+html/
+latex/
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Python (tests, tooling, generated bindings)
+# ─────────────────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.tox/
+.venv/
+venv/
+env/
+pip-wheel-metadata/
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Editors / IDEs
+# ─────────────────────────────────────────────────────────────────────────────
+# VS Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/c_cpp_properties.json
+.history/
+
+# JetBrains (CLion / IntelliJ)
+.idea/
+*.iml
+cmake-build-debug/
+cmake-build-release/
+
+# Vim / Emacs / Sublime
+*.swp
+*.swo
+*.swn
+*~
+.*.sw[a-p]
+*.sublime-workspace
+*.sublime-project
+.netrwhist
+Session.vim
+.vim/
+
+# Eclipse
+.cproject
+.project
+.settings/
+.metadata/
+
+# Qt Creator
+CMakeLists.txt.user*
+
+# clangd / ccls
+.cache/
+.ccls-cache/
+.clangd/
+.clang-format.bak
+
+# ─────────────────────────────────────────────────────────────────────────────
+# OS junk
+# ─────────────────────────────────────────────────────────────────────────────
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Logs / temp / scratch
+# ─────────────────────────────────────────────────────────────────────────────
+*.log
+*.tmp
+*.temp
+*.bak
+*.orig
+*.rej
+*.old
+.scratch/
+scratch/
+tmp/
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Docker
+# ─────────────────────────────────────────────────────────────────────────────
+.docker/
+docker-compose.override.yml
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Node (if any tooling is added later)
+# ─────────────────────────────────────────────────────────────────────────────
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Secrets / local env
+# ─────────────────────────────────────────────────────────────────────────────
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets/
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Project-specific
+# ─────────────────────────────────────────────────────────────────────────────
+# Cross-compile output trees
+build/cross/
+# Generated bash completion install artifacts
+make_completion.bash.out
