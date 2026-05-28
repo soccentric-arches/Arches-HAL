@@ -143,5 +143,3 @@ make help
 
 
 
- git add . ;  git commit -am "Initial commit" ; git push origin --all
-
