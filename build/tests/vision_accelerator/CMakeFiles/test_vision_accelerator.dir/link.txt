@@ -1,1 +1,0 @@
-/usr/bin/c++  -Wall -Wextra -Wpedantic -Werror -O3 -DNDEBUG CMakeFiles/test_vision_accelerator.dir/main.cpp.o -o ../../bin/test_vision_accelerator  ../../lib/libvision_accelerator_lib.a ../../lib/liblib_base.a 

@@ -1,2 +1,0 @@
-/usr/bin/ar qc ../../lib/libpcie_lib.a CMakeFiles/pcie_lib.dir/pcie_lib.cpp.o
-/usr/bin/ranlib ../../lib/libpcie_lib.a

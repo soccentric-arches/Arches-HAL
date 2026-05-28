@@ -1,1 +1,0 @@
-/usr/bin/c++  -Wall -Wextra -Wpedantic -Werror -O3 -DNDEBUG CMakeFiles/test_audio_interfaces.dir/main.cpp.o -o ../../bin/test_audio_interfaces  ../../lib/libaudio_interfaces.a ../../lib/liblib_base.a 

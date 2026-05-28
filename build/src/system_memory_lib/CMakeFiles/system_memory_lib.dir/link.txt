@@ -1,2 +1,0 @@
-/usr/bin/ar qc ../../lib/libsystem_memory_lib.a CMakeFiles/system_memory_lib.dir/system_memory_lib.cpp.o
-/usr/bin/ranlib ../../lib/libsystem_memory_lib.a

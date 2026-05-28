@@ -1,2 +1,0 @@
-/usr/bin/ar qc ../../lib/libclock_and_timing_lib.a CMakeFiles/clock_and_timing_lib.dir/clock_and_timing_lib.cpp.o
-/usr/bin/ranlib ../../lib/libclock_and_timing_lib.a

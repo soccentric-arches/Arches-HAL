@@ -1,2 +1,0 @@
-/usr/bin/ar qc ../../lib/libsecurity_features_lib.a CMakeFiles/security_features_lib.dir/security_features_lib.cpp.o
-/usr/bin/ranlib ../../lib/libsecurity_features_lib.a

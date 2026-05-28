@@ -1,2 +1,0 @@
-/usr/bin/ar qc ../../lib/libfunctional_safety_lib.a CMakeFiles/functional_safety_lib.dir/functional_safety_lib.cpp.o
-/usr/bin/ranlib ../../lib/libfunctional_safety_lib.a

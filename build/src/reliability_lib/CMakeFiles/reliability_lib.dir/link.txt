@@ -1,2 +1,0 @@
-/usr/bin/ar qc ../../lib/libreliability_lib.a CMakeFiles/reliability_lib.dir/reliability_lib.cpp.o
-/usr/bin/ranlib ../../lib/libreliability_lib.a

@@ -1,2 +1,0 @@
-/usr/bin/ar qc ../../lib/libcamera_interfaces_lib.a CMakeFiles/camera_interfaces_lib.dir/camera_interfaces_lib.cpp.o
-/usr/bin/ranlib ../../lib/libcamera_interfaces_lib.a

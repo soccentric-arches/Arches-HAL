@@ -1,2 +1,0 @@
-/usr/bin/ar qc ../../lib/libsense_hat_lib.a CMakeFiles/sense_hat_lib.dir/sense_hat_lib.cpp.o
-/usr/bin/ranlib ../../lib/libsense_hat_lib.a

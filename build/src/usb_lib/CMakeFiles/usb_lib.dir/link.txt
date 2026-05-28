@@ -1,2 +1,0 @@
-/usr/bin/ar qc ../../lib/libusb_lib.a CMakeFiles/usb_lib.dir/usb_lib.cpp.o
-/usr/bin/ranlib ../../lib/libusb_lib.a

@@ -1,1 +1,0 @@
-/usr/bin/c++  -Wall -Wextra -Wpedantic -Werror -O3 -DNDEBUG CMakeFiles/test_poe_hat.dir/main.cpp.o -o ../../bin/test_poe_hat  ../../lib/libpoe_hat_lib.a ../../lib/liblib_base.a 

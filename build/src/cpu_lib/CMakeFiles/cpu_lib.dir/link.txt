@@ -1,2 +1,0 @@
-/usr/bin/ar qc ../../lib/libcpu_lib.a CMakeFiles/cpu_lib.dir/cpu_lib.cpp.o
-/usr/bin/ranlib ../../lib/libcpu_lib.a

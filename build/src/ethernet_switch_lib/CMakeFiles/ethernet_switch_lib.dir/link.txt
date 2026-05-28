@@ -1,2 +1,0 @@
-/usr/bin/ar qc ../../lib/libethernet_switch_lib.a CMakeFiles/ethernet_switch_lib.dir/ethernet_switch_lib.cpp.o
-/usr/bin/ranlib ../../lib/libethernet_switch_lib.a

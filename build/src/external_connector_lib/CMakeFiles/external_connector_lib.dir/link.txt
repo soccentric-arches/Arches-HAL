@@ -1,2 +1,0 @@
-/usr/bin/ar qc ../../lib/libexternal_connector_lib.a CMakeFiles/external_connector_lib.dir/external_connector_lib.cpp.o
-/usr/bin/ranlib ../../lib/libexternal_connector_lib.a

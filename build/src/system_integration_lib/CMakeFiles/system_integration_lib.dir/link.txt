@@ -1,2 +1,0 @@
-/usr/bin/ar qc ../../lib/libsystem_integration_lib.a CMakeFiles/system_integration_lib.dir/system_integration_lib.cpp.o
-/usr/bin/ranlib ../../lib/libsystem_integration_lib.a

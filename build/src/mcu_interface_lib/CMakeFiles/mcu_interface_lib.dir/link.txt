@@ -1,2 +1,0 @@
-/usr/bin/ar qc ../../lib/libmcu_interface_lib.a CMakeFiles/mcu_interface_lib.dir/mcu_interface_lib.cpp.o
-/usr/bin/ranlib ../../lib/libmcu_interface_lib.a

@@ -1,2 +1,0 @@
-/usr/bin/ar qc ../../lib/libpoe_hat_lib.a CMakeFiles/poe_hat_lib.dir/poe_hat_lib.cpp.o
-/usr/bin/ranlib ../../lib/libpoe_hat_lib.a

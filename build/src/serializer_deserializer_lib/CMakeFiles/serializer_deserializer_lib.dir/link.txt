@@ -1,2 +1,0 @@
-/usr/bin/ar qc ../../lib/libserializer_deserializer_lib.a CMakeFiles/serializer_deserializer_lib.dir/serializer_deserializer_lib.cpp.o
-/usr/bin/ranlib ../../lib/libserializer_deserializer_lib.a

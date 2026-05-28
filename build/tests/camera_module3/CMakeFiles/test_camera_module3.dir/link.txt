@@ -1,1 +1,0 @@
-/usr/bin/c++  -Wall -Wextra -Wpedantic -Werror -O3 -DNDEBUG CMakeFiles/test_camera_module3.dir/main.cpp.o -o ../../bin/test_camera_module3  ../../lib/libcamera_module3_lib.a ../../lib/liblib_base.a 

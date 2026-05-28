@@ -1,1 +1,0 @@
-/usr/bin/c++  -Wall -Wextra -Wpedantic -Werror -O3 -DNDEBUG CMakeFiles/test_clock_and_timing.dir/main.cpp.o -o ../../bin/test_clock_and_timing  ../../lib/libclock_and_timing_lib.a ../../lib/liblib_base.a 

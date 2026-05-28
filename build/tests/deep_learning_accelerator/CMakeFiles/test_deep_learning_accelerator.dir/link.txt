@@ -1,1 +1,0 @@
-/usr/bin/c++  -Wall -Wextra -Wpedantic -Werror -O3 -DNDEBUG CMakeFiles/test_deep_learning_accelerator.dir/main.cpp.o -o ../../bin/test_deep_learning_accelerator  ../../lib/libdeep_learning_accelerator_lib.a ../../lib/liblib_base.a 
