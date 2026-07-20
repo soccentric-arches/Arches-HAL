@@ -26,16 +26,16 @@ Generated C++ sources are placed under `<build_dir>/protos/generated/` and are *
 
 ## Architecture overview
 
-The design ensures that **adding or removing a module requires only two localized changes**:
+The design keeps each native HAL module paired with one proto contract. Adding or removing a module requires updating the corresponding native HAL and proto files:
 
-1. Create `protos/modules/<module_id>.proto`
-2. Add one entry to `protos/registry/modules.yaml`
+1. Create or update the native HAL module under `src/`.
+2. Create or update `protos/modules/<module_id>.proto` and its registry entry.
 
 `hal_service.proto` and `common.proto` remain untouched.
 
 ### How it works
 
-Every `HalService` RPC carries a `google.protobuf.Any module_config` field for the request and a `google.protobuf.Any payload` field inside the returned `ResultEnvelope`. The server uses the `module_id` string to look up the registered module, unpack the `Any`, and dispatch the call — no hand-written dispatch tables, no changes to the service definition.
+Every module contract defines the messages that an external application can serialize and exchange over its own gRPC service. This repository only builds generated contract libraries; it does not implement or launch a gRPC server or client.
 
 ### Four execution modes
 
@@ -120,9 +120,9 @@ for (const auto& entry : cpu_result.test_results()) {
 
 3. **Re-run CMake** — `protos/CMakeLists.txt` globs `modules/*.proto`, so no CMake changes are needed.
 
-4. **Register the module on the server** — add the new module class to the server-side registry (outside the proto layer).
+4. **Build the matching targets** — `hal_proto_<module_id>` and `hal_proto_<module_id>_shared`, alongside the native HAL module's static/shared targets.
 
-That is all. No changes to `hal_service.proto`, `common.proto`, or any dispatch table.
+No server, client, or dispatch table is part of this repository.
 
 ---
 
@@ -145,8 +145,8 @@ That is all. No changes to `hal_service.proto`, `common.proto`, or any dispatch 
 
 | # | C++ construct | Resolution |
 |---|---------------|------------|
-| A1 | `MonitorItem::reader` (`std::function<string()>`) | Client sends `repeated string monitor_item_names` in `MonitoringParams`; server maps names to registered reader functions. |
-| A2 | `EventCriteria::predicate` (`std::function<bool(...)>`) | Client sends a structured `EventCondition` (test name + expected pass, or freeform expression string); server evaluates it each poll cycle. |
+| A1 | `MonitorItem::reader` (`std::function<string()>`) | Represented by the proto monitoring fields; an external service owns transport and evaluation. |
+| A2 | `EventCriteria::predicate` (`std::function<bool(...)>`) | Represented by the proto event-condition fields; an external service owns transport and evaluation. |
 | A3 | `GpioPin`, `GpioDirection`, `GpioPullMode` in `gpio_lib.h` | Omitted — they are internal test-harness state, never part of the public module API. |
 | A4 | `chrono::duration<double>` for test duration | Mapped to `double duration_sec` in `TestResultEntry`. |
 | A5 | `TestOutput::data` (`vector<string>`) | Mapped to `repeated string data` — free-form diagnostic strings. |

@@ -162,11 +162,20 @@ add_library(hal_protos STATIC
     ${GRPC_SRC}
     ${CLIENT_GRPC_SRC}
 )
+add_library(hal_protos_shared SHARED
+    ${PROTO_SRCS}
+    ${GRPC_SRC}
+    ${CLIENT_GRPC_SRC}
+)
 
 # Suppress warnings in protoc-generated code.
 target_compile_options(hal_protos PRIVATE
     $<$<CXX_COMPILER_ID:GNU>:   -w>
     $<$<CXX_COMPILER_ID:Clang>: -w>
+)
+target_compile_options(hal_protos_shared PRIVATE
+    $<$<CXX_COMPILER_ID:GNU>:-w>
+    $<$<CXX_COMPILER_ID:Clang>:-w>
 )
 
 target_include_directories(hal_protos
@@ -174,10 +183,20 @@ target_include_directories(hal_protos
         "${PROTO_BINARY_DIR}"       # #include "common.pb.h", "modules/cpu.pb.h"
         "${Protobuf_INCLUDE_DIRS}"  # google/protobuf/*.h
 )
+target_include_directories(hal_protos_shared
+    PUBLIC
+        "${PROTO_BINARY_DIR}"
+        "${Protobuf_INCLUDE_DIRS}"
+)
 
 target_link_libraries(hal_protos
     PUBLIC
         protobuf::libprotobuf
+        ${HAL_GRPC_LIBRARIES}
+)
+target_link_libraries(hal_protos_shared
+    PUBLIC
+        "${HAL_PROTOBUF_SHARED_LIBRARY}"
         ${HAL_GRPC_LIBRARIES}
 )
 

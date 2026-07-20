@@ -489,3 +489,215 @@ modules:
     modes: [SINGLE_SHOT, MONITORING, EVENT_BASED]
     config_type_url: type.googleapis.com/hal.modules.accelerometer.Config
     result_type_url: type.googleapis.com/hal.modules.accelerometer.Result
+
+# Canonical source map for tracking a module across the three layers.
+# proto_path   - wire/API contract
+# source_path  - native HAL interface and implementation directory
+# test_path    - native HAL test entry point
+# null means the proto contract exists, but the native HAL/test is not implemented yet.
+tracking:
+  audio_interfaces:
+    proto_path: protos/modules/audio_interfaces.proto
+    source_path: src/audio_interfaces/audio_interfaces.h
+    test_path: tests/audio_interfaces/main.cpp
+  camera_interfaces:
+    proto_path: protos/modules/camera_interfaces.proto
+    source_path: src/camera_interfaces_lib/camera_interfaces_lib.h
+    test_path: tests/camera_interfaces/main.cpp
+  camera_module3:
+    proto_path: protos/modules/camera_module3.proto
+    source_path: src/camera_module3_lib/camera_module3_lib.h
+    test_path: tests/camera_module3/main.cpp
+  clock_and_timing:
+    proto_path: protos/modules/clock_and_timing.proto
+    source_path: src/clock_and_timing_lib/clock_and_timing_lib.h
+    test_path: tests/clock_and_timing/main.cpp
+  communication_interface:
+    proto_path: protos/modules/communication_interface.proto
+    source_path: src/communication_interface_lib/communication_interface_lib.h
+    test_path: tests/communication_interface/main.cpp
+  cpu:
+    proto_path: protos/modules/cpu.proto
+    source_path: src/cpu_lib/cpu_lib.h
+    test_path: tests/cpu/main.cpp
+  debug_and_development_interfaces:
+    proto_path: protos/modules/debug_and_development_interfaces.proto
+    source_path: src/debug_and_development_interfaces/debug_and_development_interfaces.h
+    test_path: tests/debug_and_development_interfaces/main.cpp
+  deep_learning_accelerator:
+    proto_path: protos/modules/deep_learning_accelerator.proto
+    source_path: src/deep_learning_accelerator_lib/deep_learning_accelerator_lib.h
+    test_path: tests/deep_learning_accelerator/main.cpp
+  display_interfaces:
+    proto_path: protos/modules/display_interfaces.proto
+    source_path: src/display_interfaces/display_interfaces.h
+    test_path: tests/display_interfaces/main.cpp
+  environmental:
+    proto_path: protos/modules/environmental.proto
+    source_path: src/environmental_lib/environmental_lib.h
+    test_path: tests/environmental/main.cpp
+  ethernet:
+    proto_path: protos/modules/ethernet.proto
+    source_path: src/ethernet_lib/ethernet_lib.h
+    test_path: tests/ethernet/main.cpp
+  ethernet_switch:
+    proto_path: protos/modules/ethernet_switch.proto
+    source_path: src/ethernet_switch_lib/ethernet_switch_lib.h
+    test_path: tests/ethernet_switch/main.cpp
+  external_connector:
+    proto_path: protos/modules/external_connector.proto
+    source_path: src/external_connector_lib/external_connector_lib.h
+    test_path: tests/external_connector/main.cpp
+  functional_safety:
+    proto_path: protos/modules/functional_safety.proto
+    source_path: src/functional_safety_lib/functional_safety_lib.h
+    test_path: tests/functional_safety/main.cpp
+  gnss:
+    proto_path: protos/modules/gnss.proto
+    source_path: src/gnss_lib/gnss_lib.h
+    test_path: tests/gnss/main.cpp
+  gpio:
+    proto_path: protos/modules/gpio.proto
+    source_path: src/gpio_lib/gpio_lib.h
+    test_path: tests/gpio/main.cpp
+  gpu:
+    proto_path: protos/modules/gpu.proto
+    source_path: src/gpu_lib/gpu_lib.h
+    test_path: tests/gpu/main.cpp
+  imu:
+    proto_path: protos/modules/imu.proto
+    source_path: src/imu_lib/imu_lib.h
+    test_path: tests/imu/main.cpp
+  mcu_interface:
+    proto_path: protos/modules/mcu_interface.proto
+    source_path: src/mcu_interface_lib/mcu_interface_lib.h
+    test_path: tests/mcu_interface/main.cpp
+  pcie:
+    proto_path: protos/modules/pcie.proto
+    source_path: src/pcie_lib/pcie_lib.h
+    test_path: tests/pcie/main.cpp
+  poe_hat:
+    proto_path: protos/modules/poe_hat.proto
+    source_path: src/poe_hat_lib/poe_hat_lib.h
+    test_path: tests/poe_hat/main.cpp
+  power_management:
+    proto_path: protos/modules/power_management.proto
+    source_path: src/power_management_lib/power_management_lib.h
+    test_path: tests/power_management/main.cpp
+  reliability:
+    proto_path: protos/modules/reliability.proto
+    source_path: src/reliability_lib/reliability_lib.h
+    test_path: tests/reliability/main.cpp
+  security_features:
+    proto_path: protos/modules/security_features.proto
+    source_path: src/security_features_lib/security_features_lib.h
+    test_path: tests/security_features/main.cpp
+  sense_hat:
+    proto_path: protos/modules/sense_hat.proto
+    source_path: src/sense_hat_lib/sense_hat_lib.h
+    test_path: tests/sense_hat/main.cpp
+  serializer_deserializer:
+    proto_path: protos/modules/serializer_deserializer.proto
+    source_path: src/serializer_deserializer_lib/serializer_deserializer_lib.h
+    test_path: tests/serializer_deserializer/main.cpp
+  software_interface:
+    proto_path: protos/modules/software_interface.proto
+    source_path: src/software_interface_lib/software_interface_lib.h
+    test_path: tests/software_interface/main.cpp
+  storage:
+    proto_path: protos/modules/storage.proto
+    source_path: src/storage_lib/storage_lib.h
+    test_path: tests/storage/main.cpp
+  system_integration:
+    proto_path: protos/modules/system_integration.proto
+    source_path: src/system_integration_lib/system_integration_lib.h
+    test_path: tests/system_integration/main.cpp
+  system_memory:
+    proto_path: protos/modules/system_memory.proto
+    source_path: src/system_memory_lib/system_memory_lib.h
+    test_path: tests/system_memory/main.cpp
+  thermal_management:
+    proto_path: protos/modules/thermal_management.proto
+    source_path: src/thermal_management_lib/thermal_management_lib.h
+    test_path: tests/thermal_management/main.cpp
+  usb:
+    proto_path: protos/modules/usb.proto
+    source_path: src/usb_lib/usb_lib.h
+    test_path: tests/usb/main.cpp
+  video_encode_decode:
+    proto_path: protos/modules/video_encode_decode.proto
+    source_path: src/video_encode_decode_lib/video_encode_decode_lib.h
+    test_path: tests/video_encode_decode/main.cpp
+  vision_accelerator:
+    proto_path: protos/modules/vision_accelerator.proto
+    source_path: src/vision_accelerator_lib/vision_accelerator_lib.h
+    test_path: tests/vision_accelerator/main.cpp
+  watchdog_and_reset:
+    proto_path: protos/modules/watchdog_and_reset.proto
+    source_path: src/watchdog_and_reset_lib/watchdog_and_reset_lib.h
+    test_path: tests/watchdog_and_reset/main.cpp
+
+  accelerometer:
+    proto_path: protos/modules/accelerometer.proto
+    source_path: null
+    test_path: null
+  analog_input:
+    proto_path: protos/modules/analog_input.proto
+    source_path: null
+    test_path: null
+  battery:
+    proto_path: protos/modules/battery.proto
+    source_path: null
+    test_path: null
+  bluetooth:
+    proto_path: protos/modules/bluetooth.proto
+    source_path: null
+    test_path: null
+  can_bus:
+    proto_path: protos/modules/can_bus.proto
+    source_path: null
+    test_path: null
+  emmc:
+    proto_path: protos/modules/emmc.proto
+    source_path: null
+    test_path: null
+  i2c:
+    proto_path: protos/modules/i2c.proto
+    source_path: null
+    test_path: null
+  mipi_csi:
+    proto_path: protos/modules/mipi_csi.proto
+    source_path: null
+    test_path: null
+  mipi_dsi:
+    proto_path: protos/modules/mipi_dsi.proto
+    source_path: null
+    test_path: null
+  nvme:
+    proto_path: protos/modules/nvme.proto
+    source_path: null
+    test_path: null
+  pwm_output:
+    proto_path: protos/modules/pwm_output.proto
+    source_path: null
+    test_path: null
+  rs485:
+    proto_path: protos/modules/rs485.proto
+    source_path: null
+    test_path: null
+  rtc:
+    proto_path: protos/modules/rtc.proto
+    source_path: null
+    test_path: null
+  sd_card:
+    proto_path: protos/modules/sd_card.proto
+    source_path: null
+    test_path: null
+  spi:
+    proto_path: protos/modules/spi.proto
+    source_path: null
+    test_path: null
+  uart:
+    proto_path: protos/modules/uart.proto
+    source_path: null
+    test_path: null
