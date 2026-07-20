@@ -85,7 +85,7 @@ else()
     message("Doxygen need to be installed to generate the doxygen documentation")
 endif()
 
-# Add proto layer (Protobuf + gRPC generated sources and hal_protos library)
+# Add proto layer (generated Protobuf/gRPC contracts only; no server/client)
 add_subdirectory(protos)
 
 # Add src directory
@@ -160,7 +160,8 @@ set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "${HAL_DEB_ARCH}")
 set(CPACK_DEBIAN_PACKAGE_DEPENDS     "libstdc++6 (>= 10), libgcc-s1")
 set(CPACK_DEBIAN_PACKAGE_DESCRIPTION [[Arches HAL provides a C++17 hardware abstraction layer for
 NVIDIA Tegra platforms with STM32 real-time I/O offload, exposing 35
-hardware modules via a canonical API and a gRPC/Protobuf service interface.]])
+hardware modules via a canonical API and synchronized gRPC/Protobuf contracts
+for integration with external services.]])
 set(CPACK_DEBIAN_COMPRESSION_TYPE    "gzip")
 set(CPACK_DEBIAN_FILE_NAME           "DEB-DEFAULT")
 

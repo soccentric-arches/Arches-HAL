@@ -6,13 +6,7 @@
 # Produced targets
 # ─────────────────────────────────────────────────────────────
 #  hal_protos          STATIC  generated protobuf/gRPC C++
-#  hal_protos_server   STATIC  gRPC service implementation (server-side)
-#  hal_protos_client   STATIC  gRPC client wrapper
-#  hal_server          EXEC    standalone HAL gRPC server
-#
-# Consumers
-#   target_link_libraries(my_target PRIVATE hal_protos_client)  # client only
-#   target_link_libraries(my_target PRIVATE hal_protos_server)  # server (pulls in all 35 HAL modules)
+#  hal_proto_<module>  STATIC/SHARED generated module contract libraries
 #
 # Generated header include paths (propagated automatically):
 #   #include "common.pb.h"
@@ -27,6 +21,19 @@ cmake_minimum_required(VERSION 3.10)
 find_package(Protobuf REQUIRED)
 message(STATUS "[hal_protos] protobuf ${Protobuf_VERSION}  (${Protobuf_INCLUDE_DIRS})")
 message(STATUS "[hal_protos] protoc   ${Protobuf_PROTOC_EXECUTABLE}")
+
+find_library(HAL_PROTOBUF_SHARED_LIBRARY
+    NAMES protobuf
+    PATHS
+        "/usr/lib/${CMAKE_LIBRARY_ARCHITECTURE}"
+        /usr/lib
+    NO_DEFAULT_PATH
+)
+if(NOT HAL_PROTOBUF_SHARED_LIBRARY)
+    message(FATAL_ERROR
+        "[hal_protos] A shared libprotobuf is required for shared proto libraries")
+endif()
+message(STATUS "[hal_protos] shared protobuf ${HAL_PROTOBUF_SHARED_LIBRARY}")
 
 # ============================================================
 # 2. gRPC — REQUIRED (CMake config preferred; pkg-config fallback)
@@ -113,7 +120,7 @@ foreach(PROTO_FILE IN LISTS ALL_PROTOS)
 endforeach()
 
 # ============================================================
-# 6. Generate gRPC stubs for hal_service.proto
+# 6. Generate gRPC stubs for the HAL and client service contracts
 # ============================================================
 set(GRPC_SRC "${PROTO_BINARY_DIR}/hal_service.grpc.pb.cc")
 set(GRPC_HDR "${PROTO_BINARY_DIR}/hal_service.grpc.pb.h")
@@ -175,63 +182,74 @@ target_link_libraries(hal_protos
 )
 
 # ============================================================
-# 8. hal_protos_server — gRPC service implementation
+# 8. Per-module generated proto libraries
 # ============================================================
-add_library(hal_protos_server STATIC
-    server/hal_service_impl.cpp
-    server/module_registry_all.cpp
+add_library(hal_proto_common STATIC
+    "${PROTO_BINARY_DIR}/common.pb.cc"
+)
+add_library(hal_proto_common_shared SHARED
+    "${PROTO_BINARY_DIR}/common.pb.cc"
 )
 
-target_include_directories(hal_protos_server
-    PUBLIC
-        "${CMAKE_CURRENT_SOURCE_DIR}"  # #include "server/hal_service_impl.h"
-        "${CMAKE_SOURCE_DIR}/src"      # #include "cpu_lib/cpu_lib.h"
+foreach(PROTO_FILE IN LISTS MODULE_PROTOS)
+    get_filename_component(PROTO_NAME_WE "${PROTO_FILE}" NAME_WE)
+    set(MODULE_PROTO_SRC "${PROTO_BINARY_DIR}/modules/${PROTO_NAME_WE}.pb.cc")
+
+    add_library("hal_proto_${PROTO_NAME_WE}" STATIC "${MODULE_PROTO_SRC}")
+    add_library("hal_proto_${PROTO_NAME_WE}_shared" SHARED "${MODULE_PROTO_SRC}")
+
+    foreach(PROTO_TARGET
+            "hal_proto_${PROTO_NAME_WE}"
+            "hal_proto_${PROTO_NAME_WE}_shared")
+        target_include_directories("${PROTO_TARGET}" PUBLIC
+            "${PROTO_BINARY_DIR}"
+            "${Protobuf_INCLUDE_DIRS}"
+        )
+        target_compile_options("${PROTO_TARGET}" PRIVATE
+            $<$<CXX_COMPILER_ID:GNU>:-w>
+            $<$<CXX_COMPILER_ID:Clang>:-w>
+        )
+    endforeach()
+
+    target_link_libraries("hal_proto_${PROTO_NAME_WE}" PUBLIC
+        hal_proto_common)
+    target_link_libraries("hal_proto_${PROTO_NAME_WE}_shared" PUBLIC
+        hal_proto_common_shared)
+
+    install(TARGETS
+        "hal_proto_${PROTO_NAME_WE}"
+        "hal_proto_${PROTO_NAME_WE}_shared"
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    )
+endforeach()
+
+target_include_directories(hal_proto_common PUBLIC
+    "${PROTO_BINARY_DIR}"
+    "${Protobuf_INCLUDE_DIRS}"
+)
+target_include_directories(hal_proto_common_shared PUBLIC
+    "${PROTO_BINARY_DIR}"
+    "${Protobuf_INCLUDE_DIRS}"
+)
+target_link_libraries(hal_proto_common PUBLIC protobuf::libprotobuf)
+target_link_libraries(hal_proto_common_shared PUBLIC
+    "${HAL_PROTOBUF_SHARED_LIBRARY}")
+target_compile_options(hal_proto_common PRIVATE
+    $<$<CXX_COMPILER_ID:GNU>:-w>
+    $<$<CXX_COMPILER_ID:Clang>:-w>
+)
+target_compile_options(hal_proto_common_shared PRIVATE
+    $<$<CXX_COMPILER_ID:GNU>:-w>
+    $<$<CXX_COMPILER_ID:Clang>:-w>
 )
 
-target_link_libraries(hal_protos_server
-    PUBLIC
-        hal_protos
-        acu_full_test   # all 35 HAL module implementations
-)
-
-# ============================================================
-# 9. hal_protos_client — gRPC client wrapper
-# ============================================================
-add_library(hal_protos_client STATIC
-    client/hal_client.cpp
-)
-
-target_include_directories(hal_protos_client
-    PUBLIC
-        "${CMAKE_CURRENT_SOURCE_DIR}"  # #include "client/hal_client.h"
-)
-
-target_link_libraries(hal_protos_client
-    PUBLIC
-        hal_protos
-)
-
-# ============================================================
-# 10. hal_server — standalone server executable
-# ============================================================
-add_executable(hal_server
-    server/hal_server_main.cpp
-)
-
-target_link_libraries(hal_server
-    PRIVATE
-        hal_protos_server
-)
-
-install(TARGETS hal_server
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-)
-
-# ============================================================
-# 11. Install rules for libraries and generated headers
-# ============================================================
-install(TARGETS hal_protos hal_protos_server hal_protos_client
+install(TARGETS
+    hal_protos
+    hal_proto_common
+    hal_proto_common_shared
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
 
 install(

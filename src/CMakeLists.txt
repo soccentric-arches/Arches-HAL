@@ -53,3 +53,53 @@ add_subdirectory(debug_and_development_interfaces)
 add_subdirectory(sense_hat_lib)
 add_subdirectory(camera_module3_lib)
 add_subdirectory(poe_hat_lib)
+
+# Every native module exposes both a static and shared library variant.
+set(HAL_MODULE_TARGETS
+    audio_interfaces camera_interfaces_lib camera_module3_lib
+    clock_and_timing_lib communication_interface_lib cpu_lib
+    debug_and_development_interfaces deep_learning_accelerator_lib
+    display_interfaces environmental_lib ethernet_lib ethernet_switch_lib
+    external_connector_lib functional_safety_lib gnss_lib gpio_lib gpu_lib
+    imu_lib mcu_interface_lib pcie_lib poe_hat_lib power_management_lib
+    reliability_lib security_features_lib sense_hat_lib
+    serializer_deserializer_lib software_interface_lib storage_lib
+    system_integration_lib system_memory_lib thermal_management_lib usb_lib
+    video_encode_decode_lib vision_accelerator_lib watchdog_and_reset_lib
+)
+
+foreach(HAL_MODULE_TARGET IN LISTS HAL_MODULE_TARGETS)
+    get_target_property(HAL_MODULE_SOURCES
+        "${HAL_MODULE_TARGET}" SOURCES)
+    get_target_property(HAL_MODULE_SOURCE_DIR
+        "${HAL_MODULE_TARGET}" SOURCE_DIR)
+    set(HAL_MODULE_ABSOLUTE_SOURCES)
+    foreach(HAL_MODULE_SOURCE IN LISTS HAL_MODULE_SOURCES)
+        if(IS_ABSOLUTE "${HAL_MODULE_SOURCE}")
+            list(APPEND HAL_MODULE_ABSOLUTE_SOURCES "${HAL_MODULE_SOURCE}")
+        else()
+            list(APPEND HAL_MODULE_ABSOLUTE_SOURCES
+                "${HAL_MODULE_SOURCE_DIR}/${HAL_MODULE_SOURCE}")
+        endif()
+    endforeach()
+
+    add_library("${HAL_MODULE_TARGET}_shared" SHARED
+        ${HAL_MODULE_ABSOLUTE_SOURCES})
+
+    get_target_property(HAL_MODULE_INCLUDES
+        "${HAL_MODULE_TARGET}" INCLUDE_DIRECTORIES)
+    if(HAL_MODULE_INCLUDES AND NOT HAL_MODULE_INCLUDES MATCHES "-NOTFOUND$")
+        target_include_directories("${HAL_MODULE_TARGET}_shared" PUBLIC
+            ${HAL_MODULE_INCLUDES})
+    endif()
+
+    get_target_property(HAL_MODULE_LINKS
+        "${HAL_MODULE_TARGET}" LINK_LIBRARIES)
+    if(HAL_MODULE_LINKS AND NOT HAL_MODULE_LINKS MATCHES "-NOTFOUND$")
+        target_link_libraries("${HAL_MODULE_TARGET}_shared" PUBLIC
+            ${HAL_MODULE_LINKS})
+    endif()
+
+    install(TARGETS "${HAL_MODULE_TARGET}_shared"
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
+endforeach()
