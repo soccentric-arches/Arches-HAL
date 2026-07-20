@@ -72,8 +72,9 @@ file(MAKE_DIRECTORY "${PROTO_BINARY_DIR}/modules")
 # ============================================================
 set(COMMON_PROTO  "${CMAKE_CURRENT_SOURCE_DIR}/common.proto")
 set(SERVICE_PROTO "${CMAKE_CURRENT_SOURCE_DIR}/hal_service.proto")
+set(CLIENT_SERVICE_PROTO "${CMAKE_CURRENT_SOURCE_DIR}/client_service.proto")
 file(GLOB MODULE_PROTOS "${CMAKE_CURRENT_SOURCE_DIR}/modules/*.proto")
-set(ALL_PROTOS ${COMMON_PROTO} ${SERVICE_PROTO} ${MODULE_PROTOS})
+set(ALL_PROTOS ${COMMON_PROTO} ${SERVICE_PROTO} ${CLIENT_SERVICE_PROTO} ${MODULE_PROTOS})
 
 # ============================================================
 # 5. Generate protobuf C++ sources for every proto file
@@ -130,12 +131,29 @@ add_custom_command(
     VERBATIM
 )
 
+set(CLIENT_GRPC_SRC "${PROTO_BINARY_DIR}/client_service.grpc.pb.cc")
+set(CLIENT_GRPC_HDR "${PROTO_BINARY_DIR}/client_service.grpc.pb.h")
+
+add_custom_command(
+    OUTPUT  "${CLIENT_GRPC_SRC}" "${CLIENT_GRPC_HDR}"
+    COMMAND "${Protobuf_PROTOC_EXECUTABLE}"
+            "--proto_path=${CMAKE_CURRENT_SOURCE_DIR}"
+            "--proto_path=${Protobuf_INCLUDE_DIRS}"
+            "--grpc_out=${PROTO_BINARY_DIR}"
+            "--plugin=protoc-gen-grpc=${GRPC_CPP_PLUGIN}"
+            "${CLIENT_SERVICE_PROTO}"
+    DEPENDS "${CLIENT_SERVICE_PROTO}" "${COMMON_PROTO}"
+    COMMENT "[protoc grpc] client_service.proto"
+    VERBATIM
+)
+
 # ============================================================
 # 7. hal_protos — generated protobuf + gRPC sources
 # ============================================================
 add_library(hal_protos STATIC
     ${PROTO_SRCS}
     ${GRPC_SRC}
+    ${CLIENT_GRPC_SRC}
 )
 
 # Suppress warnings in protoc-generated code.
