@@ -13,7 +13,7 @@ No prose README, but a fully real C++17 hardware abstraction/validation layer: `
 - Test: `make test` (CTest via `enable_testing()`)
 - Cross-build: Docker/QEMU ARM64 (`docker/`)
 - Deploy: `make deploy-a` / `deploy-b` (SSH, default user `nvidia`)
-- Package: CPack → DEB/RPM/IPK (`arches-hal`), installs headers to `acadia_hal/`
+- Package: CPack → DEB/RPM/IPK (`arches-hal`), installs headers to `arches_hal/`
 - Lint/docs: optional `clang-format`, `cppcheck`, Doxygen targets
 
 ## Architecture
@@ -24,7 +24,7 @@ No prose README, but a fully real C++17 hardware abstraction/validation layer: `
 - `src/platform_arches.h` — canonical Jetson/Tegra platform constants: `PLATFORM_NAME = "Arches"`, `PLATFORM_SOC_FAMILY = "NVIDIA Tegra"`, `PLATFORM_OS = "L4T / JetPack"`, CPU core range 8–12, CPU/GPU thermal max 95°C, GPU render node `/dev/dri/renderD128`, Jetson-specific devfreq nodes (`17000000.ga10b`, `gpu.0`), three thermal zone paths, and the STM32 UART/SPI framing constants (SOF byte `0xA5`, GPIO direction/write/read/pull opcodes, ping, heartbeat; default baud 115200 / SPI 1MHz / timeout 100ms).
 - `src/stm32_transport.h`/`.cpp`, `src/mcu_interface_lib/` — the STM32 real-time co-processor link (`Stm32Transport` class). Tests cover GPIO/SPI/UART/DMS pass-through, secondary-MCU redundancy, failover, and synchronization (`tests/mcu_interface/`, `tests/stm32_transport/`).
 - `protos/hal_service.proto` — stable gRPC contract; module config/result are `google.protobuf.Any`-typed so the RPC signature never has to change when modules are added.
-- `protos/client_service.proto` — bidi streaming contract, `package acadia.stream` (name deliberately not renamed — see Do/Don't).
+- `protos/client_service.proto` — bidi streaming contract, `package arches.stream` (renamed from the legacy fork-lineage package name as an approved breaking change; Arches-Client and Arches-Server updated in lockstep).
 - `protos/common.proto`, `protos/modules/*.proto` (49 files), `protos/registry/modules.yaml` — machine-readable manifest mapping module id → proto package/types/version/source path.
 
 ## Do
@@ -36,9 +36,9 @@ No prose README, but a fully real C++17 hardware abstraction/validation layer: `
 ## Don't
 
 - **Don't be surprised the proto count (49) exceeds the built module count (35).** 14 protos (accelerometer, battery, bluetooth, can_bus, emmc, i2c, mipi_csi/dsi, nvme, pwm_output, rs485, rtc, sd_card, spi, analog_input, uart) have no corresponding `src/` implementation yet — they're reserved/future hardware coverage, not dead code to delete.
-- **Don't rename the `acadia.stream` proto package in `protos/client_service.proto`** without cross-repo approval — Arches-Client and Arches-Server both depend on it verbatim as a shared wire contract; the package name lagging the "Arches" rebrand is known and intentional for now.
-- **Don't assume `src/platform_rpi5.h` is dead history to clean up casually** — it's an explicit compatibility-alias shim (comment: "modules being migrated to shared Arches platform header") for modules not yet ported off the original Raspberry Pi 5 (Acadia) platform header. Check it before deleting.
-- **This repo was forked from a shared "Acadia" (Raspberry Pi 5 / BCM2712) template, only partially rebranded.** Evidence still in the tree: `Makefile` header says "Master Makefile for Acadia HAL", `DOCKER_IMAGE := acadia`, ccache volume `ccache-acu`, container home `/home/rpi/.ccache`, `docker/Dockerfile` comment "Raspberry Pi 5 (BCM2712 / RP1) build container". Don't "fix" these in isolation — they're fleet-wide naming debt, not local bugs; check with the other `-HAL` leaves before renaming.
+- **Don't rename the `arches.stream` proto package in `protos/client_service.proto` again without cross-repo coordination** — it was renamed from the legacy fork-lineage package name as an approved, coordinated breaking change (Arches-Client and Arches-Server updated to match in the same pass); any further rename needs the same cross-repo approval.
+- **Don't assume `src/platform_rpi5.h` is dead history to clean up casually** — it's an explicit compatibility-alias shim (comment: "modules being migrated to shared Arches platform header") for modules not yet ported off the original legacy Raspberry Pi 5 platform header. Check it before deleting.
+- **This repo was forked from a shared Raspberry Pi 5 / BCM2712 reference template.** The fork-lineage naming debt (old package/image/volume names, RPi-flavored comments) has been fully rebranded to Arches fleet-wide — the tree should read as natively Arches with no trace of the fork history. If you spot leftover fork-lineage naming in the future, treat it as a bug to fix, not intentional debt.
 
 ---
 Part of the `Arches` project in the `project-managers` fleet. See `docs/project-managers.md` for the full 9-project / 8-leaf hierarchy and shared conventions.

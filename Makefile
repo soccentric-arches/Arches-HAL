@@ -1,4 +1,4 @@
-# Master Makefile for Acadia HAL
+# Master Makefile for Arches HAL
 # Supports both native and Docker-based builds with Ninja
 
 .PHONY: all build configure clean test format cppcheck doc help
@@ -13,7 +13,7 @@ CROSS_BUILD_DIR := build/cross
 
 # Parallel jobs (override with make JOBS=N)
 JOBS := $(shell nproc)
-DOCKER_IMAGE := acadia
+DOCKER_IMAGE := arches
 DOCKER_CROSS_BUILD_DIR := /workspace/build/cross
 
 # Host architecture as shown by file(1) (e.g. x86-64, aarch64)
@@ -120,7 +120,7 @@ list:
 # -t: allocate a pseudo-TTY so Ctrl-C (SIGINT) is forwarded to the container
 # --init: use tini as PID 1 to properly propagate signals to child processes (e.g. ninja)
 # ccache volume: persist compilation cache across docker runs
-DOCKER_RUN := docker run --rm -t --init --platform linux/arm64 -v $(PWD):/workspace -v ccache-acu:/home/rpi/.ccache $(DOCKER_IMAGE) bash -c
+DOCKER_RUN := docker run --rm -t --init --platform linux/arm64 -v $(PWD):/workspace -v ccache-arches:/home/arches/.ccache $(DOCKER_IMAGE) bash -c
 
 docker-install:
 	@if ! command -v docker > /dev/null 2>&1; then \
@@ -152,7 +152,7 @@ docker-clean: docker-image
 
 docker-shell: docker-image
 	@echo "Starting Docker shell for development..."
-	docker run -it --rm --platform linux/arm64 -v $(PWD):/workspace -v ccache-acu:/home/rpi/.ccache $(DOCKER_IMAGE) bash
+	docker run -it --rm --platform linux/arm64 -v $(PWD):/workspace -v ccache-arches:/home/arches/.ccache $(DOCKER_IMAGE) bash
 
 docker-test: docker-build
 	@echo "Running tests inside Docker (ARM64 via QEMU)..."
@@ -220,17 +220,17 @@ doc: configure
 package-deb: build
 	@echo "Generating DEB package..."
 	cd $(NATIVE_BUILD_DIR) && cpack -G DEB
-	@echo "Package: $$(ls $(NATIVE_BUILD_DIR)/acadia-hal_*.deb 2>/dev/null | head -1)"
+	@echo "Package: $$(ls $(NATIVE_BUILD_DIR)/arches-hal_*.deb 2>/dev/null | head -1)"
 
 package-rpm: build
 	@echo "Generating RPM package (requires rpmbuild: sudo apt-get install rpm)..."
 	cd $(NATIVE_BUILD_DIR) && cpack -G RPM
-	@echo "Package: $$(ls $(NATIVE_BUILD_DIR)/acadia-hal-*.rpm 2>/dev/null | head -1)"
+	@echo "Package: $$(ls $(NATIVE_BUILD_DIR)/arches-hal-*.rpm 2>/dev/null | head -1)"
 
 package-ipk: build
 	@echo "Generating IPK package..."
 	cd $(NATIVE_BUILD_DIR) && cmake --build . --target package_ipk
-	@echo "Package: $$(ls $(NATIVE_BUILD_DIR)/acadia-hal_*.ipk 2>/dev/null | head -1)"
+	@echo "Package: $$(ls $(NATIVE_BUILD_DIR)/arches-hal_*.ipk 2>/dev/null | head -1)"
 
 package: package-deb package-ipk
 	@echo "All packages generated in $(NATIVE_BUILD_DIR)/"

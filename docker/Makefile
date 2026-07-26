@@ -1,4 +1,4 @@
-IMAGE_NAME ?= acadia
+IMAGE_NAME ?= arches
 
 .PHONY: build run clean delete-images
 

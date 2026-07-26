@@ -115,7 +115,7 @@ install(TARGETS acu_full_test
 install(TARGETS acu_full_test_shared
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
-install(DIRECTORY src/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/acadia_hal
+install(DIRECTORY src/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/arches_hal
     FILES_MATCHING PATTERN "*.h"
 )
 

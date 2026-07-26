@@ -1,5 +1,5 @@
-# Raspberry Pi 5 (BCM2712 / RP1) build container
-# Uses Ubuntu 22.04 LTS for ARM64 — runs natively on Pi5 or via QEMU on x86_64
+# Jetson (Tegra) ARM64 cross-build container
+# Uses Ubuntu 22.04 LTS for ARM64 — runs natively on Jetson or via QEMU on x86_64
 FROM ubuntu:22.04
 
 ARG UID=1000
@@ -64,17 +64,17 @@ RUN apt-get update && apt-get install -y build-essential cmake git sudo ccache f
 # --no-log-init
 # Workaround for "Docker build hangs when adding user with a large UID"
 # https://stackoverflow.com/questions/73351423
-RUN groupadd -g ${GID:-1000} rpi && \
-    useradd -m --no-log-init --uid ${UID:-1000} --gid ${GID:-1000} rpi && \
-    usermod -aG sudo rpi
+RUN groupadd -g ${GID:-1000} arches && \
+    useradd -m --no-log-init --uid ${UID:-1000} --gid ${GID:-1000} arches && \
+    usermod -aG sudo arches
 
-USER rpi
+USER arches
 
 # Enable ccache: prepend ccache symlinks to PATH so gcc/g++/cc/c++ go through ccache
 ENV PATH="/usr/lib/ccache:${PATH}"
 
 # Create ccache directory so Docker volume mount inherits correct ownership
-RUN mkdir -p /home/rpi/.ccache
+RUN mkdir -p /home/arches/.ccache
 
 # Set working directory for build
 WORKDIR /workspace
