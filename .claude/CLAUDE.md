@@ -43,6 +43,21 @@ No prose README, but a fully real C++17 hardware abstraction/validation layer: `
 ---
 Part of the `Arches` project in the `project-managers` fleet. See `docs/project-managers.md` for the full 9-project / 8-leaf hierarchy and shared conventions.
 
+## Validation gate — `.claude/validate.sh`
+
+```bash
+./.claude/validate.sh quick   # seconds: `make cppcheck` (this repo has **no** `make lint` target), clang-format, and the proto-contract checks that keep Client and Server linkable
+./.claude/validate.sh full    # + configure, build, full CTest set
+```
+
+Exit codes follow the fleet contract: `0` pass, `1`-`76` fail, **`77` means a
+check never ran** (missing toolchain) — which is not a pass. Runs automatically
+via the `Stop` hook in `.claude/settings.json`, on demand via `/validate`, and
+as part of any loop the engine executes here.
+
+Human-owned: the Loop Engine runs this script and never edits it. If a check is
+wrong, fix it yourself or raise it in the loop's Lessons Learned.
+
 <!-- BEGIN loop-engine -->
 ## Do's and Don'ts (maintained by the Loop Engine)
 
