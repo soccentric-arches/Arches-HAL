@@ -42,3 +42,11 @@ No prose README, but a fully real C++17 hardware abstraction/validation layer: `
 
 ---
 Part of the `Arches` project in the `project-managers` fleet. See `docs/project-managers.md` for the full 9-project / 8-leaf hierarchy and shared conventions.
+
+<!-- BEGIN loop-engine -->
+## Do's and Don'ts (maintained by the Loop Engine)
+
+*Appended by the Loop Engine on loop close; curated by a human when approving a
+loop out of `in-review/`. Nothing outside this fence is engine-writable.*
+
+<!-- END loop-engine -->
