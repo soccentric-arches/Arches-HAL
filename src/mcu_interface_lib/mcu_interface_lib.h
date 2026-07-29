@@ -8,36 +8,36 @@
 
 class Stm32Transport;
 
-class McuInterfaceTesting : public TestBase
-{
-  public:
-    McuInterfaceTesting();
-    ~McuInterfaceTesting() override;
+class McuInterfaceTesting : public TestBase {
+public:
+  McuInterfaceTesting();
+  ~McuInterfaceTesting() override;
 
-    TestOutput testMcuCommunicationInterface();
-    TestOutput testMcuFirmwareOperation();
-    TestOutput testMcuWatchdog();
-    TestOutput testMcuGpioInterface();
-    TestOutput testMcuSpiInterface();
-    TestOutput testMcuUartInterface();
-    TestOutput testMcuDmsInterface();
-    TestOutput testMcuToOrinDataTransfer();
-    TestOutput testSecondaryMcuRedundancy();
-    TestOutput testMcuFailoverMechanism();
-    TestOutput testMcuSynchronization();
+  TestOutput testMcuCommunicationInterface();
+  TestOutput testMcuFirmwareOperation();
+  TestOutput testMcuWatchdog();
+  TestOutput testMcuGpioInterface();
+  TestOutput testMcuSpiInterface();
+  TestOutput testMcuUartInterface();
+  TestOutput testMcuDmsInterface();
+  TestOutput testMcuToOrinDataTransfer();
+  TestOutput testSecondaryMcuRedundancy();
+  TestOutput testMcuFailoverMechanism();
+  TestOutput testMcuSynchronization();
 
-    std::vector<std::string> getAvailableTests() override;
-    TestResult runSingleTest(const std::string& testName) override;
+  std::vector<std::string> getAvailableTests() override;
+  TestResult runSingleTest(const std::string &testName) override;
 
-  protected:
-    std::vector<TestResult> runAllTests() override;
+protected:
+  std::vector<TestResult> runAllTests() override;
 
-  private:
-    TestOutput runPingTest(const std::string& name, std::uint8_t command, const std::vector<std::uint8_t>& payload);
-    std::vector<std::string> contractLines() const;
+private:
+  TestOutput runPingTest(const std::string &name, std::uint8_t command,
+                         const std::vector<std::uint8_t> &payload);
+  std::vector<std::string> contractLines() const;
 
-    std::unique_ptr<Stm32Transport> transport_;
-    std::string transportSummary_;
+  std::unique_ptr<Stm32Transport> transport_;
+  std::string transportSummary_;
 };
 
 #endif // MCUINTERFACETESTING_H

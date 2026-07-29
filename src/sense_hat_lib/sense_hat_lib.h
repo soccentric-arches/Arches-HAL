@@ -21,41 +21,41 @@
  * All tests use Linux sysfs / IIO / evdev interfaces; no proprietary library
  * is required.  Tests pass with an informational note if the HAT is absent.
  */
-class SenseHatTesting : public TestBase
-{
-  public:
-    SenseHatTesting();
-    ~SenseHatTesting();
+class SenseHatTesting : public TestBase {
+public:
+  SenseHatTesting();
+  ~SenseHatTesting();
 
-    /** @brief Detect Sense HAT on I2C bus (scans expected I2C addresses). */
-    TestOutput testSenseHatDetection();
+  /** @brief Detect Sense HAT on I2C bus (scans expected I2C addresses). */
+  TestOutput testSenseHatDetection();
 
-    /** @brief Verify 8×8 LED matrix framebuffer device exists and is writable. */
-    TestOutput testLedMatrix();
+  /** @brief Verify 8×8 LED matrix framebuffer device exists and is writable. */
+  TestOutput testLedMatrix();
 
-    /** @brief Read ambient temperature from HTS221 via IIO subsystem. */
-    TestOutput testTemperatureSensor();
+  /** @brief Read ambient temperature from HTS221 via IIO subsystem. */
+  TestOutput testTemperatureSensor();
 
-    /** @brief Read relative humidity from HTS221 via IIO subsystem. */
-    TestOutput testHumiditySensor();
+  /** @brief Read relative humidity from HTS221 via IIO subsystem. */
+  TestOutput testHumiditySensor();
 
-    /** @brief Read barometric pressure from LPS25H via IIO subsystem. */
-    TestOutput testPressureSensor();
+  /** @brief Read barometric pressure from LPS25H via IIO subsystem. */
+  TestOutput testPressureSensor();
 
-    /** @brief Read accelerometer / gyroscope / magnetometer from LSM9DS1 via IIO. */
-    TestOutput testImuSensors();
+  /** @brief Read accelerometer / gyroscope / magnetometer from LSM9DS1 via IIO.
+   */
+  TestOutput testImuSensors();
 
-    /** @brief Detect 5-way joystick as an evdev input device. */
-    TestOutput testJoystick();
+  /** @brief Detect 5-way joystick as an evdev input device. */
+  TestOutput testJoystick();
 
-    /** @brief Verify I2C bus used by the HAT (/dev/i2c-1) is accessible. */
-    TestOutput testI2cBusIntegrity();
+  /** @brief Verify I2C bus used by the HAT (/dev/i2c-1) is accessible. */
+  TestOutput testI2cBusIntegrity();
 
-    std::vector<std::string> getAvailableTests() override;
-    TestResult runSingleTest(const std::string& testName) override;
+  std::vector<std::string> getAvailableTests() override;
+  TestResult runSingleTest(const std::string &testName) override;
 
-  protected:
-    std::vector<TestResult> runAllTests() override;
+protected:
+  std::vector<TestResult> runAllTests() override;
 };
 
 #endif // SENSEHATTESTING_H
