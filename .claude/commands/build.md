@@ -1,0 +1,11 @@
+---
+description: Configure and build HAL (native). The hub — Client and Server link this tree.
+allowed-tools: Bash(make build), Bash(make configure)
+---
+
+!`make build`
+
+HAL owns the canonical protos and generated gRPC code; Client and Server link
+this working tree via add_subdirectory. A build break here breaks both
+downstream repos, and a proto change here is a cross-repo breaking change that
+needs corresponding Client/Server updates (see /proto-contract).
