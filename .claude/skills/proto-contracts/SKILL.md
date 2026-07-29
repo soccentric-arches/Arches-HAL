@@ -11,16 +11,16 @@ a sibling CMake subproject; they must never regenerate these contracts.
 
 ## Contract Rules
 
-- Preserve `package arches.stream` in `protos/client_service.proto` unless a
+- Preserve package arches.stream in protos/client_service.proto unless a
   coordinated breaking change across Client and Server is explicitly intended.
-- For a module contract, keep `protos/modules/<id>.proto` and the corresponding
-  `protos/registry/modules.yaml` entry synchronized.
+- For a module contract, keep protos/modules/<id>.proto and the corresponding
+  protos/registry/modules.yaml entry synchronized.
 - Module ids are wire identifiers: make them unique, permanent, and never
   reuse a retired id.
-- Increment the registry `version` for a contract change. Keep the configured
+- Increment the registry version for a contract change. Keep the configured
   fully-qualified package, Config type, Result type, and source path accurate.
-- New top-level `.proto` files must be explicitly named in
-  `protos/CMakeLists.txt`; module proto files are globbed.
+- New top-level .proto files must be explicitly named in
+  protos/CMakeLists.txt; module proto files are globbed.
 - Do not hand-edit generated protobuf sources or add regenerated copies in a
   sibling Arches repository.
 
@@ -32,5 +32,5 @@ Run the contract-aware gate first:
 ./.claude/validate.sh quick
 ```
 
-Run `./.claude/validate.sh full` when generated targets, service signatures, or
-shared CMake configuration changed. Treat exit `77` as blocked, not successful.
+Run ./.claude/validate.sh full when generated targets, service signatures, or
+shared CMake configuration changed. Treat exit 77 as blocked, not successful.
