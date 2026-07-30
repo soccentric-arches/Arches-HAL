@@ -1,39 +1,32 @@
-# CLAUDE.md - Arches-HAL
+# Arches-HAL
 
-Master SoCcentric CLAUDE.md applies. This file adds local knowledge only. See [project_specs.md](project_specs.md) for what this repo is and its architecture.
+C++17 hardware abstraction and validation layer for the Jetson. Owns the canonical proto/gRPC
+contract the rest of the fleet links against.
 
-## Commands
+## How you work here
 
-* Build: `make build` (CMake 3.10+, Ninja, `-Wall -Wextra -Wpedantic -Werror`)
-* Test: `make test` (CTest via `enable_testing()`)
-* Cross-build: Docker/QEMU ARM64 (`docker/`)
-* Deploy: `make deploy-a` / `deploy-b` (SSH, default user `nvidia`)
-* Package: CPack → DEB/RPM/IPK (`arches-hal`), installs headers to `arches_hal/`
-* Lint/docs: optional clang-format, cppcheck, Doxygen targets
+* Commands: `.claude/commands/` — build, test, cross-test, proto-contract, validate.
+* Write: a new module is a `TestBase` subclass plus `runTestApp<T>()` wiring, matching the existing 35. That is what keeps every module binary's CLI identical.
+* Test: CTest via `enable_testing()`. Build is `-Wall -Wextra -Wpedantic -Werror` — warnings are failures.
+
+## How you validate
+
+* Gate: `./.claude/validate.sh quick` (seconds) or `full` (adds build + tests). Run it before you claim done.
+* Exit codes: `0` pass, `1`-`76` fail, `77` a check never ran. **77 is not a pass.**
+* The gate and everything under `.claude/lib`, `hooks`, `commands`, `settings.json` is human-owned. Run it, never edit it.
 
 ## Do
 
-* Treat this repo as the single source of generated proto/gRPC symbols. Arches-Client and Arches-Server both consume it via `add_subdirectory(../Arches-HAL ...)` and link `hal_protos_shared`/`acu_full_test` — never regenerate protos in a sibling repo (ODR/duplicate-symbol risk).
-* Keep `protos/registry/modules.yaml` in sync with `src/<module>_lib/` and `protos/modules/*.proto` when adding a module — it's the machine-readable map every consumer (Client's `ModuleRegistry`) reads.
-* New modules get a `TestBase` subclass + `runTestApp<T>()` wiring, matching the existing 35 — this keeps the CLI (one-shot/monitoring/long-term/monitor-test/event) uniform across all module binaries.
+* Treat this repo as the **only** source of generated proto/gRPC symbols. Client and Server link it; nobody regenerates.
+* Keep `protos/registry/modules.yaml` in sync with `src/<module>_lib/` and `protos/modules/*.proto` when adding a module — every consumer reads it.
+* Give new modules the `TestBase` + `runTestApp<T>()` shape so the one-shot/monitoring/long-term/monitor-test/event CLI stays uniform.
 
 ## Don't
 
-* Don't be surprised the proto count (49) exceeds the built module count (35). 14 protos (accelerometer, battery, bluetooth, can_bus, emmc, i2c, mipi_csi/dsi, nvme, pwm_output, rs485, rtc, sd_card, spi, analog_input, uart) have no corresponding `src/` implementation yet — they're reserved/future hardware coverage, not dead code to delete.
-* Don't rename the `arches.stream` proto package in `protos/client_service.proto` again without cross-repo coordination — it was renamed from the legacy fork-lineage package name as an approved, coordinated breaking change (Arches-Client and Arches-Server updated to match in the same pass); any further rename needs the same cross-repo approval.
-* Don't assume `src/platform_rpi5.h` is dead history to clean up casually — it's an explicit compatibility-alias shim for modules not yet ported off the original legacy Raspberry Pi 5 platform header. Check it before deleting.
-* This repo was forked from a shared Raspberry Pi 5 / BCM2712 reference template. The fork-lineage naming debt has been fully rebranded to Arches fleet-wide — the tree should read as natively Arches with no trace of the fork history. If you spot leftover fork-lineage naming in the future, treat it as a bug to fix, not intentional debt.
-
-## Validation gate - .claude/validate.sh
-
-```
-./.claude/validate.sh quick   # seconds: `make cppcheck` (this repo has no `make lint` target), clang-format, and the proto-contract checks that keep Client and Server linkable
-./.claude/validate.sh full    # + configure, build, full CTest set
-```
-
-Exit codes follow the fleet contract: 0 pass, 1-76 fail, 77 means a check never ran (missing toolchain) - which is not a pass. Runs automatically via the Stop hook in .claude/settings.json, on demand via /validate, and as part of any loop the engine executes here.
-
-Human-owned: the Loop Engine runs this script and never edits it. If a check is wrong, fix it yourself or raise it in the loop's Lessons Learned.
+* **Don't delete the 14 protos with no `src/` implementation.** Reserved future hardware coverage, not dead code. Proto count 49 > module count 35 on purpose.
+* **Don't rename the `arches.stream` package** in `protos/client_service.proto`. Renaming it once already required Client and Server to change in lockstep; any further rename needs the same cross-repo approval.
+* **Don't delete `src/platform_rpi5.h`.** Compatibility alias shim for modules not yet ported off the legacy platform header.
+* **Don't leave fork-lineage naming.** The tree should read as natively Arches. Leftovers are bugs, not intentional debt.
 
 <!-- BEGIN loop-engine -->
 ## Do's and Don'ts (maintained by the Loop Engine)
