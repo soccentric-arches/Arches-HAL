@@ -120,6 +120,9 @@ list:
 # -t: allocate a pseudo-TTY so Ctrl-C (SIGINT) is forwarded to the container
 # --init: use tini as PID 1 to properly propagate signals to child processes (e.g. ninja)
 # ccache volume: persist compilation cache across docker runs
+# QEMU check for ARM64 emulation (check binfmt interpreter exists)
+QEMU_AVAILABLE := $(shell test -f /usr/bin/qemu-aarch64-static && echo yes || echo no)
+
 DOCKER_RUN := docker run --rm -t --init --platform linux/arm64 -v $(PWD):/workspace -v ccache-arches:/home/arches/.ccache $(DOCKER_IMAGE) bash -c
 
 docker-install:
@@ -140,35 +143,67 @@ docker-image: docker-install
 
 docker-configure: docker-image
 	@echo "Configuring project with Docker/Ninja..."
-	$(DOCKER_RUN) "mkdir -p $(DOCKER_CROSS_BUILD_DIR) && cd $(DOCKER_CROSS_BUILD_DIR) && cmake -GNinja /workspace"
+	@if [ "$(QEMU_AVAILABLE)" = "yes" ]; then \
+		$(DOCKER_RUN) "mkdir -p $(DOCKER_CROSS_BUILD_DIR) && cd $(DOCKER_CROSS_BUILD_DIR) && cmake -GNinja /workspace"; \
+	else \
+		echo "  QEMU user-static not available. Install with: sudo apt-get install qemu-user-static"; \
+	fi
 
 docker-build: docker-image
 	@echo "Building project with Docker/Ninja..."
-	$(DOCKER_RUN) "if [ ! -f $(DOCKER_CROSS_BUILD_DIR)/build.ninja ]; then mkdir -p $(DOCKER_CROSS_BUILD_DIR) && cd $(DOCKER_CROSS_BUILD_DIR) && cmake -GNinja /workspace; fi && cd $(DOCKER_CROSS_BUILD_DIR) && ninja -j$(JOBS)"
+	@if [ "$(QEMU_AVAILABLE)" = "yes" ]; then \
+		$(DOCKER_RUN) "if [ ! -f $(DOCKER_CROSS_BUILD_DIR)/build.ninja ]; then mkdir -p $(DOCKER_CROSS_BUILD_DIR) && cd $(DOCKER_CROSS_BUILD_DIR) && cmake -GNinja /workspace; fi && cd $(DOCKER_CROSS_BUILD_DIR) && ninja -j$(JOBS)"; \
+	else \
+		echo "  QEMU user-static not available. Install with: sudo apt-get install qemu-user-static"; \
+	fi
 
 docker-clean: docker-image
 	@echo "Cleaning Docker build directory..."
-	$(DOCKER_RUN) "rm -rf $(DOCKER_CROSS_BUILD_DIR)"
+	@if [ "$(QEMU_AVAILABLE)" = "yes" ]; then \
+		$(DOCKER_RUN) "rm -rf $(DOCKER_CROSS_BUILD_DIR)"; \
+	else \
+		echo "  QEMU user-static not available. Install with: sudo apt-get install qemu-user-static"; \
+	fi
 
 docker-shell: docker-image
 	@echo "Starting Docker shell for development..."
-	docker run -it --rm --platform linux/arm64 -v $(PWD):/workspace -v ccache-arches:/home/arches/.ccache $(DOCKER_IMAGE) bash
+	@if [ "$(QEMU_AVAILABLE)" = "yes" ]; then \
+		docker run -it --rm --platform linux/arm64 -v $(PWD):/workspace -v ccache-arches:/home/arches/.ccache $(DOCKER_IMAGE) bash; \
+	else \
+		echo "  QEMU user-static not available. Install with: sudo apt-get install qemu-user-static"; \
+	fi
 
 docker-test: docker-build
 	@echo "Running tests inside Docker (ARM64 via QEMU)..."
-	$(DOCKER_RUN) "cd $(DOCKER_CROSS_BUILD_DIR) && ctest --output-on-failure -j$(JOBS)"
+	@if [ "$(QEMU_AVAILABLE)" = "yes" ]; then \
+		$(DOCKER_RUN) "cd $(DOCKER_CROSS_BUILD_DIR) && ctest --output-on-failure -j$(JOBS)"; \
+	else \
+		echo "  QEMU user-static not available. Install with: sudo apt-get install qemu-user-static"; \
+	fi
 
 docker-package-deb: docker-build
 	@echo "Generating DEB package (cross/ARM64)..."
-	$(DOCKER_RUN) "cd $(DOCKER_CROSS_BUILD_DIR) && cpack -G DEB"
+	@if [ "$(QEMU_AVAILABLE)" = "yes" ]; then \
+		$(DOCKER_RUN) "cd $(DOCKER_CROSS_BUILD_DIR) && cpack -G DEB"; \
+	else \
+		echo "  QEMU user-static not available. Install with: sudo apt-get install qemu-user-static"; \
+	fi
 
 docker-package-rpm: docker-build
 	@echo "Generating RPM package (cross/ARM64, requires rpmbuild in image)..."
-	$(DOCKER_RUN) "cd $(DOCKER_CROSS_BUILD_DIR) && cpack -G RPM"
+	@if [ "$(QEMU_AVAILABLE)" = "yes" ]; then \
+		$(DOCKER_RUN) "cd $(DOCKER_CROSS_BUILD_DIR) && cpack -G RPM"; \
+	else \
+		echo "  QEMU user-static not available. Install with: sudo apt-get install qemu-user-static"; \
+	fi
 
 docker-package-ipk: docker-build
 	@echo "Generating IPK package (cross/ARM64)..."
-	$(DOCKER_RUN) "cd $(DOCKER_CROSS_BUILD_DIR) && cmake --build . --target package_ipk"
+	@if [ "$(QEMU_AVAILABLE)" = "yes" ]; then \
+		$(DOCKER_RUN) "cd $(DOCKER_CROSS_BUILD_DIR) && cmake --build . --target package_ipk"; \
+	else \
+		echo "  QEMU user-static not available. Install with: sudo apt-get install qemu-user-static"; \
+	fi
 
 docker-package: docker-package-deb docker-package-ipk
 	@echo "Cross packages generated in build/cross/"
@@ -180,16 +215,38 @@ docker-package: docker-package-deb docker-package-ipk
 deploy: deploy-a deploy-b
 
 deploy-a: docker-build
-	$(call deploy_remote,$(IP_A))
+	@if [ "$(QEMU_AVAILABLE)" = "yes" ]; then \
+		echo "Deploying to $(IP_A)..."; \
+		$(SSH) $(USER)@$(IP_A) "rm -rf /tmp/acu-test && mkdir -p /tmp/acu-test"; \
+		$(SCP) -r $(CROSS_BUILD_DIR)/lib $(USER)@$(IP_A):/tmp/acu-test/; \
+		$(SCP) -r $(CROSS_BUILD_DIR)/bin $(USER)@$(IP_A):/tmp/acu-test/; \
+	else \
+		echo "  QEMU user-static not available. Install with: sudo apt-get install qemu-user-static"; \
+	fi
 
 deploy-b: docker-build
-	$(call deploy_remote,$(IP_B))
+	@if [ "$(QEMU_AVAILABLE)" = "yes" ]; then \
+		echo "Deploying to $(IP_B)..."; \
+		$(SSH) $(USER)@$(IP_B) "rm -rf /tmp/acu-test && mkdir -p /tmp/acu-test"; \
+		$(SCP) -r $(CROSS_BUILD_DIR)/lib $(USER)@$(IP_B):/tmp/acu-test/; \
+		$(SCP) -r $(CROSS_BUILD_DIR)/bin $(USER)@$(IP_B):/tmp/acu-test/; \
+	else \
+		echo "  QEMU user-static not available. Install with: sudo apt-get install qemu-user-static"; \
+	fi
 
 run-a: deploy-a
-	$(call run_remote,$(IP_A))
+	@if [ "$(QEMU_AVAILABLE)" = "yes" ]; then \
+		$(call run_remote,$(IP_A)); \
+	else \
+		echo "  QEMU user-static not available. Install with: sudo apt-get install qemu-user-static"; \
+	fi
 
 run-b: deploy-b
-	$(call run_remote,$(IP_B))
+	@if [ "$(QEMU_AVAILABLE)" = "yes" ]; then \
+		$(call run_remote,$(IP_B)); \
+	else \
+		echo "  QEMU user-static not available. Install with: sudo apt-get install qemu-user-static"; \
+	fi
 
 # =============================================================================
 # Code quality & Docs
@@ -197,7 +254,11 @@ run-b: deploy-b
 
 format: configure
 	@echo "Formatting C++ files with clang-format..."
-	cd $(NATIVE_BUILD_DIR) && ninja format
+	@if command -v clang-format > /dev/null 2>&1; then \
+		cd $(NATIVE_BUILD_DIR) && ninja format; \
+	else \
+		echo "  clang-format not found, skipping C++ formatting."; \
+	fi
 	@echo "Formatting CMake files..."
 	@if command -v cmake-format > /dev/null 2>&1; then \
 		find . -name CMakeLists.txt -not -path './build/*' | xargs cmake-format -i; \
@@ -211,7 +272,11 @@ cppcheck: configure
 
 doc: configure
 	@echo "Generating documentation..."
-	cd $(NATIVE_BUILD_DIR) && ninja doc_doxygen
+	@if command -v doxygen > /dev/null 2>&1; then \
+		cd $(NATIVE_BUILD_DIR) && ninja doc_doxygen; \
+	else \
+		echo "  Doxygen not found. Install doxygen (apt-get install doxygen) to generate docs."; \
+	fi
 
 # =============================================================================
 # Packaging (DEB / IPK / RPM)
@@ -223,9 +288,13 @@ package-deb: build
 	@echo "Package: $$(ls $(NATIVE_BUILD_DIR)/arches-hal_*.deb 2>/dev/null | head -1)"
 
 package-rpm: build
-	@echo "Generating RPM package (requires rpmbuild: sudo apt-get install rpm)..."
-	cd $(NATIVE_BUILD_DIR) && cpack -G RPM
-	@echo "Package: $$(ls $(NATIVE_BUILD_DIR)/arches-hal-*.rpm 2>/dev/null | head -1)"
+	@echo "Generating RPM package..."
+	@if command -v rpmbuild > /dev/null 2>&1; then \
+		cd $(NATIVE_BUILD_DIR) && cpack -G RPM; \
+		echo "Package: $$(ls $(NATIVE_BUILD_DIR)/arches-hal-*.rpm 2>/dev/null | head -1)"; \
+	else \
+		echo "  rpmbuild not found. Install with: sudo apt-get install rpm"; \
+	fi
 
 package-ipk: build
 	@echo "Generating IPK package..."
@@ -246,6 +315,14 @@ setup-completion:
 		echo "Added completion to ~/.bashrc. Restart your shell or run 'source ~/.bashrc' to activate."; \
 	else \
 		echo "Completion already set up in ~/.bashrc."; \
+	fi
+
+install-tools:
+	@echo "Installing missing host tools..."
+	@if [ -x script/install-tools.sh ]; then \
+		script/install-tools.sh; \
+	else \
+		echo "  script/install-tools.sh not found. Run from the project root."; \
 	fi
 
 # =============================================================================
@@ -299,6 +376,7 @@ help:
 	@echo ""
 	@echo "  Misc:"
 	@echo "    setup-completion - Set up bash completion for make (adds to ~/.bashrc)"
+	@echo "    install-tools    - Install missing host tools (clang-format, doxygen, rpm, QEMU, ...)"
 	@echo ""
 	@echo "  Environment variables:"
 	@echo "    HAL_SSH_USER  - SSH username for deploy (default: nvidia)"

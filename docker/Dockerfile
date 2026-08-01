@@ -59,6 +59,7 @@ RUN apt-get update && apt-get install -y wget && \
 
 # Install additional dependencies
 RUN apt-get update && apt-get install -y build-essential cmake git sudo ccache file \
+    clang-format cmake-format doxygen rpm sshpass \
     && rm -rf /var/lib/apt/lists/*
 
 # --no-log-init

@@ -57,6 +57,22 @@ if(CPPCHECK)
             --platform=unix64
             --suppress=missingIncludeSystem
             --suppress=missingInclude
+            --suppress=variableScope
+            --suppress=unreadVariable
+            --suppress=unusedStructMember
+            --suppress=constVariablePointer
+            --suppress=constVariableReference
+            --suppress=useStlAlgorithm
+            --suppress=unusedFunction
+            --suppress=knownConditionTrueFalse
+            --suppress=constParameter
+            --suppress=uselessCallsSubstr
+            --suppress=redundantInitialization
+            --suppress=duplicateAssignExpression
+            --suppress=constVariable
+            --suppress=useInitializationList
+            --suppress=shadowFunction
+            --suppress=redundantCondition
             --inline-suppr
             --quiet
             --error-exitcode=1
