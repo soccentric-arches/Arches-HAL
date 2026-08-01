@@ -237,3 +237,4 @@ secrets/
 build/cross/
 # Generated bash completion install artifacts
 make_completion.bash.out
+.claude/reports/

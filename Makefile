@@ -328,7 +328,23 @@ install-tools:
 run-all-targets:
 	@echo "Running all Makefile targets and generating report..."
 	@if [ -x script/run-all-targets.sh ]; then \
-		script/run-all-targets.sh $(filter-out $@,$(MAKECMDGOALS)); \
+		script/run-all-targets.sh; \
+	else \
+		echo "  script/run-all-targets.sh not found. Run from the project root."; \
+	fi
+
+run-all-targets-quick:
+	@echo "Running all Makefile targets (quick mode) and generating report..."
+	@if [ -x script/run-all-targets.sh ]; then \
+		script/run-all-targets.sh --quick; \
+	else \
+		echo "  script/run-all-targets.sh not found. Run from the project root."; \
+	fi
+
+run-all-targets-build:
+	@echo "Running build targets and generating report..."
+	@if [ -x script/run-all-targets.sh ]; then \
+		script/run-all-targets.sh --build; \
 	else \
 		echo "  script/run-all-targets.sh not found. Run from the project root."; \
 	fi
@@ -385,9 +401,9 @@ help:
 	@echo "  Misc:"
 	@echo "    setup-completion - Set up bash completion for make (adds to ~/.bashrc)"
 	@echo "    install-tools    - Install missing host tools (clang-format, doxygen, rpm, QEMU, ...)"
-	@echo "    run-all-targets  - Run all targets and generate pass/fail report"
-	@echo "    run-all-targets --quick  - Skip slow/hardware targets"
-	@echo "    run-all-targets --build  - Only native build + test + package"
+	@echo "    run-all-targets          - Run all targets and generate pass/fail report"
+	@echo "    run-all-targets-quick    - Skip slow/hardware targets"
+	@echo "    run-all-targets-build    - Only native build + test + package"
 	@echo ""
 	@echo "  Environment variables:"
 	@echo "    HAL_SSH_USER  - SSH username for deploy (default: nvidia)"

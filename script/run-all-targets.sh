@@ -93,6 +93,11 @@ SLOW_TARGETS=(
   run-b
 )
 
+# Targets that are interactive-only (require a TTY) — always skipped
+INTERACTIVE_TARGETS=(
+  docker-shell
+)
+
 BUILD_TARGETS=(
   configure
   build
@@ -124,10 +129,24 @@ elif [[ "${1:-}" == "--list" ]]; then
   exit 0
 fi
 
+# Build the target list, filtering out interactive-only targets in all modes
+filter_targets() {
+  local candidates=("$@")
+  local result=()
+  for t in "${candidates[@]}"; do
+    local skip=false
+    for interactive in "${INTERACTIVE_TARGETS[@]}"; do
+      [[ "$t" == "$interactive" ]] && { skip=true; break; }
+    done
+    $skip || result+=("$t")
+  done
+  echo "${result[@]}"
+}
+
 case "$mode" in
   quick)
     TARGETS=()
-    for t in "${ALL_TARGETS[@]}"; do
+    for t in $(filter_targets "${ALL_TARGETS[@]}"); do
       skip=false
       for slow in "${SLOW_TARGETS[@]}"; do
         [[ "$t" == "$slow" ]] && { skip=true; break; }
@@ -136,10 +155,10 @@ case "$mode" in
     done
     ;;
   build)
-    TARGETS=("${BUILD_TARGETS[@]}")
+    mapfile -t TARGETS < <(filter_targets "${BUILD_TARGETS[@]}" | tr ' ' '\n')
     ;;
   *)
-    TARGETS=("${ALL_TARGETS[@]}")
+    mapfile -t TARGETS < <(filter_targets "${ALL_TARGETS[@]}" | tr ' ' '\n')
     ;;
 esac
 
