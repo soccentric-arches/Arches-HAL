@@ -11,6 +11,8 @@
 #   clang-format          C++ formatting (format target)
 #   cmake-format          CMake file formatting (format target)
 #   doxygen               API documentation generation (doc target)
+#   graphviz              Call/caller/class graphs in Doxygen output (doc target)
+#   texlive-latex-extra    LaTeX toolchain for the PDF reference (doc-pdf target)
 #   rpm                   rpmbuild for RPM packaging (package-rpm target)
 #   qemu-user-static      ARM64 binary emulation (docker-* targets)
 #   sshpass               SSH password auth for deploy targets
@@ -37,6 +39,8 @@ TOOLS=(
   "clang-format:clang-format:C++ formatter"
   "cmake-format:cmake-format:CMake formatter"
   "doxygen:doxygen:API documentation generator"
+  "dot:graphviz:Graphviz (Doxygen call/caller/class graphs)"
+  "pdflatex:texlive-latex-extra:LaTeX toolchain (Doxygen PDF reference)"
   "rpmbuild:rpm:RPM package builder"
   "qemu-aarch64-static:qemu-user-static:ARM64 QEMU emulation"
   "sshpass:sshpass:SSH password auth"
@@ -146,7 +150,7 @@ done
 echo ""
 if [ "$all_ok" = true ]; then
   log_info "All tools installed successfully."
-  log_info "Run 'make format' / 'make doc' / 'make package-rpm' / 'make docker-build' to use them."
+  log_info "Run 'make format' / 'make doc' / 'make doc-pdf' / 'make package-rpm' / 'make docker-build' to use them."
 else
   log_fail "Some tools failed to install. Check errors above."
   exit 1

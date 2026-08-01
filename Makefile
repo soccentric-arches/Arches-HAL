@@ -1,7 +1,7 @@
 # Master Makefile for Arches HAL
 # Supports both native and Docker-based builds with Ninja
 
-.PHONY: all build configure clean test format cppcheck doc help
+.PHONY: all build configure clean test format cppcheck doc doc-pdf help
 .PHONY: package package-deb package-rpm package-ipk
 .PHONY: docker-build docker-configure docker-clean docker-shell docker-install docker-image docker-test
 .PHONY: docker-package docker-package-deb docker-package-rpm docker-package-ipk
@@ -271,11 +271,23 @@ cppcheck: configure
 	cd $(NATIVE_BUILD_DIR) && ninja cppcheck
 
 doc: configure
-	@echo "Generating documentation..."
+	@echo "Generating documentation (HTML + XML + man)..."
 	@if command -v doxygen > /dev/null 2>&1; then \
 		cd $(NATIVE_BUILD_DIR) && ninja doc_doxygen; \
+		echo "  HTML: $(NATIVE_BUILD_DIR)/docs/html/index.html"; \
 	else \
-		echo "  Doxygen not found. Install doxygen (apt-get install doxygen) to generate docs."; \
+		echo "  Doxygen not found. Run 'make install-tools' or apt-get install doxygen graphviz."; \
+	fi
+
+doc-pdf: configure
+	@echo "Generating documentation and building the PDF reference..."
+	@if ! command -v doxygen > /dev/null 2>&1; then \
+		echo "  Doxygen not found. Run 'make install-tools' or apt-get install doxygen graphviz."; \
+	elif ! command -v pdflatex > /dev/null 2>&1; then \
+		echo "  pdflatex not found. Run 'make install-tools' or apt-get install texlive-latex-extra."; \
+	else \
+		cd $(NATIVE_BUILD_DIR) && ninja doc_doxygen_pdf; \
+		echo "  PDF: $(NATIVE_BUILD_DIR)/docs/Arches-HAL-Reference.pdf"; \
 	fi
 
 # =============================================================================
@@ -396,7 +408,8 @@ help:
 	@echo "  Code quality & Docs:"
 	@echo "    format       - Format code with clang-format (and cmake-format if available)"
 	@echo "    cppcheck     - Run static analysis with cppcheck"
-	@echo "    doc          - Generate Doxygen documentation"
+	@echo "    doc          - Generate Doxygen documentation (HTML + XML + man)"
+	@echo "    doc-pdf      - Generate Doxygen documentation + build PDF reference (needs pdflatex)"
 	@echo ""
 	@echo "  Misc:"
 	@echo "    setup-completion - Set up bash completion for make (adds to ~/.bashrc)"

@@ -1,0 +1,70 @@
+/**
+@mainpage Arches HAL Reference
+
+@section overview Overview
+
+Arches HAL is the C++17 hardware abstraction and validation layer for the
+Jetson (Tegra, L4T/JetPack) plus its STM32 real-time co-processor. It is
+two things at once:
+
+- A hardware test-suite framework: one binary per module, all sharing the
+  same `TestBase` / `runTestApp<T>()` CLI (one-shot, monitoring,
+  long-term, monitor-test, event).
+- The canonical proto/gRPC contract source for the fleet. Arches-Client
+  and Arches-Server link this repo and never regenerate its generated
+  symbols.
+
+@section layout Layout
+
+- `src/<module>_lib/` — one library per hardware module, each a `TestBase`
+  subclass, paired with `tests/<module>/` and `protos/modules/<id>.proto`.
+- `src/lib_base.h` / `.cpp` — the shared `TestBase`, `TestOutput`,
+  `hal::Status`, `hal::Value` framework every module subclasses.
+- `src/test_runner.h` — `runTestApp<T>()`, the template that gives every
+  module binary its uniform CLI.
+- `src/platform_arches.h` — Jetson platform constants (SoC family,
+  L4T/JetPack OS, CPU core range, thermal limits, GPU render node,
+  devfreq/thermal-zone paths) plus the STM32 UART/SPI framing constants.
+- `src/stm32_transport.h` / `.cpp` + `src/mcu_interface_lib/` — the STM32
+  co-processor link (`Stm32Transport`): GPIO/SPI/UART/DMS pass-through,
+  secondary-MCU redundancy, failover, sync.
+- `protos/hal_service.proto` — the stable gRPC contract; module
+  config/result are `google.protobuf.Any`, so adding a module never
+  changes an RPC signature.
+- `protos/client_service.proto` — the bidi streaming contract, package
+  `arches.stream`.
+- `protos/registry/modules.yaml` — the machine-readable module manifest
+  every consumer reads.
+
+@section modules The modules
+
+audio_interfaces, camera_interfaces, camera_module3, clock_and_timing,
+communication_interface, cpu, debug_and_development_interfaces,
+deep_learning_accelerator, display_interfaces, environmental, ethernet,
+ethernet_switch, external_connector, functional_safety, gnss, gpio, gpu,
+imu, mcu_interface, pcie, poe_hat, power_management, reliability,
+security_features, sense_hat, serializer_deserializer, software_interface,
+storage, system_integration, system_memory, thermal_management, usb,
+video_encode_decode, vision_accelerator, watchdog_and_reset.
+
+49 proto contracts exist against 35 implemented modules by design — the
+extra 14 are reserved for hardware coverage that hasn't landed in `src/`
+yet. Browse `protos/registry/modules.yaml` in the source listing below for
+the full manifest.
+
+@section building Building this documentation
+
+```
+make doc          # HTML (+ XML, man) via Doxygen — needs doxygen, graphviz
+make doc-pdf       # also builds docs/Arches-HAL-Reference.pdf — needs pdflatex
+make install-tools # installs doxygen/graphviz/texlive if missing
+```
+
+Output lands under `build/native/docs/` (`html/`, `latex/`,
+`Arches-HAL-Reference.pdf`, `xml/`, `man/`). Nothing under `build/` is
+version-controlled.
+
+@note Coverage of `\brief`/`\param` style comments across the 35 modules
+is a work in progress — `WARN_LOGFILE` in the Doxygen run lists what's
+still undocumented without failing the build (see `Doxyfile.in`).
+*/

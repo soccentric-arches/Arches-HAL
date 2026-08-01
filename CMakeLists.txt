@@ -82,25 +82,63 @@ if(CPPCHECK)
     # cmake-format: on
 endif()
 
-# Doxygen
-find_package(Doxygen)
+# Doxygen — full reference: HTML + LaTeX source + XML + man, call/caller
+# graphs, UML class diagrams, source browser (see Doxyfile.in for the full
+# feature set). `doc_doxygen` produces everything except the compiled PDF;
+# `doc_doxygen_pdf` additionally compiles docs/latex into
+# docs/Arches-HAL-Reference.pdf via pdflatex.
+find_package(Doxygen OPTIONAL_COMPONENTS dot)
+find_program(PDFLATEX_EXECUTABLE pdflatex)
+# The doxygen-generated docs/latex/Makefile is a plain GNU Makefile
+# regardless of this project's own generator (Ninja or Unix Makefiles), so
+# invoke `make` directly rather than relying on generator-specific $(MAKE)
+# expansion.
+find_program(MAKE_EXECUTABLE NAMES make gmake)
 if(DOXYGEN_FOUND)
   set(DOXYGEN_IN ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in)
   set(DOXYGEN_OUT ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
+  set(DOXYGEN_DOCS_DIR ${CMAKE_CURRENT_BINARY_DIR}/docs)
 
   configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
+  file(MAKE_DIRECTORY ${DOXYGEN_DOCS_DIR})
   message("Doxygen build started")
+  if(NOT DOXYGEN_DOT_FOUND)
+    message(
+      "  graphviz (dot) not found — Doxyfile.in requests HAVE_DOT, so "
+      "doxygen will emit a warning and skip call/class graphs rather than "
+      "fail; install graphviz for the full graph output.")
+  endif()
 
   # cmake-format: off
     add_custom_target(doc_doxygen
         COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-        COMMENT "Generating API documentation with Doxygen"
+        COMMENT "Generating Arches HAL reference (HTML + LaTeX + XML + man) with Doxygen"
         VERBATIM
     )
     # cmake-format: on
+
+  if(PDFLATEX_EXECUTABLE AND MAKE_EXECUTABLE)
+    # cmake-format: off
+      add_custom_target(doc_doxygen_pdf
+          COMMAND ${MAKE_EXECUTABLE} -C ${DOXYGEN_DOCS_DIR}/latex
+          COMMAND ${CMAKE_COMMAND} -E copy
+                  ${DOXYGEN_DOCS_DIR}/latex/refman.pdf
+                  ${DOXYGEN_DOCS_DIR}/Arches-HAL-Reference.pdf
+          DEPENDS doc_doxygen
+          WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+          COMMENT "Building Arches HAL reference PDF (docs/Arches-HAL-Reference.pdf)"
+          VERBATIM
+      )
+      # cmake-format: on
+  else()
+    message(
+      "  pdflatex not found — 'doc_doxygen_pdf' target unavailable; "
+      "install a LaTeX toolchain (e.g. texlive-latex-extra) for the PDF "
+      "reference. HTML/XML/man via 'doc_doxygen' still work.")
+  endif()
 else()
-  message("Doxygen need to be installed to generate the doxygen documentation")
+  message("Doxygen needs to be installed to generate the Arches HAL reference documentation")
 endif()
 
 # Add proto layer (generated Protobuf/gRPC contracts only; no server/client)
