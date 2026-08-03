@@ -1,3 +1,7 @@
+IMPLEMENTATION STATUS: Provider injection pattern applied (provider_base.h includes, CMakeLists.txt linked). Module-specific typed metrics, SKIPPED status, and periodic-safe subsets pending per-module implementation.
+
+IMPLEMENTATION STATUS: Provider injection pattern applied (provider_base.h includes, CMakeLists.txt linked). Module-specific typed metrics, SKIPPED status, and periodic-safe subsets pending per-module implementation.
+
 CPU review
 ==========
 

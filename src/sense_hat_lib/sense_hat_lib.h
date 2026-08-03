@@ -6,6 +6,8 @@
 #ifndef SENSEHATTESTING_H
 #define SENSEHATTESTING_H
 #include "lib_base.h"
+#include "module_helpers.h"
+#include "provider_base.h"
 
 /**
  * @class SenseHatTesting
@@ -52,6 +54,20 @@ public:
   TestOutput testI2cBusIntegrity();
 
   std::vector<std::string> getAvailableTests() override;
+  /// @brief Constructor with injected providers for deterministic testing
+  explicit SenseHatTesting(std::shared_ptr<SysfsProvider> sysfs,
+                           std::shared_ptr<CommandProvider> cmd = nullptr);
+
+  /// @brief Get periodic-safe test names (passive health checks only)
+  std::vector<std::string> getPeriodicSafeTests() const;
+
+  /// @brief Get one-shot only test names (destructive/state-changing)
+  std::vector<std::string> getOneShotOnlyTests() const;
+
+private:
+  std::shared_ptr<SysfsProvider> sysfs_;
+  std::shared_ptr<CommandProvider> cmd_;
+
   TestResult runSingleTest(const std::string &testName) override;
 
 protected:

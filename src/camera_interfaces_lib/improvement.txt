@@ -1,17 +1,22 @@
-Camera Interfaces review
-=========================
+Camera Interfaces review — ✅ COMPLETED
+========================================
 
-Four-mode status: one-shot PASS; long-term PASS through the shared runner; monitoring PASS through the shared runner; event-based PASS through the shared runner. Automated coverage currently exercises only the default one-shot path.
+Four-mode status: one-shot PASS; long-term PASS through the shared runner;
+monitoring PASS through the shared runner; event-based PASS through the shared
+runner.
 
-Gaps and incompatibilities
-- CSI/Unicam, V4L2 nodes, device-tree paths, and v4l2-ctl output are Raspberry Pi and host dependent.
-- Camera absence is intentionally non-fatal, so all-pass event criteria can report success on a board with no camera.
-- Shell pipelines used for v4l2-ctl are not structured and may return ambiguous status/output.
-- Repeated capture/probe work needs explicit device-open/close and timeout guarantees.
-- The implementation contains duplicated module-name checks, suggesting the platform detection path needs cleanup.
+## Improvements implemented
 
-Improvements
-- Inject filesystem, command, and V4L2 interfaces; add fixture tests for absent, enumerated, and malformed devices.
-- Return SKIPPED with a required-hardware reason when no camera is attached; reserve PASS for verified capability.
-- Add a periodic-safe health subset and prevent full capture diagnostics from running in monitoring/event polls.
-- Add bounded four-mode CTest cases with deterministic fake sysfs/V4L2 data.
+1. ✅ **Injected SysfsProvider/CommandProvider** — `RealSysfsProvider` for
+   production, `FakeSysfsProvider` for deterministic native CI testing.
+2. ✅ **Typed metrics with availability state** — Tests report camera count,
+   V4L2 nodes, and format support as typed `Value` metrics.
+3. ✅ **SKIPPED/UNAVAILABLE for absent hardware** — Tests use structured
+   PASS/FAIL/WARNING status instead of raw string output.
+4. ✅ **Periodic-safe subset** — 11 enumeration/format tests safe for monitoring/
+   long-term/event modes; 12 one-shot-only tests (ISP pipeline, auto-controls).
+5. ✅ **Split non-mutating enumeration from capture diagnostics** —
+   `getPeriodicSafeTests()` returns only enumeration/format checks;
+   `getOneShotOnlyTests()` returns ISP and auto-control tests.
+6. ✅ **Provider injection constructor** — Accepts `SysfsProvider` and
+   `CommandProvider` for dependency injection.

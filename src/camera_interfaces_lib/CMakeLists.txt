@@ -3,7 +3,7 @@ add_library(camera_interfaces_lib camera_interfaces_lib.cpp
 target_include_directories(
   camera_interfaces_lib PUBLIC ${CMAKE_SOURCE_DIR}/src
                                ${CMAKE_CURRENT_SOURCE_DIR})
-target_link_libraries(camera_interfaces_lib PUBLIC lib_base)
+target_link_libraries(camera_interfaces_lib PUBLIC lib_base provider_base)
 install(
   TARGETS camera_interfaces_lib
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}

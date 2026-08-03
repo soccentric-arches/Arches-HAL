@@ -11,6 +11,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(Threads REQUIRED)
 include(GNUInstallDirs)
 
+
+SET (MAINFOLDER ${PROJECT_SOURCE_DIR})
+SET (EXECUTABLE_OUTPUT_PATH "${MAINFOLDER}/bin")
+SET (LIBRARY_OUTPUT_PATH "${MAINFOLDER}/lib")
+
 # Enable testing
 enable_testing()
 

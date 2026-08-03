@@ -1,5 +1,7 @@
 /**
 #include "lib_base.h"
+#include "module_helpers.h"
+#include "provider_base.h"
  * @file storage_lib.h
  * @brief Header file for StorageTesting class
  * @author sandesh ghimire
@@ -7,6 +9,8 @@
 #ifndef STORAGETESTING_H
 #define STORAGETESTING_H
 #include "lib_base.h"
+#include "module_helpers.h"
+#include "provider_base.h"
 
 /**
  * @class class StorageTesting : public TestBase
@@ -187,6 +191,20 @@ public: /**
    * @param testName Name of the test to run
    * @return Test result with timing
    */
+  /// @brief Constructor with injected providers for deterministic testing
+  explicit StorageTesting(std::shared_ptr<SysfsProvider> sysfs,
+                          std::shared_ptr<CommandProvider> cmd = nullptr);
+
+  /// @brief Get periodic-safe test names (passive health checks only)
+  std::vector<std::string> getPeriodicSafeTests() const;
+
+  /// @brief Get one-shot only test names (destructive/state-changing)
+  std::vector<std::string> getOneShotOnlyTests() const;
+
+private:
+  std::shared_ptr<SysfsProvider> sysfs_;
+  std::shared_ptr<CommandProvider> cmd_;
+
   TestResult runSingleTest(const std::string &testName) override;
 
 protected:

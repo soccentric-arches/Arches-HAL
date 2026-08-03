@@ -282,8 +282,7 @@ private:
 
   // Sleep until wake_time or until stop() is called (whichever comes first).
   // Returns true if stopped_ was set during the wait.
-  bool waitUntilOrStop(
-      const std::chrono::steady_clock::time_point &wake_time);
+  bool waitUntilOrStop(const std::chrono::steady_clock::time_point &wake_time);
 
   std::atomic<bool> stopped_;
   std::atomic<bool> paused_{false};

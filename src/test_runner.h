@@ -75,16 +75,19 @@ static std::string trReadSysfs(const std::string &path) {
 static long long trParseDuration(const std::string &s) {
   try {
     if (s.empty() || s[0] == '-') {
-      std::cerr << "[ERROR] Duration must be non-negative, got \"" << s << "\"\n";
+      std::cerr << "[ERROR] Duration must be non-negative, got \"" << s
+                << "\"\n";
       return -1LL;
     }
     if (s.size() >= 3 && s.substr(s.size() - 2) == "ms") {
       std::string num = s.substr(0, s.size() - 2);
-      if (num.empty() || num[0] == '-') return -1LL;
+      if (num.empty() || num[0] == '-')
+        return -1LL;
       std::size_t pos = 0;
       long long val = std::stoll(num, &pos);
       if (pos != num.size()) {
-        std::cerr << "[ERROR] Trailing characters in duration \"" << s << "\"\n";
+        std::cerr << "[ERROR] Trailing characters in duration \"" << s
+                  << "\"\n";
         return -1LL;
       }
       return val;
@@ -92,11 +95,13 @@ static long long trParseDuration(const std::string &s) {
     if (s.size() >= 2) {
       char u = s.back();
       std::string n = s.substr(0, s.size() - 1);
-      if (n.empty() || n[0] == '-') return -1LL;
+      if (n.empty() || n[0] == '-')
+        return -1LL;
       std::size_t pos = 0;
       long long num = std::stoll(n, &pos);
       if (pos != n.size()) {
-        std::cerr << "[ERROR] Trailing characters in duration \"" << s << "\"\n";
+        std::cerr << "[ERROR] Trailing characters in duration \"" << s
+                  << "\"\n";
         return -1LL;
       }
       if (u == 's')
@@ -125,18 +130,21 @@ static long long trParseDuration(const std::string &s) {
 // Returns -1 on failure (negative, zero, trailing chars, or non-numeric).
 static int trParsePositiveInt(const std::string &s, const std::string &name) {
   if (s.empty() || s[0] == '-') {
-    std::cerr << "[ERROR] " << name << " must be positive, got \"" << s << "\"\n";
+    std::cerr << "[ERROR] " << name << " must be positive, got \"" << s
+              << "\"\n";
     return -1;
   }
   try {
     std::size_t pos = 0;
     int val = std::stoi(s, &pos);
     if (pos != s.size()) {
-      std::cerr << "[ERROR] Trailing characters in " << name << ": \"" << s << "\"\n";
+      std::cerr << "[ERROR] Trailing characters in " << name << ": \"" << s
+                << "\"\n";
       return -1;
     }
     if (val <= 0) {
-      std::cerr << "[ERROR] " << name << " must be positive, got " << val << "\n";
+      std::cerr << "[ERROR] " << name << " must be positive, got " << val
+                << "\n";
       return -1;
     }
     return val;
@@ -475,7 +483,8 @@ int runTestApp(const std::string &appName, int argc, char *argv[]) {
     int interval_ms = 1000;
     if (argc > 2) {
       interval_ms = trParsePositiveInt(argv[2], "interval_ms");
-      if (interval_ms < 0) return 1;
+      if (interval_ms < 0)
+        return 1;
     }
     T tester;
     int cycle = 0;
@@ -502,7 +511,8 @@ int runTestApp(const std::string &appName, int argc, char *argv[]) {
       return 1;
     }
     int interval_ms = trParsePositiveInt(argv[2], "interval_ms");
-    if (interval_ms < 0) return 1;
+    if (interval_ms < 0)
+      return 1;
     long long duration_ms = trParseDuration(argv[3]);
     if (duration_ms < 0)
       return 1;
@@ -529,7 +539,8 @@ int runTestApp(const std::string &appName, int argc, char *argv[]) {
       return 1;
     }
     int interval_ms = trParsePositiveInt(argv[2], "interval_ms");
-    if (interval_ms < 0) return 1;
+    if (interval_ms < 0)
+      return 1;
     long long duration_ms = trParseDuration(argv[3]);
     if (duration_ms < 0)
       return 1;
@@ -559,7 +570,8 @@ int runTestApp(const std::string &appName, int argc, char *argv[]) {
       return 1;
     }
     int poll_ms = trParsePositiveInt(argv[2], "poll_ms");
-    if (poll_ms < 0) return 1;
+    if (poll_ms < 0)
+      return 1;
     EventCriteria criteria = trMakeCriteria(argv[3]);
     long long max_dur_ms = 0;
     if (argc > 4) {

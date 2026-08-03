@@ -1,5 +1,7 @@
 /**
 #include "lib_base.h"
+#include "module_helpers.h"
+#include "provider_base.h"
  * @file gpio_lib.h
  * @brief Header file for GpioTesting class
  * @author sandesh ghimire
@@ -7,6 +9,8 @@
 #ifndef GPIOTESTING_H
 #define GPIOTESTING_H
 #include "lib_base.h"
+#include "module_helpers.h"
+#include "provider_base.h"
 
 #include <chrono>
 #include <map>
@@ -295,6 +299,20 @@ public: /**
   /**
    * @brief Function runAllTests
    * @return TestOutput with pass/fail and data
+  /// @brief Constructor with injected providers for deterministic testing
+  explicit GpioTesting(std::shared_ptr<SysfsProvider> sysfs,
+                        std::shared_ptr<CommandProvider> cmd = nullptr);
+
+  /// @brief Get periodic-safe test names (passive health checks only)
+  std::vector<std::string> getPeriodicSafeTests() const;
+
+  /// @brief Get one-shot only test names (destructive/state-changing)
+  std::vector<std::string> getOneShotOnlyTests() const;
+
+private:
+  std::shared_ptr<SysfsProvider> sysfs_;
+  std::shared_ptr<CommandProvider> cmd_;
+
    */
 protected:
   std::vector<TestResult> runAllTests() override;

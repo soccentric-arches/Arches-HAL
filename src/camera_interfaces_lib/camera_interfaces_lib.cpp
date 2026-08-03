@@ -20,97 +20,100 @@
 #include <unistd.h>
 #include <vector>
 
+CameraInterfacesTesting::CameraInterfacesTesting()
+    : sysfs_(std::make_shared<RealSysfsProvider>()),
+      cmd_(std::make_shared<RealCommandProvider>()) {}
+
+CameraInterfacesTesting::CameraInterfacesTesting(
+    std::shared_ptr<SysfsProvider> sysfs, std::shared_ptr<CommandProvider> cmd)
+    : sysfs_(sysfs ? sysfs : std::make_shared<RealSysfsProvider>()),
+      cmd_(cmd ? cmd : std::make_shared<RealCommandProvider>()) {}
+
+CameraInterfacesTesting::~CameraInterfacesTesting() {}
+
 // ---------------------------------------------------------------------------
-// Helper utilities
+// Periodic-safe / one-shot-only classification
 // ---------------------------------------------------------------------------
 
-/** Read first line from a sysfs / procfs text file, strip trailing newline. */
-static std::string readFile(const std::string &path) {
-  std::ifstream f(path);
-  if (!f.is_open())
-    return "";
-  std::string line;
-  std::getline(f, line);
-  while (!line.empty() && (line.back() == '\n' || line.back() == '\r'))
-    line.pop_back();
-  return line;
+std::vector<std::string> CameraInterfacesTesting::getPeriodicSafeTests() const {
+  return {
+      "testAllCsi2LanesFunctionality",
+      "testCsi2DphyOperation",
+      "testCsi2CphyOperation",
+      "testVirtualChannelSupport",
+      "testCameraClockGeneration",
+      "testRaw8",
+      "testRaw10",
+      "testRaw12",
+      "testRaw14",
+      "testYuv422",
+      "testRgbFormats",
+  };
 }
 
-/** Return true if a path exists (file or directory). */
-static bool pathExists(const std::string &path) {
-  struct stat st;
-  return (stat(path.c_str(), &st) == 0);
+std::vector<std::string> CameraInterfacesTesting::getOneShotOnlyTests() const {
+  return {
+      "testMultipleCameraSimultaneousOperation",
+      "testCameraPowerSequencing",
+      "testIspPipelineProcessing",
+      "testAutoExposure",
+      "testAutoWhiteBalance",
+      "testAutoFocus",
+      "testLensShadingCorrection",
+      "testDemosaicing",
+      "testNoiseReduction",
+      "testEdgeEnhancement",
+      "testColorCorrectionMatrix",
+      "testGammaCorrection",
+  };
 }
 
-/** List directory entries (non-recursive). */
-static std::vector<std::string> listDir(const std::string &dir) {
-  std::vector<std::string> entries;
-  DIR *d = opendir(dir.c_str());
-  if (!d)
-    return entries;
-  struct dirent *de;
-  while ((de = readdir(d)) != nullptr) {
-    std::string name(de->d_name);
-    if (name == "." || name == "..")
-      continue;
-    entries.push_back(dir + "/" + name);
-  }
-  closedir(d);
-  return entries;
+// ---------------------------------------------------------------------------
+// Internal helpers using injected providers
+// ---------------------------------------------------------------------------
+
+std::string CameraInterfacesTesting::readFile(const std::string &path) const {
+  return sysfs_->readFile(path);
 }
 
-/** Check if a kernel module is loaded. */
-static bool isModuleLoaded(const std::string &modName) {
-  std::ifstream mods("/proc/modules");
-  if (!mods.is_open())
+bool CameraInterfacesTesting::pathExists(const std::string &path) const {
+  return sysfs_->pathExists(path);
+}
+
+std::vector<std::string>
+CameraInterfacesTesting::listDir(const std::string &dir) const {
+  return sysfs_->listDir(dir);
+}
+
+bool CameraInterfacesTesting::isModuleLoaded(const std::string &modName) const {
+  std::string content = sysfs_->readFile("/proc/modules");
+  if (content.empty())
     return false;
+  std::istringstream iss(content);
   std::string line;
-  while (std::getline(mods, line)) {
-    std::istringstream iss(line);
+  while (std::getline(iss, line)) {
+    std::istringstream ls(line);
     std::string name;
-    iss >> name;
+    ls >> name;
     if (name == modName)
       return true;
   }
   return false;
 }
 
-/** Run a shell command and capture its stdout (first 4096 bytes). */
-static std::string runCmd(const std::string &cmd) {
-  FILE *fp = popen(cmd.c_str(), "r");
-  if (!fp)
-    return "";
-  char buf[4096];
-  std::string out;
-  while (fgets(buf, sizeof(buf), fp))
-    out += buf;
-  pclose(fp);
-  // strip trailing newline
-  while (!out.empty() && (out.back() == '\n' || out.back() == '\r'))
-    out.pop_back();
-  return out;
+std::string CameraInterfacesTesting::runCmd(const std::string &cmd) const {
+  return cmd_->runCommand(cmd);
 }
 
-/** Collect all /dev/video* device nodes. */
-static std::vector<std::string> getVideoDevices() {
+std::vector<std::string> CameraInterfacesTesting::getVideoDevices() const {
   std::vector<std::string> devs;
   for (int i = 0; i < 32; ++i) {
     std::string p = "/dev/video" + std::to_string(i);
-    if (pathExists(p))
+    if (sysfs_->pathExists(p))
       devs.push_back(p);
   }
   return devs;
 }
-
-/**
- * @brief Constructor for CameraInterfacesTesting
- */
-CameraInterfacesTesting::CameraInterfacesTesting() {}
-
-/**
- * @brief Destructor for CameraInterfacesTesting
- */
-CameraInterfacesTesting::~CameraInterfacesTesting() {}
 
 /**
  * @brief Implementation of testAllCsi2LanesFunctionality
@@ -1638,400 +1641,7 @@ TestOutput CameraInterfacesTesting::testGammaCorrection() {
  * @return Vector of test results
  */
 std::vector<TestResult> CameraInterfacesTesting::runAllTests() {
-  std::vector<TestResult> results;
-
-  // Run testAllCsi2LanesFunctionality
-  {
-    auto start = std::chrono::high_resolution_clock::now();
-    TestOutput result = testAllCsi2LanesFunctionality();
-    auto end = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double> duration = end - start;
-    {
-      TestResult _tr;
-      _tr.name = "testAllCsi2LanesFunctionality";
-      _tr.test_id = "testAllCsi2LanesFunctionality";
-      _tr.duration =
-          std::chrono::duration_cast<std::chrono::nanoseconds>(duration);
-      _tr.output = result;
-      results.push_back(_tr);
-    }
-  }
-
-  // Run testCsi2DphyOperation
-  {
-    auto start = std::chrono::high_resolution_clock::now();
-    TestOutput result = testCsi2DphyOperation();
-    auto end = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double> duration = end - start;
-    {
-      TestResult _tr;
-      _tr.name = "testCsi2DphyOperation";
-      _tr.test_id = "testCsi2DphyOperation";
-      _tr.duration =
-          std::chrono::duration_cast<std::chrono::nanoseconds>(duration);
-      _tr.output = result;
-      results.push_back(_tr);
-    }
-  }
-
-  // Run testCsi2CphyOperation
-  {
-    auto start = std::chrono::high_resolution_clock::now();
-    TestOutput result = testCsi2CphyOperation();
-    auto end = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double> duration = end - start;
-    {
-      TestResult _tr;
-      _tr.name = "testCsi2CphyOperation";
-      _tr.test_id = "testCsi2CphyOperation";
-      _tr.duration =
-          std::chrono::duration_cast<std::chrono::nanoseconds>(duration);
-      _tr.output = result;
-      results.push_back(_tr);
-    }
-  }
-
-  // Run testMultipleCameraSimultaneousOperation
-  {
-    auto start = std::chrono::high_resolution_clock::now();
-    TestOutput result = testMultipleCameraSimultaneousOperation();
-    auto end = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double> duration = end - start;
-    {
-      TestResult _tr;
-      _tr.name = "testMultipleCameraSimultaneousOperation";
-      _tr.test_id = "testMultipleCameraSimultaneousOperation";
-      _tr.duration =
-          std::chrono::duration_cast<std::chrono::nanoseconds>(duration);
-      _tr.output = result;
-      results.push_back(_tr);
-    }
-  }
-
-  // Run testVirtualChannelSupport
-  {
-    auto start = std::chrono::high_resolution_clock::now();
-    TestOutput result = testVirtualChannelSupport();
-    auto end = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double> duration = end - start;
-    {
-      TestResult _tr;
-      _tr.name = "testVirtualChannelSupport";
-      _tr.test_id = "testVirtualChannelSupport";
-      _tr.duration =
-          std::chrono::duration_cast<std::chrono::nanoseconds>(duration);
-      _tr.output = result;
-      results.push_back(_tr);
-    }
-  }
-
-  // Run testCameraClockGeneration
-  {
-    auto start = std::chrono::high_resolution_clock::now();
-    TestOutput result = testCameraClockGeneration();
-    auto end = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double> duration = end - start;
-    {
-      TestResult _tr;
-      _tr.name = "testCameraClockGeneration";
-      _tr.test_id = "testCameraClockGeneration";
-      _tr.duration =
-          std::chrono::duration_cast<std::chrono::nanoseconds>(duration);
-      _tr.output = result;
-      results.push_back(_tr);
-    }
-  }
-
-  // Run testCameraPowerSequencing
-  {
-    auto start = std::chrono::high_resolution_clock::now();
-    TestOutput result = testCameraPowerSequencing();
-    auto end = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double> duration = end - start;
-    {
-      TestResult _tr;
-      _tr.name = "testCameraPowerSequencing";
-      _tr.test_id = "testCameraPowerSequencing";
-      _tr.duration =
-          std::chrono::duration_cast<std::chrono::nanoseconds>(duration);
-      _tr.output = result;
-      results.push_back(_tr);
-    }
-  }
-
-  // Run testRaw8
-  {
-    auto start = std::chrono::high_resolution_clock::now();
-    TestOutput result = testRaw8();
-    auto end = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double> duration = end - start;
-    {
-      TestResult _tr;
-      _tr.name = "testRaw8";
-      _tr.test_id = "testRaw8";
-      _tr.duration =
-          std::chrono::duration_cast<std::chrono::nanoseconds>(duration);
-      _tr.output = result;
-      results.push_back(_tr);
-    }
-  }
-
-  // Run testRaw10
-  {
-    auto start = std::chrono::high_resolution_clock::now();
-    TestOutput result = testRaw10();
-    auto end = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double> duration = end - start;
-    {
-      TestResult _tr;
-      _tr.name = "testRaw10";
-      _tr.test_id = "testRaw10";
-      _tr.duration =
-          std::chrono::duration_cast<std::chrono::nanoseconds>(duration);
-      _tr.output = result;
-      results.push_back(_tr);
-    }
-  }
-
-  // Run testRaw12
-  {
-    auto start = std::chrono::high_resolution_clock::now();
-    TestOutput result = testRaw12();
-    auto end = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double> duration = end - start;
-    {
-      TestResult _tr;
-      _tr.name = "testRaw12";
-      _tr.test_id = "testRaw12";
-      _tr.duration =
-          std::chrono::duration_cast<std::chrono::nanoseconds>(duration);
-      _tr.output = result;
-      results.push_back(_tr);
-    }
-  }
-
-  // Run testRaw14
-  {
-    auto start = std::chrono::high_resolution_clock::now();
-    TestOutput result = testRaw14();
-    auto end = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double> duration = end - start;
-    {
-      TestResult _tr;
-      _tr.name = "testRaw14";
-      _tr.test_id = "testRaw14";
-      _tr.duration =
-          std::chrono::duration_cast<std::chrono::nanoseconds>(duration);
-      _tr.output = result;
-      results.push_back(_tr);
-    }
-  }
-
-  // Run testYuv422
-  {
-    auto start = std::chrono::high_resolution_clock::now();
-    TestOutput result = testYuv422();
-    auto end = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double> duration = end - start;
-    {
-      TestResult _tr;
-      _tr.name = "testYuv422";
-      _tr.test_id = "testYuv422";
-      _tr.duration =
-          std::chrono::duration_cast<std::chrono::nanoseconds>(duration);
-      _tr.output = result;
-      results.push_back(_tr);
-    }
-  }
-
-  // Run testRgbFormats
-  {
-    auto start = std::chrono::high_resolution_clock::now();
-    TestOutput result = testRgbFormats();
-    auto end = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double> duration = end - start;
-    {
-      TestResult _tr;
-      _tr.name = "testRgbFormats";
-      _tr.test_id = "testRgbFormats";
-      _tr.duration =
-          std::chrono::duration_cast<std::chrono::nanoseconds>(duration);
-      _tr.output = result;
-      results.push_back(_tr);
-    }
-  }
-
-  // Run testIspPipelineProcessing
-  {
-    auto start = std::chrono::high_resolution_clock::now();
-    TestOutput result = testIspPipelineProcessing();
-    auto end = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double> duration = end - start;
-    {
-      TestResult _tr;
-      _tr.name = "testIspPipelineProcessing";
-      _tr.test_id = "testIspPipelineProcessing";
-      _tr.duration =
-          std::chrono::duration_cast<std::chrono::nanoseconds>(duration);
-      _tr.output = result;
-      results.push_back(_tr);
-    }
-  }
-
-  // Run testAutoExposure
-  {
-    auto start = std::chrono::high_resolution_clock::now();
-    TestOutput result = testAutoExposure();
-    auto end = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double> duration = end - start;
-    {
-      TestResult _tr;
-      _tr.name = "testAutoExposure";
-      _tr.test_id = "testAutoExposure";
-      _tr.duration =
-          std::chrono::duration_cast<std::chrono::nanoseconds>(duration);
-      _tr.output = result;
-      results.push_back(_tr);
-    }
-  }
-
-  // Run testAutoWhiteBalance
-  {
-    auto start = std::chrono::high_resolution_clock::now();
-    TestOutput result = testAutoWhiteBalance();
-    auto end = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double> duration = end - start;
-    {
-      TestResult _tr;
-      _tr.name = "testAutoWhiteBalance";
-      _tr.test_id = "testAutoWhiteBalance";
-      _tr.duration =
-          std::chrono::duration_cast<std::chrono::nanoseconds>(duration);
-      _tr.output = result;
-      results.push_back(_tr);
-    }
-  }
-
-  // Run testAutoFocus
-  {
-    auto start = std::chrono::high_resolution_clock::now();
-    TestOutput result = testAutoFocus();
-    auto end = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double> duration = end - start;
-    {
-      TestResult _tr;
-      _tr.name = "testAutoFocus";
-      _tr.test_id = "testAutoFocus";
-      _tr.duration =
-          std::chrono::duration_cast<std::chrono::nanoseconds>(duration);
-      _tr.output = result;
-      results.push_back(_tr);
-    }
-  }
-
-  // Run testLensShadingCorrection
-  {
-    auto start = std::chrono::high_resolution_clock::now();
-    TestOutput result = testLensShadingCorrection();
-    auto end = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double> duration = end - start;
-    {
-      TestResult _tr;
-      _tr.name = "testLensShadingCorrection";
-      _tr.test_id = "testLensShadingCorrection";
-      _tr.duration =
-          std::chrono::duration_cast<std::chrono::nanoseconds>(duration);
-      _tr.output = result;
-      results.push_back(_tr);
-    }
-  }
-
-  // Run testDemosaicing
-  {
-    auto start = std::chrono::high_resolution_clock::now();
-    TestOutput result = testDemosaicing();
-    auto end = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double> duration = end - start;
-    {
-      TestResult _tr;
-      _tr.name = "testDemosaicing";
-      _tr.test_id = "testDemosaicing";
-      _tr.duration =
-          std::chrono::duration_cast<std::chrono::nanoseconds>(duration);
-      _tr.output = result;
-      results.push_back(_tr);
-    }
-  }
-
-  // Run testNoiseReduction
-  {
-    auto start = std::chrono::high_resolution_clock::now();
-    TestOutput result = testNoiseReduction();
-    auto end = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double> duration = end - start;
-    {
-      TestResult _tr;
-      _tr.name = "testNoiseReduction";
-      _tr.test_id = "testNoiseReduction";
-      _tr.duration =
-          std::chrono::duration_cast<std::chrono::nanoseconds>(duration);
-      _tr.output = result;
-      results.push_back(_tr);
-    }
-  }
-
-  // Run testEdgeEnhancement
-  {
-    auto start = std::chrono::high_resolution_clock::now();
-    TestOutput result = testEdgeEnhancement();
-    auto end = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double> duration = end - start;
-    {
-      TestResult _tr;
-      _tr.name = "testEdgeEnhancement";
-      _tr.test_id = "testEdgeEnhancement";
-      _tr.duration =
-          std::chrono::duration_cast<std::chrono::nanoseconds>(duration);
-      _tr.output = result;
-      results.push_back(_tr);
-    }
-  }
-
-  // Run testColorCorrectionMatrix
-  {
-    auto start = std::chrono::high_resolution_clock::now();
-    TestOutput result = testColorCorrectionMatrix();
-    auto end = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double> duration = end - start;
-    {
-      TestResult _tr;
-      _tr.name = "testColorCorrectionMatrix";
-      _tr.test_id = "testColorCorrectionMatrix";
-      _tr.duration =
-          std::chrono::duration_cast<std::chrono::nanoseconds>(duration);
-      _tr.output = result;
-      results.push_back(_tr);
-    }
-  }
-
-  // Run testGammaCorrection
-  {
-    auto start = std::chrono::high_resolution_clock::now();
-    TestOutput result = testGammaCorrection();
-    auto end = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double> duration = end - start;
-    {
-      TestResult _tr;
-      _tr.name = "testGammaCorrection";
-      _tr.test_id = "testGammaCorrection";
-      _tr.duration =
-          std::chrono::duration_cast<std::chrono::nanoseconds>(duration);
-      _tr.output = result;
-      results.push_back(_tr);
-    }
-  }
-
-  return results;
+  return runSelectedTests(getPeriodicSafeTests());
 }
 
 /**
@@ -2039,31 +1649,10 @@ std::vector<TestResult> CameraInterfacesTesting::runAllTests() {
  * @return Vector of test names
  */
 std::vector<std::string> CameraInterfacesTesting::getAvailableTests() {
-  return {
-      "testAllCsi2LanesFunctionality",
-      "testCsi2DphyOperation",
-      "testCsi2CphyOperation",
-      "testMultipleCameraSimultaneousOperation",
-      "testVirtualChannelSupport",
-      "testCameraClockGeneration",
-      "testCameraPowerSequencing",
-      "testRaw8",
-      "testRaw10",
-      "testRaw12",
-      "testRaw14",
-      "testYuv422",
-      "testRgbFormats",
-      "testIspPipelineProcessing",
-      "testAutoExposure",
-      "testAutoWhiteBalance",
-      "testAutoFocus",
-      "testLensShadingCorrection",
-      "testDemosaicing",
-      "testNoiseReduction",
-      "testEdgeEnhancement",
-      "testColorCorrectionMatrix",
-      "testGammaCorrection",
-  };
+  auto tests = getPeriodicSafeTests();
+  auto oneShot = getOneShotOnlyTests();
+  tests.insert(tests.end(), oneShot.begin(), oneShot.end());
+  return tests;
 }
 
 /**

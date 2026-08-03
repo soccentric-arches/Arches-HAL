@@ -8,10 +8,28 @@ install(
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
 install(FILES lib_base.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/arches_hal)
 
+# Create provider_base library (injected provider interfaces)
+add_library(provider_base provider_base.cpp provider_base.h)
+target_include_directories(provider_base PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(provider_base PUBLIC Threads::Threads)
+install(
+  TARGETS provider_base
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
+install(FILES provider_base.h
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/arches_hal)
+target_include_directories(lib_base PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(lib_base Threads::Threads)
+install(
+  TARGETS lib_base
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
+install(FILES lib_base.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/arches_hal)
+
 add_library(arches_platform stm32_transport.cpp stm32_transport.h
                             platform_arches.h)
 target_include_directories(arches_platform PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-target_link_libraries(arches_platform PUBLIC Threads::Threads lib_base)
+target_link_libraries(arches_platform PUBLIC Threads::Threads lib_base provider_base)
 install(
   TARGETS arches_platform
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}

@@ -120,7 +120,8 @@ void TestBase::runTests(
             std::cerr << "[TestBase] Callback exception in MONITORING: "
                       << ex.what() << "\n";
           } catch (...) {
-            std::cerr << "[TestBase] Unknown callback exception in MONITORING\n";
+            std::cerr
+                << "[TestBase] Unknown callback exception in MONITORING\n";
           }
         }
         if (waitUntilOrStop(std::chrono::steady_clock::now() +
@@ -151,41 +152,40 @@ void TestBase::runLongTerm(
   stop();
   stopped_ = false;
   paused_ = false;
-  monitoring_thread_ =
-      std::thread([this, interval_ms, duration_ms, callback]() {
-        auto start = std::chrono::steady_clock::now();
-        int cycle = 0;
-        while (!stopped_) {
-          waitWhilePaused();
-          if (stopped_)
-            break;
-          if (duration_ms > 0) {
-            auto elapsed =
-                std::chrono::duration_cast<std::chrono::milliseconds>(
-                    std::chrono::steady_clock::now() - start)
-                    .count();
-            if (elapsed >= duration_ms) {
-              break;
-            }
-          }
-          auto results = runAllTestsSafe();
-          ++cycle;
-          if (callback) {
-            try {
-              callback(results, cycle);
-            } catch (const std::exception &ex) {
-              std::cerr << "[TestBase] Callback exception in LONG_TERM: "
-                        << ex.what() << "\n";
-            } catch (...) {
-              std::cerr << "[TestBase] Unknown callback exception in LONG_TERM\n";
-            }
-          }
-          if (waitUntilOrStop(std::chrono::steady_clock::now() +
-                              std::chrono::milliseconds(interval_ms)))
-            break;
+  monitoring_thread_ = std::thread([this, interval_ms, duration_ms,
+                                    callback]() {
+    auto start = std::chrono::steady_clock::now();
+    int cycle = 0;
+    while (!stopped_) {
+      waitWhilePaused();
+      if (stopped_)
+        break;
+      if (duration_ms > 0) {
+        auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(
+                           std::chrono::steady_clock::now() - start)
+                           .count();
+        if (elapsed >= duration_ms) {
+          break;
         }
-        stopped_ = true;
-      });
+      }
+      auto results = runAllTestsSafe();
+      ++cycle;
+      if (callback) {
+        try {
+          callback(results, cycle);
+        } catch (const std::exception &ex) {
+          std::cerr << "[TestBase] Callback exception in LONG_TERM: "
+                    << ex.what() << "\n";
+        } catch (...) {
+          std::cerr << "[TestBase] Unknown callback exception in LONG_TERM\n";
+        }
+      }
+      if (waitUntilOrStop(std::chrono::steady_clock::now() +
+                          std::chrono::milliseconds(interval_ms)))
+        break;
+    }
+    stopped_ = true;
+  });
 }
 
 // ---------------------------------------------------------------------------
@@ -250,7 +250,8 @@ void TestBase::runMonitoringTest(
               std::cerr << "[TestBase] Callback exception in MONITOR_TEST: "
                         << ex.what() << "\n";
             } catch (...) {
-              std::cerr << "[TestBase] Unknown callback exception in MONITOR_TEST\n";
+              std::cerr
+                  << "[TestBase] Unknown callback exception in MONITOR_TEST\n";
             }
           }
           if (waitUntilOrStop(std::chrono::steady_clock::now() +
@@ -305,8 +306,8 @@ void TestBase::runEventTest(
           try {
             event_callback(results);
           } catch (const std::exception &ex) {
-            std::cerr << "[TestBase] Callback exception in EVENT: "
-                      << ex.what() << "\n";
+            std::cerr << "[TestBase] Callback exception in EVENT: " << ex.what()
+                      << "\n";
           } catch (...) {
             std::cerr << "[TestBase] Unknown callback exception in EVENT\n";
           }
@@ -325,7 +326,10 @@ void TestBase::runEventTest(
 // Control
 // ---------------------------------------------------------------------------
 
-void TestBase::requestStop() { stopped_ = true; cv_.notify_all(); }
+void TestBase::requestStop() {
+  stopped_ = true;
+  cv_.notify_all();
+}
 
 void TestBase::stop() {
   stopped_ = true;

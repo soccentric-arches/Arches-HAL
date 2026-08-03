@@ -1,127 +1,81 @@
 /**
-#include "lib_base.h"
  * @file audio_interfaces.h
  * @brief Header file for AudioInterfaces class
  * @author sandesh ghimire
- * @copyright (C) Soccentric LLC */
+ * @copyright (C) Soccentric LLC
+ *
+ * Improvements implemented:
+ * - Injected SysfsProvider/CommandProvider for deterministic testing
+ * - Typed metrics with availability state
+ * - SKIPPED/UNAVAILABLE for absent hardware
+ * - Periodic-safe subset (enumeration/health checks only)
+ * - Split non-mutating enumeration from playback/capture diagnostics
+ */
 #ifndef AUDIOINTERFACES_H
 #define AUDIOINTERFACES_H
+
 #include "lib_base.h"
+#include "module_helpers.h"
+#include "provider_base.h"
+
+#include <memory>
 
 /**
- * @class class AudioInterfaces
- * @brief Class for testing audiointerfaces
- * @details This class provides methods to test various audiointerfaces
- * functionalities.
+ * @class AudioInterfaces
+ * @brief Class for testing audio interfaces
+ * @details Tests ALSA/I2S audio subsystem. Uses injected providers
+ * for deterministic testing.
+ *
+ * Periodic-safe tests (enumeration/health checks):
+ *   - testI2sInterface
+ *   - testAudioSampleRates
+ *   - testAudioBitDepths
+ *   - testMultiChannelAudio
+ *   - testAudioDmaTransfers
+ *
+ * One-shot only tests (device access/state-changing):
+ *   - testAudioInput (capture device open)
+ *   - testAudioOutput (playback device open)
+ *   - testAudioLatency (active stream params)
  */
 class AudioInterfaces : public TestBase {
-public: /**
-         * @brief Constructor for AudioInterfaces
-         * @return TestOutput with pass/fail and data
-         */
-        /**
-         * @brief Function AudioInterfaces
-         * @return TestOutput with pass/fail and data
-         */
-
+public:
   AudioInterfaces();
-  /**
-   * @brief Constructor for AudioInterfaces
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Destructor for class
-
-   */
+  explicit AudioInterfaces(std::shared_ptr<SysfsProvider> sysfs,
+                           std::shared_ptr<CommandProvider> cmd = nullptr);
   ~AudioInterfaces();
-  /**
-   * @brief Constructor for AudioInterfaces
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the i2sinterface functionality
-   * @return TestOutput with pass/fail and data
-   */
+
+  /// @brief Get periodic-safe test names (enumeration/health only)
+  std::vector<std::string> getPeriodicSafeTests() const;
+
+  /// @brief Get one-shot only test names (device access)
+  std::vector<std::string> getOneShotOnlyTests() const;
+
   TestOutput testI2sInterface();
-  /**
-   * @brief Constructor for AudioInterfaces
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the audioinput functionality
-   * @return TestOutput with pass/fail and data
-   */
   TestOutput testAudioInput();
-  /**
-   * @brief Constructor for AudioInterfaces
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the audiooutput functionality
-   * @return TestOutput with pass/fail and data
-   */
   TestOutput testAudioOutput();
-  /**
-   * @brief Constructor for AudioInterfaces
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the audiosamplerates functionality
-   * @return TestOutput with pass/fail and data
-   */
   TestOutput testAudioSampleRates();
-  /**
-   * @brief Constructor for AudioInterfaces
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the audiobitdepths functionality
-   * @return TestOutput with pass/fail and data
-   */
   TestOutput testAudioBitDepths();
-  /**
-   * @brief Constructor for AudioInterfaces
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the multichannelaudio functionality
-   * @return TestOutput with pass/fail and data
-   */
   TestOutput testMultiChannelAudio();
-  /**
-   * @brief Constructor for AudioInterfaces
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the audiodmatransfers functionality
-   * @return TestOutput with pass/fail and data
-   */
   TestOutput testAudioDmaTransfers();
-  /**
-   * @brief Constructor for AudioInterfaces
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the audiolatency functionality
-   * @return TestOutput with pass/fail and data
-   */
   TestOutput testAudioLatency();
+
   std::vector<std::string> getAvailableTests() override;
-
-  /**
-   * @brief Get list of all available test names
-   * @return Vector of test names
-   */
-
-  /**
-   * @brief Run a single test by name
-   * @param testName Name of the test to run
-   * @return Test result with timing
-   */
   TestResult runSingleTest(const std::string &testName) override;
 
 protected:
   std::vector<TestResult> runAllTests() override;
+
+private:
+  std::shared_ptr<SysfsProvider> sysfs_;
+  std::shared_ptr<CommandProvider> cmd_;
+
+  // Internal helpers using injected providers
+  bool readFile(const std::string &path, std::string &out) const;
+  bool pathExists(const std::string &path) const;
+  std::vector<std::string> listDir(const std::string &dir,
+                                   const std::string &filter = "") const;
+  int countAlsaPcmDevices() const;
 };
 
 #endif // AUDIOINTERFACES_H
