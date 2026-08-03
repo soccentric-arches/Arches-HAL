@@ -16,9 +16,6 @@ TestBase::~TestBase() { stop(); }
 
 // ---------------------------------------------------------------------------
 // Internal: exception-safe wrapper around runAllTests().
-// Returns a single ERROR result if any exception escapes the derived class.
-// ---------------------------------------------------------------------------
-// Internal: exception-safe wrapper around runAllTests().
 // Uses runSelectedTests() to isolate exceptions per test so one failing
 // test does not suppress the remaining tests in a cycle.
 // Returns a single ERROR result if any exception escapes the derived class.
@@ -126,11 +123,9 @@ void TestBase::runTests(
             std::cerr << "[TestBase] Unknown callback exception in MONITORING\n";
           }
         }
-        auto wake = std::chrono::steady_clock::now() +
-                    std::chrono::milliseconds(interval_ms);
-        while (!stopped_ && std::chrono::steady_clock::now() < wake) {
-          std::this_thread::sleep_for(std::chrono::milliseconds(50));
-        }
+        if (waitUntilOrStop(std::chrono::steady_clock::now() +
+                            std::chrono::milliseconds(interval_ms)))
+          break;
       }
     });
   }
@@ -318,11 +313,9 @@ void TestBase::runEventTest(
         }
       }
       prev_fired = now_fired;
-      auto wake = std::chrono::steady_clock::now() +
-                  std::chrono::milliseconds(poll_interval_ms);
-      while (!stopped_ && std::chrono::steady_clock::now() < wake) {
-        std::this_thread::sleep_for(std::chrono::milliseconds(50));
-      }
+      if (waitUntilOrStop(std::chrono::steady_clock::now() +
+                          std::chrono::milliseconds(poll_interval_ms)))
+        break;
     }
     stopped_ = true;
   });

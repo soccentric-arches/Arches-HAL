@@ -71,24 +71,50 @@ static std::string trReadSysfs(const std::string &path) {
 // Parse human-friendly duration string to milliseconds.
 // Accepted: "500ms"  "30s"  "5m"  "2h"  "1d"  or plain integer (treated as ms).
 // Returns -1 if the input cannot be parsed.
+// Rejects negative values and trailing characters after a valid parse.
 static long long trParseDuration(const std::string &s) {
   try {
+    if (s.empty() || s[0] == '-') {
+      std::cerr << "[ERROR] Duration must be non-negative, got \"" << s << "\"\n";
+      return -1LL;
+    }
     if (s.size() >= 3 && s.substr(s.size() - 2) == "ms") {
-      return std::stoll(s.substr(0, s.size() - 2));
+      std::string num = s.substr(0, s.size() - 2);
+      if (num.empty() || num[0] == '-') return -1LL;
+      std::size_t pos = 0;
+      long long val = std::stoll(num, &pos);
+      if (pos != num.size()) {
+        std::cerr << "[ERROR] Trailing characters in duration \"" << s << "\"\n";
+        return -1LL;
+      }
+      return val;
     }
     if (s.size() >= 2) {
       char u = s.back();
       std::string n = s.substr(0, s.size() - 1);
+      if (n.empty() || n[0] == '-') return -1LL;
+      std::size_t pos = 0;
+      long long num = std::stoll(n, &pos);
+      if (pos != n.size()) {
+        std::cerr << "[ERROR] Trailing characters in duration \"" << s << "\"\n";
+        return -1LL;
+      }
       if (u == 's')
-        return std::stoll(n) * 1000LL;
+        return num * 1000LL;
       if (u == 'm')
-        return std::stoll(n) * 60000LL;
+        return num * 60000LL;
       if (u == 'h')
-        return std::stoll(n) * 3600000LL;
+        return num * 3600000LL;
       if (u == 'd')
-        return std::stoll(n) * 86400000LL;
+        return num * 86400000LL;
     }
-    return std::stoll(s); // plain integer → ms
+    std::size_t pos = 0;
+    long long val = std::stoll(s, &pos);
+    if (pos != s.size()) {
+      std::cerr << "[ERROR] Trailing characters in duration \"" << s << "\"\n";
+      return -1LL;
+    }
+    return val; // plain integer → ms
   } catch (...) {
     std::cerr << "[ERROR] Invalid duration string: \"" << s << "\"\n";
     return -1LL;
