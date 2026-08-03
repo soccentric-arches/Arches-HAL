@@ -8,9 +8,11 @@
 
 #include <atomic>
 #include <chrono>
+#include <condition_variable>
 #include <cstdint>
 #include <functional>
 #include <map>
+#include <mutex>
 #include <string>
 #include <thread>
 #include <utility>
@@ -95,14 +97,30 @@ using hal::TestOutput;
 using hal::TestResult;
 using hal::Value;
 
+/// Availability state for a monitor reading.
+enum class MonitorAvailability {
+  AVAILABLE,   ///< Value is valid and ready for thresholding
+  UNAVAILABLE, ///< Source not found or not present (e.g. missing sysfs file)
+  ERROR,       ///< Source found but read failed
+};
+
+/// Typed monitor reading with availability state.
+/// Numeric values (int64_t, double) are safe for thresholding;
+/// string values are used for non-numeric data only.
+struct MonitorValue {
+  Value value{std::string("")};
+  MonitorAvailability availability{MonitorAvailability::UNAVAILABLE};
+  std::string error_message;
+};
+
 /**
  * @struct MonitorItem
  * @brief A named data source sampled every cycle during a monitoring test
  */
 struct MonitorItem {
   std::string name; ///< Display name for this item
-  std::function<std::string()>
-      reader; ///< Callable that returns current value as string
+  std::function<MonitorValue()>
+      reader; ///< Callable that returns a typed value with availability
 };
 
 /**
@@ -114,7 +132,7 @@ struct MonitoringSnapshot {
   std::chrono::system_clock::time_point
       timestamp;                       ///< Wall-clock time of snapshot
   std::vector<TestResult> testResults; ///< Results from running all tests
-  std::vector<std::pair<std::string, std::string>>
+  std::vector<std::pair<std::string, MonitorValue>>
       monitorData; ///< Sampled monitor item values
 };
 
@@ -218,6 +236,12 @@ public:
   void stop();
 
   /**
+   * @brief Non-blocking stop request — sets the stop flag without joining.
+   * Safe to call from within a callback or the worker thread itself.
+   */
+  void requestStop();
+
+  /**
    * @brief Pause execution of an active background test loop.
    * The current cycle completes; the next cycle is held until resume() is
    * called. Has no effect on SINGLE_SHOT / SINGLE_SHOT tests (they are already
@@ -249,13 +273,24 @@ private:
   // returned as a single ERROR TestResult instead of crashing the thread.
   std::vector<TestResult> runAllTestsSafe();
 
+  // Fill in timestamp, sequence, and module_id on a TestResult.
+  void prepareResult(TestResult &r);
+
   // Block the calling thread while paused_ is set (honours stopped_ to exit
   // early).
   void waitWhilePaused();
 
+  // Sleep until wake_time or until stop() is called (whichever comes first).
+  // Returns true if stopped_ was set during the wait.
+  bool waitUntilOrStop(
+      const std::chrono::steady_clock::time_point &wake_time);
+
   std::atomic<bool> stopped_;
   std::atomic<bool> paused_{false};
   std::thread monitoring_thread_;
+  std::atomic<uint64_t> sequenceCounter_{0};
+  std::mutex cv_mutex_;
+  std::condition_variable cv_;
 };
 
 #endif // TEST_BASE_H

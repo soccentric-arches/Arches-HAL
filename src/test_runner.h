@@ -95,6 +95,31 @@ static long long trParseDuration(const std::string &s) {
   }
 }
 
+// Helper: parse a strictly positive integer from a CLI argument.
+// Returns -1 on failure (negative, zero, trailing chars, or non-numeric).
+static int trParsePositiveInt(const std::string &s, const std::string &name) {
+  if (s.empty() || s[0] == '-') {
+    std::cerr << "[ERROR] " << name << " must be positive, got \"" << s << "\"\n";
+    return -1;
+  }
+  try {
+    std::size_t pos = 0;
+    int val = std::stoi(s, &pos);
+    if (pos != s.size()) {
+      std::cerr << "[ERROR] Trailing characters in " << name << ": \"" << s << "\"\n";
+      return -1;
+    }
+    if (val <= 0) {
+      std::cerr << "[ERROR] " << name << " must be positive, got " << val << "\n";
+      return -1;
+    }
+    return val;
+  } catch (...) {
+    std::cerr << "[ERROR] Invalid " << name << ": \"" << s << "\"\n";
+    return -1;
+  }
+}
+
 // ---------------------------------------------------------------------------
 // Built-in Raspberry Pi 5 hardware monitor items
 // ---------------------------------------------------------------------------
@@ -112,51 +137,76 @@ static std::string trReadFirstExisting(const std::vector<std::string> &paths) {
 static std::vector<MonitorItem> trArchesMonitorItems() {
   return {
       {"cpu_temp_C",
-       []() {
+       []() -> MonitorValue {
          std::vector<std::string> paths;
          for (const char *path : arches::platform::THERMAL_ZONE_PATHS) {
            paths.emplace_back(path);
          }
          std::string v = trReadFirstExisting(paths);
-         if (v.empty())
-           return std::string("N/A");
-         std::ostringstream ss;
-         ss << std::fixed << std::setprecision(1) << (std::stod(v) / 1000.0);
-         return ss.str();
+         if (v.empty()) {
+           return {std::string(""), MonitorAvailability::UNAVAILABLE,
+                   "No thermal zone found"};
+         }
+         try {
+           double tempC = std::stod(v) / 1000.0;
+           return {tempC, MonitorAvailability::AVAILABLE, ""};
+         } catch (...) {
+           return {std::string(""), MonitorAvailability::ERROR,
+                   "Failed to parse temperature: " + v};
+         }
        }},
       {"cpu0_freq_MHz",
-       []() {
+       []() -> MonitorValue {
          std::string v = trReadSysfs(arches::platform::CPU_FREQ_PATH);
-         if (v.empty())
-           return std::string("N/A");
-         return std::to_string(std::stoll(v) / 1000);
+         if (v.empty()) {
+           return {std::string(""), MonitorAvailability::UNAVAILABLE,
+                   "CPU freq sysfs not found"};
+         }
+         try {
+           long long freqMHz = std::stoll(v) / 1000;
+           return {freqMHz, MonitorAvailability::AVAILABLE, ""};
+         } catch (...) {
+           return {std::string(""), MonitorAvailability::ERROR,
+                   "Failed to parse CPU freq: " + v};
+         }
        }},
       {"gpu_freq_MHz",
-       []() {
+       []() -> MonitorValue {
          std::vector<std::string> paths;
          for (const char *path : arches::platform::GPU_FREQ_PATHS) {
            paths.emplace_back(path);
          }
          std::string v = trReadFirstExisting(paths);
-         if (v.empty())
-           return std::string("N/A");
-         return std::to_string(std::stoll(v) / 1000000);
+         if (v.empty()) {
+           return {std::string(""), MonitorAvailability::UNAVAILABLE,
+                   "No GPU freq sysfs found"};
+         }
+         try {
+           long long freqMHz = std::stoll(v) / 1000000;
+           return {freqMHz, MonitorAvailability::AVAILABLE, ""};
+         } catch (...) {
+           return {std::string(""), MonitorAvailability::ERROR,
+                   "Failed to parse GPU freq: " + v};
+         }
        }},
       {"mem_avail_MB",
-       []() {
+       []() -> MonitorValue {
          std::ifstream f("/proc/meminfo");
-         if (!f.is_open())
-           return std::string("N/A");
+         if (!f.is_open()) {
+           return {std::string(""), MonitorAvailability::UNAVAILABLE,
+                   "/proc/meminfo not found"};
+         }
          std::string line;
          while (std::getline(f, line)) {
            if (line.rfind("MemAvailable:", 0) == 0) {
              std::istringstream ss(line.substr(13));
              long long kb = 0;
              ss >> kb;
-             return std::to_string(kb / 1024) + " MB";
+             return {kb / 1024, MonitorAvailability::AVAILABLE, ""};
            }
          }
-         return std::string("N/A");
+         return {std::string(""), MonitorAvailability::UNAVAILABLE,
+                 "MemAvailable not found in /proc/meminfo"};
        }},
   };
 }
@@ -295,14 +345,47 @@ static void trPrintCycleHeader(int cycle, const std::string &label,
   std::cout << "\n[Cycle " << cycle << "] " << label << "\n";
 }
 
+// Format a Value variant for display.
+static std::string trFormatValue(const Value &v) {
+  if (std::holds_alternative<bool>(v)) {
+    return std::get<bool>(v) ? "true" : "false";
+  }
+  if (std::holds_alternative<int64_t>(v)) {
+    return std::to_string(std::get<int64_t>(v));
+  }
+  if (std::holds_alternative<double>(v)) {
+    std::ostringstream ss;
+    ss << std::fixed << std::setprecision(1) << std::get<double>(v);
+    return ss.str();
+  }
+  return std::get<std::string>(v);
+}
+
 static void trPrintMonitorData(
-    const std::vector<std::pair<std::string, std::string>> &data) {
+    const std::vector<std::pair<std::string, MonitorValue>> &data) {
   if (data.empty())
     return;
   std::cout << "--- System Monitors ---\n";
   for (const auto &kv : data) {
-    std::cout << "  " << std::left << std::setw(20) << kv.first << ": "
-              << kv.second << "\n";
+    const auto &mv = kv.second;
+    std::cout << "  " << std::left << std::setw(20) << kv.first << ": ";
+    switch (mv.availability) {
+    case MonitorAvailability::AVAILABLE:
+      std::cout << trFormatValue(mv.value) << "\n";
+      break;
+    case MonitorAvailability::UNAVAILABLE:
+      std::cout << "UNAVAILABLE";
+      if (!mv.error_message.empty())
+        std::cout << " (" << mv.error_message << ")";
+      std::cout << "\n";
+      break;
+    case MonitorAvailability::ERROR:
+      std::cout << "ERROR";
+      if (!mv.error_message.empty())
+        std::cout << " (" << mv.error_message << ")";
+      std::cout << "\n";
+      break;
+    }
   }
 }
 
@@ -365,12 +448,8 @@ int runTestApp(const std::string &appName, int argc, char *argv[]) {
   if (mode_str == "monitoring") {
     int interval_ms = 1000;
     if (argc > 2) {
-      try {
-        interval_ms = std::stoi(argv[2]);
-      } catch (...) {
-        std::cerr << "[ERROR] Invalid interval_ms: " << argv[2] << "\n";
-        return 1;
-      }
+      interval_ms = trParsePositiveInt(argv[2], "interval_ms");
+      if (interval_ms < 0) return 1;
     }
     T tester;
     int cycle = 0;
@@ -396,13 +475,8 @@ int runTestApp(const std::string &appName, int argc, char *argv[]) {
                 << " long-term <interval_ms> <duration>\n";
       return 1;
     }
-    int interval_ms = 0;
-    try {
-      interval_ms = std::stoi(argv[2]);
-    } catch (...) {
-      std::cerr << "[ERROR] Invalid interval_ms: " << argv[2] << "\n";
-      return 1;
-    }
+    int interval_ms = trParsePositiveInt(argv[2], "interval_ms");
+    if (interval_ms < 0) return 1;
     long long duration_ms = trParseDuration(argv[3]);
     if (duration_ms < 0)
       return 1;
@@ -428,13 +502,8 @@ int runTestApp(const std::string &appName, int argc, char *argv[]) {
                 << " monitor-test <interval_ms> <duration>\n";
       return 1;
     }
-    int interval_ms = 0;
-    try {
-      interval_ms = std::stoi(argv[2]);
-    } catch (...) {
-      std::cerr << "[ERROR] Invalid interval_ms: " << argv[2] << "\n";
-      return 1;
-    }
+    int interval_ms = trParsePositiveInt(argv[2], "interval_ms");
+    if (interval_ms < 0) return 1;
     long long duration_ms = trParseDuration(argv[3]);
     if (duration_ms < 0)
       return 1;
@@ -463,13 +532,8 @@ int runTestApp(const std::string &appName, int argc, char *argv[]) {
       trPrintUsage(appName);
       return 1;
     }
-    int poll_ms = 0;
-    try {
-      poll_ms = std::stoi(argv[2]);
-    } catch (...) {
-      std::cerr << "[ERROR] Invalid poll_ms: " << argv[2] << "\n";
-      return 1;
-    }
+    int poll_ms = trParsePositiveInt(argv[2], "poll_ms");
+    if (poll_ms < 0) return 1;
     EventCriteria criteria = trMakeCriteria(argv[3]);
     long long max_dur_ms = 0;
     if (argc > 4) {
