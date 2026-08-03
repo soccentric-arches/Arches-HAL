@@ -1,0 +1,16 @@
+Thermal Management review
+==========================
+
+Four-mode status: one-shot PASS; long-term PASS through the shared runner; monitoring PASS through the shared runner; event-based PASS through the shared runner. Only one-shot is covered by current CTest.
+
+Gaps and incompatibilities
+- Thermal zones, cooling devices, fan controls, throttling, and thresholds are platform-specific.
+- Fan/control or thermal-load tests are stateful and can affect system temperature and power.
+- Repeated threshold checks need hysteresis and rate-of-change context to avoid event flapping.
+- Missing thermal telemetry must be unknown/unavailable, not an all-pass condition.
+
+Improvements
+- Inject thermal-zone/cooling providers and add deterministic heating/cooling fixtures.
+- Split passive telemetry from fan/control/load actions; make actions explicit one-shot tests with restoration.
+- Report temperature, trip point, cooling state, sample age, and hysteresis as typed metrics.
+- Add bounded four-mode tests for over-temperature, recovery, missing zone, event debounce, and cleanup.

@@ -1,0 +1,16 @@
+Power Management review
+========================
+
+Four-mode status: one-shot PASS; long-term PASS through the shared runner; monitoring PASS through the shared runner; event-based PASS through the shared runner. CTest currently runs only one-shot.
+
+Gaps and incompatibilities
+- Power rails, voltage history, brownout, wake sources, and power modes depend on board firmware/kernel state.
+- Changing power modes or forcing brownout/wake behavior is unsafe when inherited by monitoring/event loops.
+- Historical throttle/under-voltage logs can repeatedly report old events.
+- Unknown telemetry must not satisfy all-pass criteria.
+
+Improvements
+- Split passive rail/telemetry checks from state-changing power-mode and fault-injection checks.
+- Add provider injection and fixtures for clean, undervoltage, brownout, wake, and recovery states.
+- Track event sequence/time and use hysteresis; return typed voltage/current/validity metrics.
+- Add bounded four-mode tests with explicit cleanup and no-reset guarantees for periodic modes.

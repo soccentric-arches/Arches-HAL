@@ -1,0 +1,16 @@
+IMU review
+==========
+
+Four-mode status: one-shot PASS; long-term PASS through the shared runner; monitoring PASS through the shared runner; event-based PASS through the shared runner. Only one-shot is currently automated.
+
+Gaps and incompatibilities
+- Sensor availability, I2C device paths, calibration, and motion-dependent thresholds vary by board and physical state.
+- Repeated calibration or active sensor tests may alter sensor configuration or conflict with another client.
+- Event mode needs debouncing and a defined motion threshold; otherwise noise can fire continuously.
+- Missing sensor, stationary sensor, and out-of-range sensor states need distinct outcomes.
+
+Improvements
+- Inject sensor transport and clock providers; add recorded-vector fixtures for static and motion cases.
+- Separate passive sample health from calibration/actuation tests and restore configuration after each test.
+- Report raw/filtered values, units, calibration state, and sample age as typed metrics.
+- Add bounded four-mode tests for no device, stationary, motion event, noisy input, and recovery.

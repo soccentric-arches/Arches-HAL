@@ -1,0 +1,16 @@
+Camera Module 3 review
+=======================
+
+Four-mode status: one-shot PASS; long-term PASS through the shared runner; monitoring PASS through the shared runner; event-based PASS through the shared runner. Only one-shot is currently exercised by CTest.
+
+Gaps and incompatibilities
+- Module detection and capture depend on physical Camera Module 3 hardware, libcamera/V4L2 configuration, and board topology.
+- Repeated capture tests can leak handles, hold camera resources, or conflict with another camera client unless cleanup is guaranteed.
+- Event criteria cannot distinguish absent hardware from a real camera failure when absence is downgraded to warning.
+- No explicit safe periodic test set or acquisition timeout is defined.
+
+Improvements
+- Add a camera backend abstraction with fake enumeration/capture fixtures for native CI.
+- Use structured SKIPPED/UNAVAILABLE results for absent hardware and FAIL only for an expected device that is unhealthy.
+- Isolate one-shot capture diagnostics from lightweight monitoring checks; enforce frame and operation timeouts.
+- Add bounded tests for one-shot, long-term, monitoring, and event timeout/event-fire behavior.

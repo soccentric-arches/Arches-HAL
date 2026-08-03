@@ -1,0 +1,16 @@
+Sense HAT review
+================
+
+Four-mode status: one-shot PASS; long-term PASS through the shared runner; monitoring PASS through the shared runner; event-based PASS through the shared runner. CTest currently covers only one-shot.
+
+Gaps and incompatibilities
+- I2C sensors, joystick events, LED state, and device nodes depend on attached hardware and permissions.
+- LED output tests mutate visible/device state and may conflict with other applications when repeated.
+- Joystick event polling needs nonblocking reads, timeout handling, and edge/debounce semantics.
+- Absent HAT and broken HAT are not consistently distinct for event criteria.
+
+Improvements
+- Add injected I2C/input/LED providers and replay fixtures for sensor and joystick events.
+- Snapshot and restore LED state; make output tests explicit one-shot actions.
+- Keep monitoring passive and use edge-triggered input events with bounded waits.
+- Add bounded four-mode tests for absent hardware, sensor fault, joystick transition, cleanup, and event timeout.

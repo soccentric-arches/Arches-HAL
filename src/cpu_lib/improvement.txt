@@ -1,0 +1,16 @@
+CPU review
+==========
+
+Four-mode status: one-shot PASS; long-term PASS through the shared runner; monitoring PASS through the shared runner; event-based PASS through the shared runner. No mode-specific CTest coverage exists.
+
+Gaps and incompatibilities
+- Affinity, migration, frequency, topology, and scheduler checks depend on host CPU count and kernel policy.
+- Worker-thread and load tests are expensive when every monitoring/event poll runs the complete suite.
+- Thresholds are not clearly normalized for different board revisions or host load.
+- No periodic-safe subset, warm-up, or sample aggregation is declared.
+
+Improvements
+- Inject topology, affinity, sysfs, and scheduler providers for deterministic native tests.
+- Split cheap read-only health metrics from stress/affinity diagnostics; run only health metrics periodically.
+- Record CPU identity, requested affinity, observed migration, sample count, and threshold as metrics.
+- Add bounded four-mode tests with low-resource fixtures and invalid interval coverage.

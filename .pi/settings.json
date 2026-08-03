@@ -1,0 +1,16 @@
+{
+  "skills": [
+    ".pi/skills/coding-standards",
+    ".pi/skills/proto-contracts",
+    ".pi/skills/remote-test",
+    ".pi/skills/add-hal-module",
+    ".pi/skills/native-test",
+    ".pi/skills/validate",
+    ".pi/skills/hal-module-manager",
+    ".pi/skills/project-specs"
+  ],
+  "prompts": [
+    ".pi/prompts"
+  ],
+  "enableSkillCommands": true
+}

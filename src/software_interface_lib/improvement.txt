@@ -1,0 +1,16 @@
+Software Interface review
+==========================
+
+Four-mode status: one-shot PASS; long-term PASS through the shared runner; monitoring PASS through the shared runner; event-based PASS through the shared runner. The four modes have no direct CTest coverage.
+
+Gaps and incompatibilities
+- Kernel, driver, CUDA, cuDNN, TensorRT, VPI, and multimedia checks depend on installation and host image.
+- Most checks are static presence/configuration probes; frequent polling adds cost without new evidence.
+- Version parsing and command failures need structured status and provenance.
+- Optional software absence must not be treated as a passing all-pass event.
+
+Improvements
+- Inject package/command/filesystem providers and add fixtures for missing, incompatible, and valid versions.
+- Report component, version, source, requirement, and validity as structured fields.
+- Add a low-frequency cache or snapshot for monitoring/event modes and invalidate on explicit request.
+- Add bounded four-mode tests for static pass/fail, unknown permission state, and event timeout.

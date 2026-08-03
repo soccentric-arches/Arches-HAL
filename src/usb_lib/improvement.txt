@@ -1,0 +1,16 @@
+USB review
+==========
+
+Four-mode status: one-shot PASS; long-term PASS through the shared runner; monitoring PASS through the shared runner; event-based PASS through the shared runner. Automated coverage currently proves only one-shot.
+
+Gaps and incompatibilities
+- USB class, hotplug, mass-storage, camera, audio, and network checks depend on attached devices and permissions.
+- Enumeration and hotplug history are not deterministic and may report stale events on each poll.
+- Mass-storage or device I/O tests can mutate external media and should not run indefinitely.
+- Device removal during a cycle needs bounded I/O and reliable descriptor cleanup.
+
+Improvements
+- Inject libusb/sysfs/udev providers and add replay fixtures for insertion, removal, class mismatch, and timeout.
+- Use uevent sequence/cursor and edge-triggered events; return SKIPPED for absent optional devices.
+- Restrict periodic modes to read-only enumeration/health; make media writes explicit one-shot actions.
+- Add bounded four-mode tests for hotplug, disappearance, recovery, cleanup, and event de-duplication.

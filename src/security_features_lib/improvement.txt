@@ -1,0 +1,16 @@
+Security Features review
+=========================
+
+Four-mode status: one-shot PASS; long-term PASS through the shared runner; monitoring PASS through the shared runner; event-based PASS through the shared runner. Non-one-shot modes are not directly tested.
+
+Gaps and incompatibilities
+- Secure boot, debug ports, JTAG, kernel policy, crypto libraries, and perf policy depend on boot configuration, privileges, and installation.
+- Security state should be treated as evidence with provenance, not as a transient repeated probe with warning-only failure.
+- Some security checks are static and do not benefit from high-frequency polling; command output parsing can be ambiguous.
+- Event criteria need explicit policy for unknown/permission-denied states.
+
+Improvements
+- Inject filesystem, command, boot-state, and crypto providers; add fixtures for secure/insecure/unknown cases.
+- Return typed evidence, policy version, source, and timestamp; use ERROR or SKIPPED consistently for unknown state.
+- Define a low-frequency passive monitoring subset and avoid repeated expensive crypto/configuration scans.
+- Add bounded four-mode tests for policy transitions, permission denial, event firing, and timeout.

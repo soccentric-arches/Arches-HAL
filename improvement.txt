@@ -1,0 +1,44 @@
+Arches-HAL deep review
+======================
+
+Scope
+-----
+Reviewed all 35 implemented TestBase modules, their test entry points, CMake wiring, and the shared runner. Every implemented module has runAllTests(), getAvailableTests(), runSingleTest(), and a runTestApp<T>() executable. Therefore all four CLI modes are nominally exposed:
+
+- one-shot
+- long-term
+- monitoring
+- event-based
+
+The current CTest registrations invoke executables without arguments, so automated coverage proves only one-shot mode. Add focused smoke tests for all four modes, including bounded durations and event timeouts.
+
+Shared correctness gaps
+-----------------------
+1. Validate interval and poll values as strictly positive. Zero or negative values can create hot loops.
+2. Catch exceptions from callbacks. A callback exception currently terminates the worker with std::terminate.
+3. Prevent stop() from joining the worker thread when called by that worker, or provide a nonblocking stop request.
+4. Clear paused_ when starting a new run. A paused run can leave the next run permanently paused.
+5. Isolate exceptions per test so one failing test does not suppress the remaining tests in a cycle.
+6. Make event detection edge-triggered or provide an explicit repeat policy. Current criteria are level-triggered and can fire on every poll.
+7. Reject negative durations and reject trailing characters in numeric CLI arguments.
+8. Replace string monitor values with typed values plus availability/error state; current N/A strings cannot be thresholded safely.
+9. Add timestamps, module_id, test_id, and sequence consistently to every result produced by the runner.
+10. Add cancellation-aware waits so stop latency is bounded without polling every 50 ms.
+
+Cross-module gaps
+-----------------
+- Repeated modes rerun every test, including destructive, expensive, state-changing, or environment-dependent tests.
+- No module declares test metadata such as safe_for_monitoring, safe_for_event_polling, expected duration, required hardware, or cleanup requirements.
+- Missing hardware is frequently reported as PASS/WARN rather than structured SKIPPED, making event criteria unreliable.
+- CTest does not exercise monitoring, long-term, or event-based behavior.
+- Host-specific Raspberry Pi paths and external devices are not represented by deterministic test fixtures.
+
+Recommended implementation order
+--------------------------------
+1. Harden lib_base.cpp and test_runner.h validation/cancellation/callback handling.
+2. Add per-test metadata and separate diagnostic one-shot tests from safe periodic health checks.
+3. Make all four modes use only periodic-safe tests unless the user explicitly selects a destructive test.
+4. Add CTest cases for one-shot, bounded long-term, bounded monitor-test, event timeout, and event firing.
+5. Add hardware-absent tests that verify SKIPPED/UNAVAILABLE semantics without requiring a board.
+
+Module-specific details are in src/*/improvement.txt.

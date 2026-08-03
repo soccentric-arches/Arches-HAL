@@ -1,0 +1,16 @@
+System Memory review
+====================
+
+Four-mode status: one-shot PASS; long-term PASS through the shared runner; monitoring PASS through the shared runner; event-based PASS through the shared runner. CTest does not verify repeated modes.
+
+Gaps and incompatibilities
+- Allocation, fragmentation, DMA, concurrency, leak, and OOM checks can consume significant memory and destabilize the target.
+- Repeating allocation/stress tests at a short interval can overlap, create pressure, or trigger the OOM killer.
+- VmRSS and /proc metrics need sample age, process identity, and baseline; a single reading is weak evidence.
+- No resource budget or periodic-safe subset is declared.
+
+Improvements
+- Separate read-only memory telemetry from bounded allocation/stress diagnostics.
+- Add hard allocation budgets, cleanup guards, per-test deadlines, and no-overlap scheduling.
+- Inject proc/memory allocators and add deterministic failure/fragmentation fixtures.
+- Add bounded four-mode tests for allocation failure, cancellation cleanup, pressure recovery, and event threshold/debounce.

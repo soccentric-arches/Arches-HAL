@@ -1,0 +1,16 @@
+External Connector review
+==========================
+
+Four-mode status: one-shot PASS; long-term PASS through the shared runner; monitoring PASS through the shared runner; event-based PASS through the shared runner. Only the default one-shot is in CTest.
+
+Gaps and incompatibilities
+- USB/HDMI connector state and dmesg history depend on physical devices and kernel configuration.
+- Historical disconnect/HPD scans can generate duplicate event notifications on every poll.
+- Connector stimulation or device writes are not safe as an implicit monitoring action.
+- No connector identity, event cursor, or required/optional hardware policy is represented.
+
+Improvements
+- Add injected connector and event-source providers with fake insertion/removal sequences.
+- Use current state plus event sequence numbers, not unbounded log rescans.
+- Restrict periodic modes to passive observation and return SKIPPED for absent optional connectors.
+- Add bounded four-mode tests for insertion, removal, stale history, and recovery.

@@ -1,0 +1,16 @@
+PoE HAT review
+==============
+
+Four-mode status: one-shot PASS; long-term PASS through the shared runner; monitoring PASS through the shared runner; event-based PASS through the shared runner. Four-mode behavior is not directly covered.
+
+Gaps and incompatibilities
+- PoE negotiation, INA voltage/current readings, fan behavior, and thermal state depend on HAT hardware and load.
+- Power/fan actions are stateful and unsafe to repeat without ownership, limits, and restoration.
+- Optional third-party HATs can produce false PASS/WARN outcomes when telemetry is absent.
+- Event mode needs thresholds, hysteresis, and a transition policy for voltage/thermal faults.
+
+Improvements
+- Inject hwmon/I2C/fan providers and add deterministic voltage/current/thermal fixtures.
+- Separate passive telemetry from power/fan control; require explicit one-shot opt-in for actuation.
+- Add typed units, validity, threshold, and hysteresis metadata; use SKIPPED for absent HATs.
+- Add bounded four-mode tests for nominal, over-temperature, undervoltage, recovery, and max-duration behavior.

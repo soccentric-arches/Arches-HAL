@@ -1,0 +1,16 @@
+System Integration review
+==========================
+
+Four-mode status: one-shot PASS; long-term PASS through the shared runner; monitoring PASS through the shared runner; event-based PASS through the shared runner. Only one-shot is currently automated.
+
+Gaps and incompatibilities
+- Concurrent subsystem, contention, latency, and workload tests are expensive and may interfere with production services.
+- Re-running full integration scenarios each poll can overlap with the previous cycle if a test exceeds the interval.
+- OOM/kernel event history is stale unless baselined; event criteria can fire repeatedly.
+- No dependency readiness model or per-test timeout is exposed.
+
+Improvements
+- Add test metadata for resource class, expected duration, dependencies, cleanup, and periodic safety.
+- Prevent overlapping cycles and expose skipped_due_to_busy/timeout outcomes.
+- Inject subsystem clients and event sources; add deterministic contention and fault fixtures.
+- Add bounded four-mode tests for dependency loss, slow cycle, cancellation, recovery, and event de-duplication.

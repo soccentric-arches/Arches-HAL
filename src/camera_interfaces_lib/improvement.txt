@@ -1,0 +1,17 @@
+Camera Interfaces review
+=========================
+
+Four-mode status: one-shot PASS; long-term PASS through the shared runner; monitoring PASS through the shared runner; event-based PASS through the shared runner. Automated coverage currently exercises only the default one-shot path.
+
+Gaps and incompatibilities
+- CSI/Unicam, V4L2 nodes, device-tree paths, and v4l2-ctl output are Raspberry Pi and host dependent.
+- Camera absence is intentionally non-fatal, so all-pass event criteria can report success on a board with no camera.
+- Shell pipelines used for v4l2-ctl are not structured and may return ambiguous status/output.
+- Repeated capture/probe work needs explicit device-open/close and timeout guarantees.
+- The implementation contains duplicated module-name checks, suggesting the platform detection path needs cleanup.
+
+Improvements
+- Inject filesystem, command, and V4L2 interfaces; add fixture tests for absent, enumerated, and malformed devices.
+- Return SKIPPED with a required-hardware reason when no camera is attached; reserve PASS for verified capability.
+- Add a periodic-safe health subset and prevent full capture diagnostics from running in monitoring/event polls.
+- Add bounded four-mode CTest cases with deterministic fake sysfs/V4L2 data.

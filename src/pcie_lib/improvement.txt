@@ -1,0 +1,16 @@
+PCIe review
+===========
+
+Four-mode status: one-shot PASS; long-term PASS through the shared runner; monitoring PASS through the shared runner; event-based PASS through the shared runner. Only one-shot is covered by current CTest invocation.
+
+Gaps and incompatibilities
+- Enumeration, BAR/resource state, link speed, and device topology depend on installed cards, firmware, and permissions.
+- Repeated PCIe probing can be expensive and may read unstable topology during hotplug.
+- Hotplug/event checks need a uevent cursor rather than historical snapshots alone.
+- Unsupported topology and a failed required device need different statuses.
+
+Improvements
+- Inject PCI/sysfs/udev providers and add fixtures for enumeration, link degradation, removal, and recovery.
+- Use passive bounded reads in monitoring/event modes; isolate reset or link manipulation to explicit one-shot tests.
+- Return typed link/resource metrics and SKIPPED for optional absent devices.
+- Add bounded four-mode tests including device disappearance during a cycle.

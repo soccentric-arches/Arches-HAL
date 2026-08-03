@@ -1,0 +1,16 @@
+Vision Accelerator review
+==========================
+
+Four-mode status: one-shot PASS; long-term PASS through the shared runner; monitoring PASS through the shared runner; event-based PASS through the shared runner. Current tests do not exercise all modes.
+
+Gaps and incompatibilities
+- Accelerator discovery, model/runtime availability, image formats, and throughput depend on board image and hardware.
+- Inference/performance checks may allocate accelerator resources and are too expensive for arbitrary polling intervals.
+- Missing accelerator and unsupported model should not count as all-pass.
+- No explicit per-test timeout, warm-up, cleanup, or periodic-safe classification is exposed.
+
+Improvements
+- Add injected runtime/device/model providers and deterministic image/inference fixtures.
+- Separate read-only capability/health probes from inference benchmarks; make benchmarks one-shot unless explicitly requested.
+- Report model, format, latency, throughput, validity, and device identity as typed metrics.
+- Add bounded four-mode tests for absent runtime, malformed input, timeout, degraded throughput, recovery, and event firing.

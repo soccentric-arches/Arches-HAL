@@ -1,0 +1,16 @@
+Audio Interfaces review
+========================
+
+Four-mode status: one-shot PASS; long-term PASS through the shared runner; monitoring PASS through the shared runner; event-based PASS through the shared runner. The module does not currently prove these modes with automated tests.
+
+Gaps and incompatibilities
+- ALSA/device presence and capture/playback results depend on attached hardware, mixer state, permissions, and host configuration.
+- Repeating playback or capture checks can contend with the active audio device and can create audible or resource side effects.
+- Missing audio hardware should be SKIPPED/UNAVAILABLE, not treated as a normal PASS/WARN result that can trigger all-pass events.
+- No explicit periodic-safe subset or per-test duration/cleanup metadata is exposed.
+
+Improvements
+- Add injected ALSA/device discovery and fake PCM fixtures for native tests.
+- Separate non-mutating enumeration/health checks from playback/capture diagnostics; run only the former in long-term, monitoring, and event modes by default.
+- Add bounded buffer, stream cleanup, and timeout handling for every repeated operation.
+- Add CTest coverage for all four modes with no audio hardware present and with a fake backend.

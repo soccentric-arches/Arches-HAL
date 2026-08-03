@@ -1,0 +1,16 @@
+Ethernet review
+===============
+
+Four-mode status: one-shot PASS; long-term PASS through the shared runner; monitoring PASS through the shared runner; event-based PASS through the shared runner. Non-one-shot modes lack direct automated tests.
+
+Gaps and incompatibilities
+- Interface names, link state, PHY sysfs, IP configuration, and network reachability are host-specific.
+- Network probes can block or depend on external services; repeated probes can cause traffic and false failures.
+- Link/event history needs a cursor or state transition model to avoid repeated event notifications.
+- Missing eth0 or an intentionally disconnected interface is not equivalent to a broken required link.
+
+Improvements
+- Inject netlink/sysfs/command and reachability providers; add fake link transitions and timeout fixtures.
+- Require explicit interface/endpoint configuration instead of hard-coded assumptions.
+- Make monitoring read-only and bounded; make event mode edge-triggered on link transitions.
+- Add all four bounded mode tests for absent, up, down, timeout, and recovery cases.

@@ -1,0 +1,16 @@
+Deep Learning Accelerator review
+=================================
+
+Four-mode status: one-shot PASS; long-term PASS through the shared runner; monitoring PASS through the shared runner; event-based PASS through the shared runner. Direct automated coverage of the four modes is missing.
+
+Gaps and incompatibilities
+- Hailo/Coral/DLA discovery, model availability, performance, and temperature depend on installed hardware/software and board policy.
+- Inference and benchmark checks can be costly and may allocate device resources on every poll.
+- Throughput thresholds need workload, model, power mode, and thermal context to avoid noisy events.
+- Missing accelerators should not look like a passing event cycle.
+
+Improvements
+- Add an accelerator provider and fake inference/telemetry backend for native CI.
+- Split discovery/health checks from inference benchmarks; permit benchmarks only in explicit one-shot mode.
+- Add bounded inference deadlines, cleanup, warm-up, and typed latency/throughput metrics.
+- Add four-mode tests for absent hardware, timeout, degraded result, event firing, and max-duration expiry.

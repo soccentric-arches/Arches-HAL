@@ -1,0 +1,16 @@
+Environmental review
+====================
+
+Four-mode status: one-shot PASS; long-term PASS through the shared runner; monitoring PASS through the shared runner; event-based PASS through the shared runner. Only one-shot is currently automated.
+
+Gaps and incompatibilities
+- Sensor paths, thermal values, voltage history, USB events, and pstore/journal records are board- and boot-history-dependent.
+- Historical event checks can report stale conditions on every monitoring/event poll.
+- Missing sensors are often warnings, which makes all-pass event criteria semantically weak.
+- No sampling cadence, stale-data age, or sensor validity metric is exposed.
+
+Improvements
+- Inject sensor and event-log providers; add fixtures for missing, stale, out-of-range, and recovering sensors.
+- Track event sequence/timestamp so event mode detects new events only.
+- Return typed values with validity and SKIPPED status for unavailable optional sensors.
+- Add bounded four-mode tests, including event de-duplication and max-duration expiry.

@@ -1,0 +1,16 @@
+Debug and Development Interfaces review
+=========================================
+
+Four-mode status: one-shot PASS; long-term PASS through the shared runner; monitoring PASS through the shared runner; event-based PASS through the shared runner. Only default one-shot execution is covered by CTest.
+
+Gaps and incompatibilities
+- UART, CoreSight, perf, and kernel policy checks depend on board configuration, privileges, and installed tools.
+- Presence/configuration checks are not the same as operational health and can create false all-pass event results.
+- perf and kernel log probing can be expensive or permission-sensitive when repeated.
+- Tool command failures need structured exit status rather than output-only interpretation.
+
+Improvements
+- Inject command execution, filesystem, and privilege providers; add fixture cases for unavailable tools and denied access.
+- Use SKIPPED for unsupported interfaces and FAIL for required-but-broken interfaces.
+- Define a read-only periodic subset and avoid repeated perf setup in monitoring/event modes.
+- Add bounded four-mode tests and verify callback/event behavior when an interface changes state.

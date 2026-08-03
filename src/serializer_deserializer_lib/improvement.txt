@@ -1,0 +1,16 @@
+Serializer/Deserializer review
+==============================
+
+Four-mode status: one-shot PASS; long-term PASS through the shared runner; monitoring PASS through the shared runner; event-based PASS through the shared runner. Only default one-shot is automated.
+
+Gaps and incompatibilities
+- CSI-2/SerDes link state, CRC errors, and kernel logs depend on external topology and accumulated history.
+- Historical error counters/logs can repeatedly fire the same event without a baseline or sequence cursor.
+- Link manipulation or reset tests are unsafe in indefinite modes and may affect other clients.
+- Missing links and degraded links need distinct structured statuses.
+
+Improvements
+- Inject sysfs, error-counter, and event providers with fixtures for link up/down, CRC growth, and recovery.
+- Capture a baseline and report deltas/rates with typed metrics; make events transition-based.
+- Restrict periodic modes to passive counters and health reads; isolate resets to explicit one-shot tests.
+- Add bounded four-mode tests for absent link, error growth, recovery, and event de-duplication.

@@ -1,0 +1,16 @@
+Reliability review
+==================
+
+Four-mode status: one-shot PASS; long-term PASS through the shared runner; monitoring PASS through the shared runner; event-based PASS through the shared runner. Current automated execution proves only one-shot.
+
+Gaps and incompatibilities
+- Burn-in, thermal cycling, power cycling, MTBF, and aging concepts are not equivalent to rerunning a full test suite at a polling interval.
+- Repeating stress or power actions can damage hardware, reset the target, or invalidate accumulated measurements.
+- Reliability measurements lack run identity, elapsed exposure, sample count, and persistence across process restarts.
+- Historical USB/error events can be stale and repeatedly reported.
+
+Improvements
+- Model reliability campaigns as explicit long-term jobs with setup, teardown, checkpoints, and durable results.
+- Restrict monitoring/event modes to passive health/error counters; require explicit opt-in for stress and power cycling.
+- Add injected fault/event sources and deterministic fixtures for native CI.
+- Add bounded four-mode tests for campaign timeout, pause/resume, interruption cleanup, and event de-duplication.

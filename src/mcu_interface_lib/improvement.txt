@@ -1,0 +1,16 @@
+MCU Interface review
+=====================
+
+Four-mode status: one-shot PASS; long-term PASS through the shared runner; monitoring PASS through the shared runner; event-based PASS through the shared runner. No direct four-mode CTest coverage exists.
+
+Gaps and incompatibilities
+- MCU transport, protocol state, firmware version, and response timing depend on external hardware.
+- Repeated requests can leave the MCU in a changed mode or collide with another transaction.
+- Event mode is polling-based and lacks sequence/debounce handling for asynchronous MCU events.
+- Timeouts and transport cleanup need to bound worker shutdown.
+
+Improvements
+- Add a fake MCU transport with scripted responses, disconnects, malformed frames, and delays.
+- Define request idempotence, session reset, RAII cleanup, and per-command deadlines.
+- Restrict periodic modes to read-only health/status calls; make commands explicit and one-shot.
+- Add bounded four-mode tests for healthy, timeout, disconnect, recovery, and event transition cases.

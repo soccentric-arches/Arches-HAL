@@ -1,0 +1,16 @@
+GPIO review
+===========
+
+Four-mode status: one-shot PASS; long-term PASS through the shared runner; monitoring PASS through the shared runner; event-based PASS through the shared runner. The modes are inherited, not behavior-tested.
+
+Gaps and incompatibilities
+- GPIO reads/writes mutate shared pins and can interfere with other processes or board functions.
+- Repeated tests may leave direction, pull, output level, or ownership different from the initial state.
+- Event polling should use edge-triggered GPIO facilities where possible; repeated reads are not equivalent to events.
+- Pin mapping, permissions, and reserved pins are board-specific.
+
+Improvements
+- Add a pin ownership/configuration abstraction and guaranteed snapshot/restore for every mutating test.
+- Separate passive input health from output/toggle tests; make mutation explicit and one-shot by default.
+- Use edge timestamps/debounce and bounded waits for event mode.
+- Add fake GPIO fixtures and four-mode tests proving cleanup, contention, timeout, and event transition behavior.

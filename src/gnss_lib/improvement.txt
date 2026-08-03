@@ -1,0 +1,16 @@
+GNSS review
+===========
+
+Four-mode status: one-shot PASS; long-term PASS through the shared runner; monitoring PASS through the shared runner; event-based PASS through the shared runner. Automated CTest coverage is one-shot only.
+
+Gaps and incompatibilities
+- Fix status, constellation count, signal quality, and serial device state depend on antenna, sky view, receiver lock, and environment.
+- Polling without a receiver timeout can block a worker thread and delay stop().
+- A no-fix outdoor condition is not the same as a disconnected or broken receiver.
+- Event mode needs transition/debounce policy for fix acquired/lost rather than firing every poll.
+
+Improvements
+- Inject serial/NMEA and clock providers; add replay fixtures for fix acquisition/loss and malformed data.
+- Enforce per-read and total acquisition deadlines with RAII cleanup.
+- Report fix age, constellation count, SNR, and validity as typed metrics; use SKIPPED only for absent hardware.
+- Add bounded four-mode tests for no-fix, fix, loss, recovery, and event de-duplication.

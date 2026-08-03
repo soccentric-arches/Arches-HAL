@@ -1,0 +1,16 @@
+Functional Safety review
+=========================
+
+Four-mode status: one-shot PASS; long-term PASS through the shared runner; monitoring PASS through the shared runner; event-based PASS through the shared runner. Safety semantics are not directly tested in the four modes.
+
+Gaps and incompatibilities
+- Watchdog, throttle, PMIC, and safety-state checks depend on board/kernel behavior and may have safety consequences.
+- Repeating a safety action or watchdog operation can reset or destabilize the target.
+- Monitoring and event modes rerun the full suite rather than a declared passive safety-observation subset.
+- Safety-critical results need explicit severity, evidence, timestamps, and fail-safe handling.
+
+Improvements
+- Split passive observation from actuating tests; make actuating tests one-shot and opt-in.
+- Add hardware-in-the-loop fixtures for watchdog/throttle transitions and prove cleanup/restoration.
+- Use typed safety state and CRITICAL severity for invalid/unknown readings; never downgrade missing safety telemetry to PASS.
+- Add bounded four-mode tests with simulated fault injection and callback failure handling.

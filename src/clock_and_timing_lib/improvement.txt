@@ -1,0 +1,16 @@
+Clock and Timing review
+========================
+
+Four-mode status: one-shot PASS; long-term PASS through the shared runner; monitoring PASS through the shared runner; event-based PASS through the shared runner. The four modes are not directly tested.
+
+Gaps and incompatibilities
+- Timing and jitter thresholds vary with scheduler load, CPU frequency, clock source, virtualization, and host kernel.
+- Repeating timing measurements can create noisy event results without a baseline or hysteresis.
+- Tests need monotonic-clock guarantees and should never use wall-clock changes for elapsed duration.
+- No result metadata records sample count, percentile, threshold, or clock source.
+
+Improvements
+- Inject the clock and sleep functions; use deterministic fake time for unit tests.
+- Report sample count, min/max, percentiles, and threshold configuration as typed metrics.
+- Add warm-up, minimum sample, and hysteresis policies for monitoring/event modes.
+- Add bounded four-mode tests under nominal and intentionally injected jitter.

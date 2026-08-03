@@ -1,0 +1,16 @@
+Display Interfaces review
+=========================
+
+Four-mode status: one-shot PASS; long-term PASS through the shared runner; monitoring PASS through the shared runner; event-based PASS through the shared runner. CTest does not exercise the non-default modes.
+
+Gaps and incompatibilities
+- Connector, EDID, HPD, and display state depend on physical monitors, DRM topology, permissions, and kernel log history.
+- Historical dmesg/HPD text is not a reliable edge-triggered event source; repeated polls can report stale events.
+- Display mutation or modeset checks are unsafe to repeat without ownership and restoration.
+- No structured distinction exists between absent display and failed connected display.
+
+Improvements
+- Inject DRM/sysfs/log providers and add fixtures for connected, disconnected, malformed EDID, and permission cases.
+- Use current state plus a cursor/sequence for events rather than rescanning historical logs.
+- Limit monitoring/event modes to read-only connector health; isolate modeset tests to one-shot.
+- Add bounded four-mode tests and verify no stale event repeats.

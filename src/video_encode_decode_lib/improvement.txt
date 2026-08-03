@@ -1,0 +1,16 @@
+Video Encode/Decode review
+===========================
+
+Four-mode status: one-shot PASS; long-term PASS through the shared runner; monitoring PASS through the shared runner; event-based PASS through the shared runner. The non-default modes are not directly tested.
+
+Gaps and incompatibilities
+- Codec/device availability, pipeline support, formats, and performance depend on hardware acceleration and installed tools.
+- Encode/decode benchmarks and frame pipelines are expensive to repeat and can hold buffers or device resources.
+- A tegrastats or command probe can be unavailable/ambiguous, and output-only parsing weakens event criteria.
+- No frame timeout, throughput sample window, or cleanup contract is declared.
+
+Improvements
+- Inject codec/device/command providers with fake frame sources and deterministic error fixtures.
+- Separate capability enumeration from bounded encode/decode diagnostics; keep monitoring passive.
+- Add per-frame deadlines, buffer RAII, warm-up, sample windows, and typed latency/throughput metrics.
+- Add bounded four-mode tests for unsupported codec, malformed frame, timeout, recovery, and event threshold.

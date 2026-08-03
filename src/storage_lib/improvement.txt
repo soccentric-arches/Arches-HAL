@@ -1,0 +1,16 @@
+Storage review
+==============
+
+Four-mode status: one-shot PASS; long-term PASS through the shared runner; monitoring PASS through the shared runner; event-based PASS through the shared runner. Current CTest invocation exercises only one-shot.
+
+Gaps and incompatibilities
+- Capacity, filesystem, I/O, wear, bad-block, power-loss, and performance tests depend on the target device and can mutate it.
+- Repeating writes or stress tests in monitoring/event mode can consume flash endurance or fill storage.
+- Temperature and uevent/log checks need freshness and baseline handling; historical data can repeat events.
+- Device absence, read-only media, and failed expected media need distinct results.
+
+Improvements
+- Classify tests as read-only, temporary-write, destructive, or power-loss; permit only read-only tests in periodic modes.
+- Require explicit target paths, size limits, fsync/cleanup, timeouts, and restoration for write tests.
+- Inject block/filesystem/udev providers and add sparse-file/fake-device fixtures for native CI.
+- Add bounded four-mode tests for absent media, read-only media, timeout, cleanup, event delta, and duration expiry.

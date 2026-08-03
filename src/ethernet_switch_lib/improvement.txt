@@ -1,0 +1,16 @@
+Ethernet Switch review
+======================
+
+Four-mode status: one-shot PASS; long-term PASS through the shared runner; monitoring PASS through the shared runner; event-based PASS through the shared runner. CTest currently covers only one-shot.
+
+Gaps and incompatibilities
+- Switch topology, bonding, failover, STP, and journal state depend on deployment-specific interfaces and history.
+- Failover or topology mutation checks are not safe to repeat from every poll.
+- Journal scans are historical and can repeatedly report old bonding events.
+- No explicit distinction exists between unsupported topology and a failed required switch path.
+
+Improvements
+- Inject netlink/sysfs/journal providers and add deterministic topology/failover fixtures.
+- Make periodic checks read-only; isolate failover actions to explicit one-shot tests with rollback.
+- Track journal cursor/sequence for event mode and add edge-triggered notifications.
+- Add bounded four-mode tests for stable, degraded, recovered, and unsupported topologies.

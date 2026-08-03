@@ -1,0 +1,16 @@
+Watchdog and Reset review
+==========================
+
+Four-mode status: one-shot PASS; long-term PASS through the shared runner; monitoring PASS through the shared runner; event-based PASS through the shared runner. The inherited modes are unsafe without policy gates, and CTest covers only one-shot.
+
+Gaps and incompatibilities
+- Watchdog feeding, timeout, reset, and recovery operations can reset or permanently alter the target.
+- Repeating reset/timeout checks in monitoring or event mode can terminate the process or invalidate later cycles.
+- Reset and input-event logs are historical and can repeatedly report old events.
+- No explicit distinction exists between passive watchdog status and destructive watchdog validation.
+
+Improvements
+- Classify passive status versus reset/timeout actions; prohibit destructive tests in periodic/event modes by default.
+- Require explicit opt-in, board safety policy, deadline, and post-reset recovery for destructive tests.
+- Use event sequence/timestamp baselines and structured reset cause metrics.
+- Add hardware-in-the-loop and simulated four-mode tests for timeout, cancellation, recovery, stale-event suppression, and callback safety.

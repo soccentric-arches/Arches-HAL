@@ -1,0 +1,16 @@
+GPU review
+==========
+
+Four-mode status: one-shot PASS; long-term PASS through the shared runner; monitoring PASS through the shared runner; event-based PASS through the shared runner. CTest does not directly cover the modes.
+
+Gaps and incompatibilities
+- GPU device paths, clocks, temperatures, CUDA/Vulkan/V4L2 availability, and thresholds are host-specific.
+- Stress, throughput, and workload tests are expensive and can change thermal/power state when repeated.
+- Frequency and throttle event criteria need hysteresis and sample history to avoid flapping.
+- Missing GPU hardware should be structured as SKIPPED/UNAVAILABLE, not a passing warning.
+
+Improvements
+- Inject device, sysfs, command, and workload providers; add fake telemetry and fault fixtures.
+- Restrict monitoring/event modes to passive telemetry and small bounded health probes.
+- Add typed temperature/frequency/throttle metrics with sample timestamps and hysteresis.
+- Add bounded four-mode tests for absent GPU, thermal degradation, recovery, and event firing.

@@ -1,0 +1,16 @@
+Communication Interface review
+===============================
+
+Four-mode status: one-shot PASS; long-term PASS through the shared runner; monitoring PASS through the shared runner; event-based PASS through the shared runner. CTest currently validates only one-shot startup.
+
+Gaps and incompatibilities
+- Serial, I2C, SPI, and platform-device paths depend on host permissions, device nodes, and external endpoints.
+- Repeated probes can leave transactions or file descriptors open and can collide with another client.
+- Device absence, permission failure, timeout, and protocol failure are not consistently distinguished for event criteria.
+- Shell/sysfs probing and external state make native results difficult to reproduce.
+
+Improvements
+- Introduce transport interfaces with fake endpoints and deterministic timeout/error injection.
+- Guarantee RAII cleanup and per-operation deadlines; make monitoring use read-only health probes.
+- Mark missing optional endpoints SKIPPED and expected-but-unhealthy endpoints FAIL.
+- Add all four bounded mode tests, including endpoint disappearance during a run.
