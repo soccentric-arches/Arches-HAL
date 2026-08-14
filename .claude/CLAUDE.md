@@ -3,7 +3,7 @@
 C++17 hardware abstraction and validation layer for the Jetson. Owns the canonical proto/gRPC
 contract the rest of the fleet links against.
 
-Remote: `git@github.com:SiliconCentric/Arches-HAL.git`
+Remote: `git@github.com:soccentric-arches/Arches-HAL.git`
 Target: NVIDIA Jetson (Tegra, L4T/JetPack) + STM32 real-time co-processor.
 
 Two things at once: a hardware test-suite framework (one binary per module, uniform CLI), and the
