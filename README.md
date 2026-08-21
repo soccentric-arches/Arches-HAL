@@ -2,13 +2,25 @@
 
 ## Project Summary
 
-Arches-HAL is the C++17 hardware abstraction and validation layer shared by the Arches client and target platforms. Protocol definitions in `protos/` describe common messages, client and HAL services, and module contracts ranging from accelerometers and cameras to storage, networking, power, safety, and watchdog functions. The module registry manifest provides the interface inventory used by generated and hand-written code. CMake builds protocol artifacts and the library implementation under `src/`.
+Arches-HAL is the C++17 hardware abstraction and validation layer shared by the Arches client and target platforms.
 
-The source tree includes common provider and module helpers, Arches and Raspberry Pi 5 platform bindings, STM32 transport support, and module libraries for the declared interfaces. These implementations bridge Linux facilities and MCU or peripheral transports into a consistent test contract. Doxygen inputs and Docker/toolchain files support documentation and embedded builds.
+Protocol definitions in `protos/` describe common messages, client and HAL services, and module contracts ranging from accelerometers and cameras to storage, networking, power, safety, and watchdog functions. The module registry manifest provides the interface inventory used by generated and hand-written code.
 
-`tests/` contains per-module executable test programs and CMake definitions for many interface families, plus focused GPU, pinmux, and STM32 transport cases. Many tests interact with real hardware or platform devices; test-binary presence is not equivalent to successful target execution. The Makefile and `script/run-all-targets.sh` expose build and execution workflows.
+CMake builds protocol artifacts and the library implementation under `src/`.
 
-The HAL is strongly platform-dependent: compiler flags, device nodes, peripheral availability, and transport wiring affect runtime results. Review generated protocol freshness, target permissions, module registration, and test fixture assumptions before release. Also compare every supported board’s expected buses, permissions, timing, and failure reporting with its fixture configuration. No manual verification is implied by a compiled test binary.
+The source tree includes common provider and module helpers, Arches and Raspberry Pi 5 platform bindings, STM32 transport support, and module libraries for the declared interfaces.
+
+These implementations bridge Linux facilities and MCU or peripheral transports into a consistent test contract. Doxygen inputs and Docker/toolchain files support documentation and embedded builds.
+
+`tests/` contains per-module executable test programs and CMake definitions for many interface families, plus focused GPU, pinmux, and STM32 transport cases.
+
+Many tests interact with real hardware or platform devices; test-binary presence is not equivalent to successful target execution. The Makefile and `script/run-all-targets.sh` expose build and execution workflows.
+
+The HAL is strongly platform-dependent: compiler flags, device nodes, peripheral availability, and transport wiring affect runtime results.
+
+Review generated protocol freshness, target permissions, module registration, and test fixture assumptions before release. Also compare every supported board’s expected buses, permissions, timing, and failure reporting with its fixture configuration.
+
+No manual verification is implied by a compiled test binary.
 
 ## Features
 
@@ -25,6 +37,6 @@ The HAL is strongly platform-dependent: compiler flags, device nodes, peripheral
 | 9 | Doxygen API documentation inputs | Implemented | Unknown | [ ] Manual verification required |
 | 10 | Full validation on every supported target | Partial | Not established from source alone | [ ] Manual verification required |
 
-## Validation
+## Validation Commands
 
 `make build`; `make test`; `./script/run-all-targets.sh`. Target prerequisites and hardware access are required.
