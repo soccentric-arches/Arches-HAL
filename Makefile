@@ -1,6 +1,8 @@
 # Master Makefile for Arches HAL
 # Supports both native and Docker-based builds with Ninja
 
+.DEFAULT_GOAL := help
+
 .PHONY: all build configure clean test format cppcheck doc doc-pdf help
 .PHONY: package package-deb package-rpm package-ipk
 .PHONY: docker-build docker-configure docker-clean docker-shell docker-install docker-image docker-test
@@ -36,7 +38,7 @@ SSH := $(SSHPASS) ssh -o StrictHostKeyChecking=no
 SCP := $(SSHPASS) scp -o StrictHostKeyChecking=no
 
 # Default target
-all: docker-build
+all: docker-build ## Alias for docker-build (default)
 
 # Deploy to remote target: $(1)=IP address
 define deploy_remote
@@ -83,19 +85,19 @@ endef
 # Native builds (host architecture)
 # =============================================================================
 
-configure:
+configure: ## Configure the project with CMake/Ninja
 	@echo "Configuring project with Ninja..."
 	mkdir -p $(NATIVE_BUILD_DIR)
 	cd $(NATIVE_BUILD_DIR) && cmake -GNinja $(CURDIR)
 
-build: configure
+build: configure ## Build the project (configures if needed)
 	@echo "Building project with Ninja..."
 	cd $(NATIVE_BUILD_DIR) && ninja -j$(JOBS)
 
-run: build
+run: build ## Run test app locally (usage: make run [name] [args...], no args = run all)
 	$(call run_local)
 
-test: build
+test: build ## Run tests with CTest
 	@echo "Running tests with CTest..."
 	cd $(NATIVE_BUILD_DIR) && ctest --output-on-failure -j$(JOBS)
 
@@ -103,11 +105,11 @@ test: build
 # Common for native and Cross
 # =============================================================================
 
-clean:
+clean: ## Remove build directory
 	@echo "Cleaning build directory..."
 	rm -rf build
 
-list:
+list: ## List available test applications
 	@echo "Native ($(NATIVE_BUILD_DIR)):"
 	@ls -1 $(NATIVE_BUILD_DIR)/bin/ 2>/dev/null | sed 's/^/    /' || echo "    (none - run 'make build' first)"
 	@echo "Cross ($(CROSS_BUILD_DIR)):"
@@ -125,7 +127,7 @@ QEMU_AVAILABLE := $(shell test -f /usr/bin/qemu-aarch64-static && echo yes || ec
 
 DOCKER_RUN := docker run --rm -t --init --platform linux/arm64 -v $(PWD):/workspace -v ccache-arches:/home/arches/.ccache $(DOCKER_IMAGE) bash -c
 
-docker-install:
+docker-install: ## Install Docker if not present
 	@if ! command -v docker > /dev/null 2>&1; then \
 		echo "Docker not found. Installing Docker..."; \
 		sudo apt update && sudo apt install -y docker.io; \
@@ -133,7 +135,7 @@ docker-install:
 		echo "Docker is already installed."; \
 	fi
 
-docker-image: docker-install
+docker-image: docker-install ## Build Docker image if not exists
 	@if ! docker image inspect $(DOCKER_IMAGE) >/dev/null 2>&1; then \
 		echo "Building Docker image $(DOCKER_IMAGE)..."; \
 		make -C docker build; \
@@ -141,7 +143,7 @@ docker-image: docker-install
 		echo "Docker image $(DOCKER_IMAGE) already exists."; \
 	fi
 
-docker-configure: docker-image
+docker-configure: docker-image ## Configure project with Docker/Ninja
 	@echo "Configuring project with Docker/Ninja..."
 	@if [ "$(QEMU_AVAILABLE)" = "yes" ]; then \
 		$(DOCKER_RUN) "mkdir -p $(DOCKER_CROSS_BUILD_DIR) && cd $(DOCKER_CROSS_BUILD_DIR) && cmake -GNinja /workspace"; \
@@ -149,7 +151,7 @@ docker-configure: docker-image
 		echo "  QEMU user-static not available. Install with: sudo apt-get install qemu-user-static"; \
 	fi
 
-docker-build: docker-image
+docker-build: docker-image ## Build project with Docker/Ninja
 	@echo "Building project with Docker/Ninja..."
 	@if [ "$(QEMU_AVAILABLE)" = "yes" ]; then \
 		$(DOCKER_RUN) "if [ ! -f $(DOCKER_CROSS_BUILD_DIR)/build.ninja ]; then mkdir -p $(DOCKER_CROSS_BUILD_DIR) && cd $(DOCKER_CROSS_BUILD_DIR) && cmake -GNinja /workspace; fi && cd $(DOCKER_CROSS_BUILD_DIR) && ninja -j$(JOBS)"; \
@@ -157,7 +159,7 @@ docker-build: docker-image
 		echo "  QEMU user-static not available. Install with: sudo apt-get install qemu-user-static"; \
 	fi
 
-docker-clean: docker-image
+docker-clean: docker-image ## Clean Docker build artifacts
 	@echo "Cleaning Docker build directory..."
 	@if [ "$(QEMU_AVAILABLE)" = "yes" ]; then \
 		$(DOCKER_RUN) "rm -rf $(DOCKER_CROSS_BUILD_DIR)"; \
@@ -165,7 +167,7 @@ docker-clean: docker-image
 		echo "  QEMU user-static not available. Install with: sudo apt-get install qemu-user-static"; \
 	fi
 
-docker-shell: docker-image
+docker-shell: docker-image ## Start Docker shell for development
 	@echo "Starting Docker shell for development..."
 	@if [ "$(QEMU_AVAILABLE)" = "yes" ]; then \
 		docker run -it --rm --platform linux/arm64 -v $(PWD):/workspace -v ccache-arches:/home/arches/.ccache $(DOCKER_IMAGE) bash; \
@@ -173,7 +175,7 @@ docker-shell: docker-image
 		echo "  QEMU user-static not available. Install with: sudo apt-get install qemu-user-static"; \
 	fi
 
-docker-test: docker-build
+docker-test: docker-build ## Run CTest inside Docker (ARM64 via QEMU)
 	@echo "Running tests inside Docker (ARM64 via QEMU)..."
 	@if [ "$(QEMU_AVAILABLE)" = "yes" ]; then \
 		$(DOCKER_RUN) "cd $(DOCKER_CROSS_BUILD_DIR) && ctest --output-on-failure -j$(JOBS)"; \
@@ -181,7 +183,7 @@ docker-test: docker-build
 		echo "  QEMU user-static not available. Install with: sudo apt-get install qemu-user-static"; \
 	fi
 
-docker-package-deb: docker-build
+docker-package-deb: docker-build ## Generate DEB package (cross/ARM64)
 	@echo "Generating DEB package (cross/ARM64)..."
 	@if [ "$(QEMU_AVAILABLE)" = "yes" ]; then \
 		$(DOCKER_RUN) "cd $(DOCKER_CROSS_BUILD_DIR) && cpack -G DEB"; \
@@ -189,7 +191,7 @@ docker-package-deb: docker-build
 		echo "  QEMU user-static not available. Install with: sudo apt-get install qemu-user-static"; \
 	fi
 
-docker-package-rpm: docker-build
+docker-package-rpm: docker-build ## Generate RPM package (cross/ARM64)
 	@echo "Generating RPM package (cross/ARM64, requires rpmbuild in image)..."
 	@if [ "$(QEMU_AVAILABLE)" = "yes" ]; then \
 		$(DOCKER_RUN) "cd $(DOCKER_CROSS_BUILD_DIR) && cpack -G RPM"; \
@@ -197,7 +199,7 @@ docker-package-rpm: docker-build
 		echo "  QEMU user-static not available. Install with: sudo apt-get install qemu-user-static"; \
 	fi
 
-docker-package-ipk: docker-build
+docker-package-ipk: docker-build ## Generate IPK package (cross/ARM64)
 	@echo "Generating IPK package (cross/ARM64)..."
 	@if [ "$(QEMU_AVAILABLE)" = "yes" ]; then \
 		$(DOCKER_RUN) "cd $(DOCKER_CROSS_BUILD_DIR) && cmake --build . --target package_ipk"; \
@@ -205,16 +207,16 @@ docker-package-ipk: docker-build
 		echo "  QEMU user-static not available. Install with: sudo apt-get install qemu-user-static"; \
 	fi
 
-docker-package: docker-package-deb docker-package-ipk
+docker-package: docker-package-deb docker-package-ipk ## Generate DEB + IPK (cross/ARM64)
 	@echo "Cross packages generated in build/cross/"
 
 # =============================================================================
 # Deploy & Run (on target device)
 # =============================================================================
 
-deploy: deploy-a deploy-b
+deploy: deploy-a deploy-b ## Deploy to all devices (deploy-a + deploy-b)
 
-deploy-a: docker-build
+deploy-a: docker-build ## Deploy lib and bin to $(IP_A)
 	@if [ "$(QEMU_AVAILABLE)" = "yes" ]; then \
 		echo "Deploying to $(IP_A)..."; \
 		$(SSH) $(USER)@$(IP_A) "rm -rf /tmp/acu-test && mkdir -p /tmp/acu-test"; \
@@ -224,7 +226,7 @@ deploy-a: docker-build
 		echo "  QEMU user-static not available. Install with: sudo apt-get install qemu-user-static"; \
 	fi
 
-deploy-b: docker-build
+deploy-b: docker-build ## Deploy lib and bin to $(IP_B)
 	@if [ "$(QEMU_AVAILABLE)" = "yes" ]; then \
 		echo "Deploying to $(IP_B)..."; \
 		$(SSH) $(USER)@$(IP_B) "rm -rf /tmp/acu-test && mkdir -p /tmp/acu-test"; \
@@ -234,14 +236,14 @@ deploy-b: docker-build
 		echo "  QEMU user-static not available. Install with: sudo apt-get install qemu-user-static"; \
 	fi
 
-run-a: deploy-a
+run-a: deploy-a ## Run test app on $(IP_A) (usage: make run-a [name] [args...])
 	@if [ "$(QEMU_AVAILABLE)" = "yes" ]; then \
 		$(call run_remote,$(IP_A)); \
 	else \
 		echo "  QEMU user-static not available. Install with: sudo apt-get install qemu-user-static"; \
 	fi
 
-run-b: deploy-b
+run-b: deploy-b ## Run test app on $(IP_B) (usage: make run-b [name] [args...])
 	@if [ "$(QEMU_AVAILABLE)" = "yes" ]; then \
 		$(call run_remote,$(IP_B)); \
 	else \
@@ -252,7 +254,7 @@ run-b: deploy-b
 # Code quality & Docs
 # =============================================================================
 
-format: configure
+format: configure ## Format code with clang-format (and cmake-format if available)
 	@echo "Formatting C++ files with clang-format..."
 	@if command -v clang-format > /dev/null 2>&1; then \
 		cd $(NATIVE_BUILD_DIR) && ninja format; \
@@ -266,11 +268,11 @@ format: configure
 		echo "  cmake-format not found, skipping CMake file formatting."; \
 	fi
 
-cppcheck: configure
+cppcheck: configure ## Run static analysis with cppcheck
 	@echo "Running cppcheck static analysis..."
 	cd $(NATIVE_BUILD_DIR) && ninja cppcheck
 
-doc: configure
+doc: configure ## Generate Doxygen documentation (HTML + XML + man)
 	@echo "Generating documentation (HTML + XML + man)..."
 	@if command -v doxygen > /dev/null 2>&1; then \
 		cd $(NATIVE_BUILD_DIR) && ninja doc_doxygen; \
@@ -279,7 +281,7 @@ doc: configure
 		echo "  Doxygen not found. Run 'make install-tools' or apt-get install doxygen graphviz."; \
 	fi
 
-doc-pdf: configure
+doc-pdf: configure ## Generate Doxygen documentation + build PDF reference (needs pdflatex)
 	@echo "Generating documentation and building the PDF reference..."
 	@if ! command -v doxygen > /dev/null 2>&1; then \
 		echo "  Doxygen not found. Run 'make install-tools' or apt-get install doxygen graphviz."; \
@@ -294,12 +296,12 @@ doc-pdf: configure
 # Packaging (DEB / IPK / RPM)
 # =============================================================================
 
-package-deb: build
+package-deb: build ## Generate DEB package (native build)
 	@echo "Generating DEB package..."
 	cd $(NATIVE_BUILD_DIR) && cpack -G DEB
 	@echo "Package: $$(ls $(NATIVE_BUILD_DIR)/arches-hal_*.deb 2>/dev/null | head -1)"
 
-package-rpm: build
+package-rpm: build ## Generate RPM package (requires rpmbuild)
 	@echo "Generating RPM package..."
 	@if command -v rpmbuild > /dev/null 2>&1; then \
 		cd $(NATIVE_BUILD_DIR) && cpack -G RPM; \
@@ -308,12 +310,12 @@ package-rpm: build
 		echo "  rpmbuild not found. Install with: sudo apt-get install rpm"; \
 	fi
 
-package-ipk: build
+package-ipk: build ## Generate IPK package (DEB renamed .ipk)
 	@echo "Generating IPK package..."
 	cd $(NATIVE_BUILD_DIR) && cmake --build . --target package_ipk
 	@echo "Package: $$(ls $(NATIVE_BUILD_DIR)/arches-hal_*.ipk 2>/dev/null | head -1)"
 
-package: package-deb package-ipk
+package: package-deb package-ipk ## Generate DEB + IPK (native build)
 	@echo "All packages generated in $(NATIVE_BUILD_DIR)/"
 
 # =============================================================================
@@ -329,7 +331,7 @@ setup-completion:
 		echo "Completion already set up in ~/.bashrc."; \
 	fi
 
-install-tools:
+install-tools: ## Install missing host tools (clang-format, doxygen, rpm, QEMU, ...)
 	@echo "Installing missing host tools..."
 	@if [ -x script/install-tools.sh ]; then \
 		script/install-tools.sh; \
@@ -337,7 +339,7 @@ install-tools:
 		echo "  script/install-tools.sh not found. Run from the project root."; \
 	fi
 
-run-all-targets:
+run-all-targets: ## Run all targets and generate pass/fail report
 	@echo "Running all Makefile targets and generating report..."
 	@if [ -x script/run-all-targets.sh ]; then \
 		script/run-all-targets.sh; \
@@ -345,7 +347,7 @@ run-all-targets:
 		echo "  script/run-all-targets.sh not found. Run from the project root."; \
 	fi
 
-run-all-targets-quick:
+run-all-targets-quick: ## Skip slow/hardware targets
 	@echo "Running all Makefile targets (quick mode) and generating report..."
 	@if [ -x script/run-all-targets.sh ]; then \
 		script/run-all-targets.sh --quick; \
@@ -353,7 +355,7 @@ run-all-targets-quick:
 		echo "  script/run-all-targets.sh not found. Run from the project root."; \
 	fi
 
-run-all-targets-build:
+run-all-targets-build: ## Only native build + test + package
 	@echo "Running build targets and generating report..."
 	@if [ -x script/run-all-targets.sh ]; then \
 		script/run-all-targets.sh --build; \
@@ -365,63 +367,20 @@ run-all-targets-build:
 # Help
 # =============================================================================
 
-help:
-	@echo "Available targets:"
-	@echo "  Native builds (host architecture):"
-	@echo "    configure    - Configure the project with CMake/Ninja"
-	@echo "    build        - Build the project (configures if needed)"
-	@echo "    test         - Run tests with CTest"
-	@echo "    run          - Run test app locally (usage: make run [name] [args...], no args = run all)"
-	@echo ""
-	@echo "  Common (host and docker):"
-	@echo "    clean        - Remove build directory"
-	@echo "    list         - List available test applications"
-	@echo ""
-	@echo "  Cross builds (Docker / ARM64):"
-	@echo "    all                  - Alias for docker-build (default)"
-	@echo "    docker-install       - Install Docker if not present"
-	@echo "    docker-image         - Build Docker image if not exists"
-	@echo "    docker-configure     - Configure project with Docker/Ninja"
-	@echo "    docker-build         - Build project with Docker/Ninja"
-	@echo "    docker-test          - Run CTest inside Docker (ARM64 via QEMU)"
-	@echo "    docker-clean         - Clean Docker build artifacts"
-	@echo "    docker-shell         - Start Docker shell for development"
-	@echo ""
-	@echo "  Deploy & Run (on target device):"
-	@echo "    deploy       - Deploy to all devices (deploy-a + deploy-b)"
-	@echo "    deploy-a     - Deploy lib and bin to $(IP_A)"
-	@echo "    deploy-b     - Deploy lib and bin to $(IP_B)"
-	@echo "    run-a        - Run test app on $(IP_A) (usage: make run-a [name] [args...])"
-	@echo "    run-b        - Run test app on $(IP_B) (usage: make run-b [name] [args...])"
-	@echo "    Override IPs: make deploy IP_A=<addr> IP_B=<addr>"
-	@echo ""
-	@echo "  Packaging:"
-	@echo "    package-deb          - Generate DEB package (native build)"
-	@echo "    package-rpm          - Generate RPM package (requires rpmbuild)"
-	@echo "    package-ipk          - Generate IPK package (DEB renamed .ipk)"
-	@echo "    package              - Generate DEB + IPK (native build)"
-	@echo "    docker-package-deb   - Generate DEB package (cross/ARM64)"
-	@echo "    docker-package-rpm   - Generate RPM package (cross/ARM64)"
-	@echo "    docker-package-ipk   - Generate IPK package (cross/ARM64)"
-	@echo "    docker-package       - Generate DEB + IPK (cross/ARM64)"
-	@echo ""
-	@echo "  Code quality & Docs:"
-	@echo "    format       - Format code with clang-format (and cmake-format if available)"
-	@echo "    cppcheck     - Run static analysis with cppcheck"
-	@echo "    doc          - Generate Doxygen documentation (HTML + XML + man)"
-	@echo "    doc-pdf      - Generate Doxygen documentation + build PDF reference (needs pdflatex)"
-	@echo ""
-	@echo "  Misc:"
-	@echo "    setup-completion - Set up bash completion for make (adds to ~/.bashrc)"
-	@echo "    install-tools    - Install missing host tools (clang-format, doxygen, rpm, QEMU, ...)"
-	@echo "    run-all-targets          - Run all targets and generate pass/fail report"
-	@echo "    run-all-targets-quick    - Skip slow/hardware targets"
-	@echo "    run-all-targets-build    - Only native build + test + package"
-	@echo ""
-	@echo "  Environment variables:"
-	@echo "    HAL_SSH_USER  - SSH username for deploy (default: nvidia)"
-	@echo "    HAL_SSH_PASS  - SSH password for deploy"
-	@echo "    HAL_TLS_CERT  - Path to server TLS certificate"
-	@echo "    HAL_TLS_KEY   - Path to server TLS private key"
-	@echo "    HAL_TLS_CA    - Path to CA certificate for mutual TLS"
-	@echo "    JOBS          - Parallel build jobs (default: nproc=$(JOBS))"
+# ── Fleet-standard aliases ────────────────────────────────────────────────────
+# Same verbs mean the same thing in every repo; these forward to this
+# repo's own targets rather than duplicating their recipes.
+.PHONY: fmt lint
+fmt: format ## Alias for format
+lint: cppcheck ## Alias for cppcheck
+
+# ── Help ──────────────────────────────────────────────────────────────────────
+# Targets are self-documenting: text after `## ` on a target line is picked up
+# by `make help` automatically, so the listing can never drift from the rules.
+.PHONY: help
+help: ## Show this help
+	@printf '\n  \033[1m%s\033[0m\n' 'Arches-HAL'
+	@printf '  Usage: make <target> [VAR=value ...]\n'
+	@printf '\n'
+	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z0-9_.\/-]+:.*?## / { printf "    \033[36m%-24s\033[0m %s\n", $$1, $$2 }' $(MAKEFILE_LIST)
+	@printf '\n'
