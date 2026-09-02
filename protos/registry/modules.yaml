@@ -331,164 +331,148 @@ modules:
     source_path: src/watchdog_and_reset_lib/watchdog_and_reset_lib.h
 
   - id: i2c
-    name: I2C Bus
-    description: I2C bus communication testing
-    version: "1.0.0"
+    proto_package: hal.modules.i2c
+    config_type: hal.modules.i2c.Config
+    result_type: hal.modules.i2c.Result
+    version: 1
     status: active
     category: connectivity
-    modes: [SINGLE_SHOT, LONG_TERM, MONITORING]
-    config_type_url: type.googleapis.com/hal.modules.i2c.Config
-    result_type_url: type.googleapis.com/hal.modules.i2c.Result
+    source_path: src/i2c_lib/i2c_lib.h
 
   - id: spi
-    name: SPI Bus
-    description: SPI bus communication testing
-    version: "1.0.0"
+    proto_package: hal.modules.spi
+    config_type: hal.modules.spi.Config
+    result_type: hal.modules.spi.Result
+    version: 1
     status: active
     category: connectivity
-    modes: [SINGLE_SHOT, LONG_TERM]
-    config_type_url: type.googleapis.com/hal.modules.spi.Config
-    result_type_url: type.googleapis.com/hal.modules.spi.Result
+    source_path: src/spi_lib/spi_lib.h
 
   - id: uart
-    name: UART
-    description: UART/serial communication testing
-    version: "1.0.0"
+    proto_package: hal.modules.uart
+    config_type: hal.modules.uart.Config
+    result_type: hal.modules.uart.Result
+    version: 1
     status: active
     category: connectivity
-    modes: [SINGLE_SHOT, LONG_TERM, MONITORING]
-    config_type_url: type.googleapis.com/hal.modules.uart.Config
-    result_type_url: type.googleapis.com/hal.modules.uart.Result
+    source_path: src/uart_lib/uart_lib.h
 
   - id: rtc
-    name: Real-Time Clock
-    description: Real-time clock accuracy and persistence testing
-    version: "1.0.0"
+    proto_package: hal.modules.rtc
+    config_type: hal.modules.rtc.Config
+    result_type: hal.modules.rtc.Result
+    version: 1
     status: active
     category: timing
-    modes: [SINGLE_SHOT, MONITORING]
-    config_type_url: type.googleapis.com/hal.modules.rtc.Config
-    result_type_url: type.googleapis.com/hal.modules.rtc.Result
+    source_path: src/rtc_lib/rtc_lib.h
 
   - id: battery
-    name: Battery Management
-    description: Battery charge, health, and capacity testing
-    version: "1.0.0"
+    proto_package: hal.modules.battery
+    config_type: hal.modules.battery.Config
+    result_type: hal.modules.battery.Result
+    version: 1
     status: active
     category: power
-    modes: [SINGLE_SHOT, MONITORING, EVENT_BASED]
-    config_type_url: type.googleapis.com/hal.modules.battery.Config
-    result_type_url: type.googleapis.com/hal.modules.battery.Result
+    source_path: src/battery_lib/battery_lib.h
 
   - id: nvme
-    name: NVMe Storage
-    description: NVMe SSD performance and health testing
-    version: "1.0.0"
+    proto_package: hal.modules.nvme
+    config_type: hal.modules.nvme.Config
+    result_type: hal.modules.nvme.Result
+    version: 1
     status: active
     category: storage
-    modes: [SINGLE_SHOT, LONG_TERM]
-    config_type_url: type.googleapis.com/hal.modules.nvme.Config
-    result_type_url: type.googleapis.com/hal.modules.nvme.Result
+    source_path: src/nvme_lib/nvme_lib.h
 
   - id: emmc
-    name: eMMC Storage
-    description: eMMC flash storage testing
-    version: "1.0.0"
+    proto_package: hal.modules.emmc
+    config_type: hal.modules.emmc.Config
+    result_type: hal.modules.emmc.Result
+    version: 1
     status: active
     category: storage
-    modes: [SINGLE_SHOT, LONG_TERM]
-    config_type_url: type.googleapis.com/hal.modules.emmc.Config
-    result_type_url: type.googleapis.com/hal.modules.emmc.Result
+    source_path: src/emmc_lib/emmc_lib.h
 
   - id: can_bus
-    name: CAN Bus
-    description: CAN bus communication and error testing
-    version: "1.0.0"
+    proto_package: hal.modules.can_bus
+    config_type: hal.modules.can_bus.Config
+    result_type: hal.modules.can_bus.Result
+    version: 1
     status: active
     category: connectivity
-    modes: [SINGLE_SHOT, LONG_TERM, MONITORING, EVENT_BASED]
-    config_type_url: type.googleapis.com/hal.modules.can_bus.Config
-    result_type_url: type.googleapis.com/hal.modules.can_bus.Result
+    source_path: src/can_bus_lib/can_bus_lib.h
 
   - id: rs485
-    name: RS-485
-    description: RS-485 half-duplex serial bus testing
-    version: "1.0.0"
+    proto_package: hal.modules.rs485
+    config_type: hal.modules.rs485.Config
+    result_type: hal.modules.rs485.Result
+    version: 1
     status: active
     category: connectivity
-    modes: [SINGLE_SHOT, LONG_TERM]
-    config_type_url: type.googleapis.com/hal.modules.rs485.Config
-    result_type_url: type.googleapis.com/hal.modules.rs485.Result
+    source_path: src/rs485_lib/rs485_lib.h
 
   - id: analog_input
-    name: Analog Input (ADC)
-    description: ADC analog input measurement and linearity testing
-    version: "1.0.0"
+    proto_package: hal.modules.analog_input
+    config_type: hal.modules.analog_input.Config
+    result_type: hal.modules.analog_input.Result
+    version: 1
     status: active
     category: io
-    modes: [SINGLE_SHOT, MONITORING, EVENT_BASED]
-    config_type_url: type.googleapis.com/hal.modules.analog_input.Config
-    result_type_url: type.googleapis.com/hal.modules.analog_input.Result
+    source_path: src/analog_input_lib/analog_input_lib.h
 
   - id: pwm_output
-    name: PWM Output
-    description: PWM output frequency and duty cycle testing
-    version: "1.0.0"
+    proto_package: hal.modules.pwm_output
+    config_type: hal.modules.pwm_output.Config
+    result_type: hal.modules.pwm_output.Result
+    version: 1
     status: active
     category: io
-    modes: [SINGLE_SHOT, LONG_TERM]
-    config_type_url: type.googleapis.com/hal.modules.pwm_output.Config
-    result_type_url: type.googleapis.com/hal.modules.pwm_output.Result
+    source_path: src/pwm_output_lib/pwm_output_lib.h
 
   - id: sd_card
-    name: SD Card
-    description: SD card read/write performance and reliability testing
-    version: "1.0.0"
+    proto_package: hal.modules.sd_card
+    config_type: hal.modules.sd_card.Config
+    result_type: hal.modules.sd_card.Result
+    version: 1
     status: active
     category: storage
-    modes: [SINGLE_SHOT, LONG_TERM]
-    config_type_url: type.googleapis.com/hal.modules.sd_card.Config
-    result_type_url: type.googleapis.com/hal.modules.sd_card.Result
+    source_path: src/sd_card_lib/sd_card_lib.h
 
   - id: bluetooth
-    name: Bluetooth
-    description: Bluetooth radio and pairing testing
-    version: "1.0.0"
+    proto_package: hal.modules.bluetooth
+    config_type: hal.modules.bluetooth.Config
+    result_type: hal.modules.bluetooth.Result
+    version: 1
     status: active
     category: connectivity
-    modes: [SINGLE_SHOT, MONITORING]
-    config_type_url: type.googleapis.com/hal.modules.bluetooth.Config
-    result_type_url: type.googleapis.com/hal.modules.bluetooth.Result
+    source_path: src/bluetooth_lib/bluetooth_lib.h
 
   - id: mipi_csi
-    name: MIPI CSI Camera Interface
-    description: MIPI CSI-2 camera lane and signal testing
-    version: "1.0.0"
+    proto_package: hal.modules.mipi_csi
+    config_type: hal.modules.mipi_csi.Config
+    result_type: hal.modules.mipi_csi.Result
+    version: 1
     status: active
     category: peripherals
-    modes: [SINGLE_SHOT, MONITORING]
-    config_type_url: type.googleapis.com/hal.modules.mipi_csi.Config
-    result_type_url: type.googleapis.com/hal.modules.mipi_csi.Result
+    source_path: src/mipi_csi_lib/mipi_csi_lib.h
 
   - id: mipi_dsi
-    name: MIPI DSI Display Interface
-    description: MIPI DSI display lane and signal testing
-    version: "1.0.0"
+    proto_package: hal.modules.mipi_dsi
+    config_type: hal.modules.mipi_dsi.Config
+    result_type: hal.modules.mipi_dsi.Result
+    version: 1
     status: active
     category: peripherals
-    modes: [SINGLE_SHOT, MONITORING]
-    config_type_url: type.googleapis.com/hal.modules.mipi_dsi.Config
-    result_type_url: type.googleapis.com/hal.modules.mipi_dsi.Result
+    source_path: src/mipi_dsi_lib/mipi_dsi_lib.h
 
   - id: accelerometer
-    name: Accelerometer
-    description: Accelerometer sensor calibration and range testing
-    version: "1.0.0"
+    proto_package: hal.modules.accelerometer
+    config_type: hal.modules.accelerometer.Config
+    result_type: hal.modules.accelerometer.Result
+    version: 1
     status: active
     category: sensors
-    modes: [SINGLE_SHOT, MONITORING, EVENT_BASED]
-    config_type_url: type.googleapis.com/hal.modules.accelerometer.Config
-    result_type_url: type.googleapis.com/hal.modules.accelerometer.Result
+    source_path: src/accelerometer_lib/accelerometer_lib.h
 
 # Canonical source map for tracking a module across the three layers.
 # proto_path   - wire/API contract
@@ -639,65 +623,65 @@ tracking:
 
   accelerometer:
     proto_path: protos/modules/accelerometer.proto
-    source_path: null
-    test_path: null
+    source_path: src/accelerometer_lib/accelerometer_lib.h
+    test_path: tests/accelerometer/main.cpp
   analog_input:
     proto_path: protos/modules/analog_input.proto
-    source_path: null
-    test_path: null
+    source_path: src/analog_input_lib/analog_input_lib.h
+    test_path: tests/analog_input/main.cpp
   battery:
     proto_path: protos/modules/battery.proto
-    source_path: null
-    test_path: null
+    source_path: src/battery_lib/battery_lib.h
+    test_path: tests/battery/main.cpp
   bluetooth:
     proto_path: protos/modules/bluetooth.proto
-    source_path: null
-    test_path: null
+    source_path: src/bluetooth_lib/bluetooth_lib.h
+    test_path: tests/bluetooth/main.cpp
   can_bus:
     proto_path: protos/modules/can_bus.proto
-    source_path: null
-    test_path: null
+    source_path: src/can_bus_lib/can_bus_lib.h
+    test_path: tests/can_bus/main.cpp
   emmc:
     proto_path: protos/modules/emmc.proto
-    source_path: null
-    test_path: null
+    source_path: src/emmc_lib/emmc_lib.h
+    test_path: tests/emmc/main.cpp
   i2c:
     proto_path: protos/modules/i2c.proto
-    source_path: null
-    test_path: null
+    source_path: src/i2c_lib/i2c_lib.h
+    test_path: tests/i2c/main.cpp
   mipi_csi:
     proto_path: protos/modules/mipi_csi.proto
-    source_path: null
-    test_path: null
+    source_path: src/mipi_csi_lib/mipi_csi_lib.h
+    test_path: tests/mipi_csi/main.cpp
   mipi_dsi:
     proto_path: protos/modules/mipi_dsi.proto
-    source_path: null
-    test_path: null
+    source_path: src/mipi_dsi_lib/mipi_dsi_lib.h
+    test_path: tests/mipi_dsi/main.cpp
   nvme:
     proto_path: protos/modules/nvme.proto
-    source_path: null
-    test_path: null
+    source_path: src/nvme_lib/nvme_lib.h
+    test_path: tests/nvme/main.cpp
   pwm_output:
     proto_path: protos/modules/pwm_output.proto
-    source_path: null
-    test_path: null
+    source_path: src/pwm_output_lib/pwm_output_lib.h
+    test_path: tests/pwm_output/main.cpp
   rs485:
     proto_path: protos/modules/rs485.proto
-    source_path: null
-    test_path: null
+    source_path: src/rs485_lib/rs485_lib.h
+    test_path: tests/rs485/main.cpp
   rtc:
     proto_path: protos/modules/rtc.proto
-    source_path: null
-    test_path: null
+    source_path: src/rtc_lib/rtc_lib.h
+    test_path: tests/rtc/main.cpp
   sd_card:
     proto_path: protos/modules/sd_card.proto
-    source_path: null
-    test_path: null
+    source_path: src/sd_card_lib/sd_card_lib.h
+    test_path: tests/sd_card/main.cpp
   spi:
     proto_path: protos/modules/spi.proto
-    source_path: null
-    test_path: null
+    source_path: src/spi_lib/spi_lib.h
+    test_path: tests/spi/main.cpp
   uart:
     proto_path: protos/modules/uart.proto
-    source_path: null
-    test_path: null
+    source_path: src/uart_lib/uart_lib.h
+    test_path: tests/uart/main.cpp

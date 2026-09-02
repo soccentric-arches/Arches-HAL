@@ -27,7 +27,7 @@ No manual verification is implied by a compiled test binary.
 | # | Name / Description | Implemented? | Test Coverage? | Manual Test |
 |---:|---|---|---|---|
 | 1 | Common, client, and HAL protobuf services | Implemented | Protocol CMake targets | [ ] Manual verification required |
-| 2 | Module registry and generated contracts | Implemented | Partial: module targets | [ ] Manual verification required |
+| 2 | Module registry and generated contracts (51 modules) | Implemented | Protocol CMake targets + per-module test binaries | [ ] Manual verification required |
 | 3 | Provider and module helper infrastructure | Implemented | Partial | [ ] Manual verification required |
 | 4 | Arches and Raspberry Pi 5 bindings | Implemented | Partial: platform-dependent | [ ] Manual verification required |
 | 5 | STM32 transport | Implemented | `tests/stm32_transport` | [ ] Manual verification required |
@@ -35,7 +35,7 @@ No manual verification is implied by a compiled test binary.
 | 7 | CPU, memory, storage, PCIe, USB, networking | Implemented | Per-module tests | [ ] Manual verification required |
 | 8 | GPIO, IMU, environmental, power, safety | Implemented | Per-module tests | [ ] Manual verification required |
 | 9 | Doxygen API documentation inputs | Implemented | Unknown | [ ] Manual verification required |
-| 10 | Full validation on every supported target | Partial | Not established from source alone | [ ] Manual verification required |
+| 10 | Full validation on every supported target | Partial | Native CTest suite (53 tests); hardware execution still required | [ ] Manual verification required |
 
 ## Validation Commands
 

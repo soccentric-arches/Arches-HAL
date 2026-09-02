@@ -1,0 +1,9 @@
+add_library(rtc_lib rtc_lib.cpp rtc_lib.h)
+target_include_directories(
+  rtc_lib PUBLIC ${CMAKE_SOURCE_DIR}/src ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(rtc_lib PUBLIC lib_base provider_base)
+install(
+  TARGETS rtc_lib
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
+install(FILES rtc_lib.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/arches_hal)

@@ -13,7 +13,7 @@ protos/
 ├── modules/                # One .proto file per HAL module
 │   ├── cpu.proto
 │   ├── gpu.proto
-│   └── …  (35 modules total)
+│   └── …  (51 modules total)
 ├── registry/
 │   └── modules.yaml        # Machine-readable module manifest
 ├── CMakeLists.txt          # Builds the hal_protos static library

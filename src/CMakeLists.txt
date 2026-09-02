@@ -18,13 +18,6 @@ install(
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
 install(FILES provider_base.h
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/arches_hal)
-target_include_directories(lib_base PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-target_link_libraries(lib_base Threads::Threads)
-install(
-  TARGETS lib_base
-  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
-install(FILES lib_base.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/arches_hal)
 
 add_library(arches_platform stm32_transport.cpp stm32_transport.h
                             platform_arches.h)
@@ -73,6 +66,22 @@ add_subdirectory(debug_and_development_interfaces)
 add_subdirectory(sense_hat_lib)
 add_subdirectory(camera_module3_lib)
 add_subdirectory(poe_hat_lib)
+add_subdirectory(i2c_lib)
+add_subdirectory(spi_lib)
+add_subdirectory(uart_lib)
+add_subdirectory(rtc_lib)
+add_subdirectory(battery_lib)
+add_subdirectory(nvme_lib)
+add_subdirectory(emmc_lib)
+add_subdirectory(sd_card_lib)
+add_subdirectory(can_bus_lib)
+add_subdirectory(rs485_lib)
+add_subdirectory(analog_input_lib)
+add_subdirectory(pwm_output_lib)
+add_subdirectory(bluetooth_lib)
+add_subdirectory(mipi_csi_lib)
+add_subdirectory(mipi_dsi_lib)
+add_subdirectory(accelerometer_lib)
 
 # Every native module exposes both a static and shared library variant.
 set(HAL_MODULE_TARGETS
@@ -110,7 +119,23 @@ set(HAL_MODULE_TARGETS
     usb_lib
     video_encode_decode_lib
     vision_accelerator_lib
-    watchdog_and_reset_lib)
+    watchdog_and_reset_lib
+    i2c_lib
+    spi_lib
+    uart_lib
+    rtc_lib
+    battery_lib
+    nvme_lib
+    emmc_lib
+    sd_card_lib
+    can_bus_lib
+    rs485_lib
+    analog_input_lib
+    pwm_output_lib
+    bluetooth_lib
+    mipi_csi_lib
+    mipi_dsi_lib
+    accelerometer_lib)
 
 foreach(HAL_MODULE_TARGET IN LISTS HAL_MODULE_TARGETS)
   get_target_property(HAL_MODULE_SOURCES "${HAL_MODULE_TARGET}" SOURCES)
