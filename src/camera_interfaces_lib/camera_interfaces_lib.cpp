@@ -530,7 +530,6 @@ TestOutput CameraInterfacesTesting::testCameraClockGeneration() {
         if (cname.find(kw) != std::string::npos) {
           std::string rate = readFile(entry + "/rate");
           std::string state = readFile(entry + "/state");
-          std::string refcnt = readFile(entry + "/refcnt");
           data.push_back("[PASS] " + cname +
                          " rate=" + (rate.empty() ? "N/A" : rate) + " Hz" +
                          " state=" + (state.empty() ? "N/A" : state));

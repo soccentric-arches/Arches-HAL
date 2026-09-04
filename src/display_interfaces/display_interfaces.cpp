@@ -186,7 +186,6 @@ TestOutput DisplayInterfaces::testVariousResolutions() {
     data.push_back("HDMI modes: " + modes.substr(0, 600));
   } else {
     // vcgencmd approach
-    std::string vcModes = dispRunCmd("vcgencmd get_display_power 2>/dev/null");
     data.push_back("Pi5 supports: 640x480 → 3840x2160 (4K) at 60Hz");
     data.push_back("  - 1920x1080@60Hz (Full HD)");
     data.push_back("  - 2560x1440@60Hz (QHD)");

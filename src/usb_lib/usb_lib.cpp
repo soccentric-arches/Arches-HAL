@@ -774,7 +774,6 @@ TestOutput UsbTesting::testUsbMassStorageDevices() {
     // Interface level: bInterfaceClass == 08 means mass storage
     std::string ifClass = readSysfs(dev + "/bInterfaceClass");
     std::string ifSub = readSysfs(dev + "/bInterfaceSubClass");
-    std::string ifProtocol = readSysfs(dev + "/bInterfaceProtocol");
 
     if (ifClass == "08") {
       // Check for block device node created by the driver
@@ -1138,7 +1137,6 @@ TestOutput UsbTesting::testUsbHidDevices() {
       continue;
 
     std::string ifClass = readSysfs(dev + "/bInterfaceClass");
-    std::string ifSub = readSysfs(dev + "/bInterfaceSubClass");
     std::string ifProtocol = readSysfs(dev + "/bInterfaceProtocol");
 
     // HID class = 0x03

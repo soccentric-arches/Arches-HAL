@@ -243,9 +243,7 @@ TestOutput SystemMemoryTesting::testMemoryClockFrequency() {
   data.push_back("Effective clock: 2133 MHz (DDR — dual data rate)");
 
   // Try to read from DMI/SMBIOS
-  std::string dmiSpeed = memReadFile("/sys/class/dmi/id/product_version");
   // vcgencmd measure_clock arm gives CPU, not RAM — but confirms clock domain
-  std::string vcArm = memReadFile("/proc/device-tree/memory/reg");
 
   // /proc/cpuinfo may mention memory
   std::ifstream cpuinfo("/proc/cpuinfo");

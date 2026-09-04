@@ -133,7 +133,6 @@ static double measureSeqReadMBps(const std::string &dev,
 /** Measure random read IOPS with 4 KB random reads over 2 seconds. */
 static int measureRandReadIops(const std::string &dev) {
   // Get device size in bytes
-  std::string szPath = "/sys/block/";
   // extract basename
   size_t pos = dev.rfind('/');
   std::string base = (pos != std::string::npos) ? dev.substr(pos + 1) : dev;

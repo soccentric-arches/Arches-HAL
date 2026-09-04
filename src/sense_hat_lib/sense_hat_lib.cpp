@@ -94,7 +94,6 @@ TestOutput SenseHatTesting::testSenseHatDetection() {
            : "[WARN] /dev/i2c-1 absent — enable with dtparam=i2c_arm=on");
 
   // Check overlay loaded
-  std::string cmdline = shReadFile("/boot/firmware/config.txt");
   bool overlayLoaded =
       !shRunCmd("dtoverlay -l 2>/dev/null | grep -c 'sense'").empty();
   (void)overlayLoaded;

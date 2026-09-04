@@ -344,7 +344,6 @@ TestOutput DebugAndDevelopmentInterfaces::testDebugUart() {
     std::string devName = dev.substr(5); // strip "/dev/"
     std::string sysPath = "/sys/class/tty/" + devName;
     if (isDir(sysPath)) {
-      std::string driverLink = sysPath + "/device/driver";
       data.push_back("  sysfs entry: " + sysPath + " -> present");
       // Try to read uevent for device type
       std::string ueventPath = sysPath + "/uevent";

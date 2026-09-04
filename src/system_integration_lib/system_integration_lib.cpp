@@ -144,7 +144,6 @@ TestOutput SystemIntegrationTesting::testResourceContentionHandling() {
                      : "[INFO] PSI CPU pressure:\n" + cpuPressure);
 
   // Swap usage
-  std::string swapTotal = siReadFile("/proc/meminfo");
   // Extract SwapTotal and SwapFree from /proc/meminfo
   std::string swapTotalVal =
       siRunCmd("grep SwapTotal /proc/meminfo 2>/dev/null");
@@ -233,7 +232,6 @@ TestOutput SystemIntegrationTesting::testEndtoendLatency() {
   struct timespec t0 {
   }, t1{};
   clock_gettime(CLOCK_MONOTONIC, &t0);
-  std::string ver = siRunCmd("cat /proc/version 2>/dev/null");
   clock_gettime(CLOCK_MONOTONIC, &t1);
   long long ns =
       (t1.tv_sec - t0.tv_sec) * 1000000000LL + (t1.tv_nsec - t0.tv_nsec);

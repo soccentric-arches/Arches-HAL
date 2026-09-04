@@ -459,7 +459,6 @@ TestOutput SecurityFeaturesTesting::testMemoryEncryption() {
                  std::string(hasPAC ? "supported" : "not in feature list"));
 
   // Check smem protection
-  std::string smaps = secRunCmd("cat /proc/1/smaps 2>/dev/null | grep -c 'ss'");
   data.push_back(
       "Software memory protection: dm-crypt/LUKS for at-rest encryption.");
 
