@@ -100,7 +100,7 @@ CpuTesting::~CpuTesting() {}
 // ---------------------------------------------------------------------------
 TestOutput CpuTesting::testAll12CpuCoresFunctionality() {
   std::vector<std::string> data;
-  bool passed = true;
+    bool passed = true;
 
   data.push_back("Platform: " + std::string(PLATFORM_NAME) + " (" +
                  PLATFORM_SOC + ")");
@@ -179,7 +179,7 @@ TestOutput CpuTesting::testAll12CpuCoresFunctionality() {
 // ---------------------------------------------------------------------------
 TestOutput CpuTesting::testCpuCoreFrequencyScaling() {
   std::vector<std::string> data;
-  bool passed = true;
+    bool passed = true;
   int validCores = 0;
 
   for (int i = 0; i < CPU_CORES; ++i) {
@@ -240,7 +240,7 @@ TestOutput CpuTesting::testCpuCoreFrequencyScaling() {
 // ---------------------------------------------------------------------------
 TestOutput CpuTesting::testIndividualCoreStressTesting() {
   std::vector<std::string> data;
-  bool passed = true;
+    bool passed = true;
 
   struct CoreResult {
     int core;
@@ -296,7 +296,7 @@ TestOutput CpuTesting::testIndividualCoreStressTesting() {
 // ---------------------------------------------------------------------------
 TestOutput CpuTesting::testMulticoreSynchronization() {
   std::vector<std::string> data;
-  bool passed = true;
+    bool passed = true;
 
   const int N = CPU_CORES;
   std::atomic<int> counter{0}, phase{0};
@@ -354,7 +354,7 @@ TestOutput CpuTesting::testMulticoreSynchronization() {
 // ---------------------------------------------------------------------------
 TestOutput CpuTesting::testCpuClusterCommunication() {
   std::vector<std::string> data;
-  bool passed = true;
+    bool passed = true;
 
   // Two logical groups of cores (single physical cluster on BCM2712)
   const std::vector<int> clusterCores = {0, 2}; // representative core per pair
@@ -406,7 +406,7 @@ TestOutput CpuTesting::testCpuClusterCommunication() {
 // ---------------------------------------------------------------------------
 TestOutput CpuTesting::testCoreAffinityAndThreadMigration() {
   std::vector<std::string> data;
-  bool passed = true;
+    bool passed = true;
 
   for (int i = 0; i < CPU_CORES; ++i) {
     int observedBefore = -1, observedAfter = -1;
@@ -452,7 +452,7 @@ TestOutput CpuTesting::testCoreAffinityAndThreadMigration() {
 // ---------------------------------------------------------------------------
 TestOutput CpuTesting::testCpuThermalThrottling() {
   std::vector<std::string> data;
-  bool passed = true;
+    bool passed = true;
   bool foundAny = false;
 
   for (int zone = 0; zone < 20; ++zone) {
@@ -511,7 +511,6 @@ TestOutput CpuTesting::testCpuThermalThrottling() {
 // ---------------------------------------------------------------------------
 TestOutput CpuTesting::testCpuPowerStatesAndTransitions() {
   std::vector<std::string> data;
-  bool passed = true;
   int coresWithIdle = 0;
 
   for (int i = 0; i < CPU_CORES; ++i) {
@@ -550,8 +549,8 @@ TestOutput CpuTesting::testCpuPowerStatesAndTransitions() {
 
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -564,7 +563,6 @@ TestOutput CpuTesting::testCpuPowerStatesAndTransitions() {
 // ---------------------------------------------------------------------------
 TestOutput CpuTesting::testL1Cache() {
   std::vector<std::string> data;
-  bool passed = true;
 
   const size_t L1_SIZE = 32 * 1024;
   const size_t STRIDE = 64;
@@ -605,8 +603,8 @@ TestOutput CpuTesting::testL1Cache() {
   }
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -620,7 +618,6 @@ TestOutput CpuTesting::testL1Cache() {
 // ---------------------------------------------------------------------------
 TestOutput CpuTesting::testL2Cache() {
   std::vector<std::string> data;
-  bool passed = true;
 
   const size_t L2_SIZE = 512 * 1024; // 512 KB — Pi5 Cortex-A76 L2
   const size_t STRIDE = 64;
@@ -652,8 +649,8 @@ TestOutput CpuTesting::testL2Cache() {
 
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -667,7 +664,6 @@ TestOutput CpuTesting::testL2Cache() {
 // ---------------------------------------------------------------------------
 TestOutput CpuTesting::testL3Cache() {
   std::vector<std::string> data;
-  bool passed = true;
 
   const size_t L3_SIZE = 4 * 1024 * 1024;
   const size_t STRIDE = 64;
@@ -698,8 +694,8 @@ TestOutput CpuTesting::testL3Cache() {
 
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -712,7 +708,6 @@ TestOutput CpuTesting::testL3Cache() {
 // ---------------------------------------------------------------------------
 TestOutput CpuTesting::testSystemCache() {
   std::vector<std::string> data;
-  bool passed = true;
   bool foundL1 = false, foundL2 = false, foundL3 = false;
 
   for (int core = 0; core < CPU_CORES; ++core) {
@@ -749,8 +744,8 @@ TestOutput CpuTesting::testSystemCache() {
 
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -764,7 +759,7 @@ TestOutput CpuTesting::testSystemCache() {
 // ---------------------------------------------------------------------------
 TestOutput CpuTesting::testCacheCoherencyBetweenClusters() {
   std::vector<std::string> data;
-  bool passed = true;
+    bool passed = true;
 
   const int ROUNDS = 1000;
   std::atomic<int> sharedValue{0};
@@ -812,7 +807,6 @@ TestOutput CpuTesting::testCacheCoherencyBetweenClusters() {
 // ---------------------------------------------------------------------------
 TestOutput CpuTesting::testCacheLineInvalidation() {
   std::vector<std::string> data;
-  bool passed = true;
 
   const int THREADS = 4;
   const uint64_t ITERS = 2'000'000;
@@ -865,8 +859,8 @@ TestOutput CpuTesting::testCacheLineInvalidation() {
 
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -880,7 +874,7 @@ TestOutput CpuTesting::testCacheLineInvalidation() {
 // ---------------------------------------------------------------------------
 TestOutput CpuTesting::testCacheBandwidthAndLatency() {
   std::vector<std::string> data;
-  bool passed = true;
+    bool passed = true;
 
   const size_t BUF_SIZE = 64ULL * 1024 * 1024;
   const int PASSES = 3;
@@ -927,7 +921,7 @@ TestOutput CpuTesting::testCacheBandwidthAndLatency() {
 // ---------------------------------------------------------------------------
 TestOutput CpuTesting::testSinglethreadedPerformance() {
   std::vector<std::string> data;
-  bool passed = true;
+    bool passed = true;
 
   const uint64_t ITERS = 10'000'000;
 
@@ -982,7 +976,7 @@ TestOutput CpuTesting::testSinglethreadedPerformance() {
 // ---------------------------------------------------------------------------
 TestOutput CpuTesting::testMultithreadedPerformance() {
   std::vector<std::string> data;
-  bool passed = true;
+    bool passed = true;
 
   const uint64_t ITERS_PER_THREAD = 5'000'000;
   std::mutex mtx;
@@ -1036,7 +1030,6 @@ TestOutput CpuTesting::testMultithreadedPerformance() {
 // ---------------------------------------------------------------------------
 TestOutput CpuTesting::testContextSwitchingPerformance() {
   std::vector<std::string> data;
-  bool passed = true;
 
   const int ROUNDS = 10'000;
   int pipeAB[2], pipeBA[2];
@@ -1096,8 +1089,8 @@ TestOutput CpuTesting::testContextSwitchingPerformance() {
 
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -1110,7 +1103,7 @@ TestOutput CpuTesting::testContextSwitchingPerformance() {
 // ---------------------------------------------------------------------------
 TestOutput CpuTesting::testInterruptLatency() {
   std::vector<std::string> data;
-  bool passed = true;
+    bool passed = true;
 
   const int SAMPLES = 200;
   const long SLEEP_NS = 1'000'000; // 1 ms
@@ -1169,7 +1162,7 @@ TestOutput CpuTesting::testInterruptLatency() {
 // ---------------------------------------------------------------------------
 TestOutput CpuTesting::testDmaOperations() {
   std::vector<std::string> data;
-  bool passed = true;
+    bool passed = true;
 
   const size_t BLOCK = 16 * 1024 * 1024; // 16 MB
   const int PASSES = 4;

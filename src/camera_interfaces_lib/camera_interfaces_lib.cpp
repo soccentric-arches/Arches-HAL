@@ -124,7 +124,6 @@ std::vector<std::string> CameraInterfacesTesting::getVideoDevices() const {
  */
 TestOutput CameraInterfacesTesting::testAllCsi2LanesFunctionality() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("=== CSI-2 Lane Functionality (Raspberry Pi 5) ===");
 
@@ -227,8 +226,8 @@ TestOutput CameraInterfacesTesting::testAllCsi2LanesFunctionality() {
 
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -243,7 +242,6 @@ TestOutput CameraInterfacesTesting::testAllCsi2LanesFunctionality() {
  */
 TestOutput CameraInterfacesTesting::testCsi2DphyOperation() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("=== CSI-2 D-PHY Operation (Raspberry Pi 5) ===");
 
@@ -300,8 +298,8 @@ TestOutput CameraInterfacesTesting::testCsi2DphyOperation() {
 
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -316,7 +314,6 @@ TestOutput CameraInterfacesTesting::testCsi2DphyOperation() {
  */
 TestOutput CameraInterfacesTesting::testCsi2CphyOperation() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("=== CSI-2 C-PHY Operation (Raspberry Pi 5) ===");
 
@@ -369,8 +366,8 @@ TestOutput CameraInterfacesTesting::testCsi2CphyOperation() {
 
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -385,7 +382,6 @@ TestOutput CameraInterfacesTesting::testCsi2CphyOperation() {
  */
 TestOutput CameraInterfacesTesting::testMultipleCameraSimultaneousOperation() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back(
       "=== Multiple Camera Simultaneous Operation (Raspberry Pi 5) ===");
@@ -445,8 +441,8 @@ TestOutput CameraInterfacesTesting::testMultipleCameraSimultaneousOperation() {
 
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -461,7 +457,6 @@ TestOutput CameraInterfacesTesting::testMultipleCameraSimultaneousOperation() {
  */
 TestOutput CameraInterfacesTesting::testVirtualChannelSupport() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("=== CSI-2 Virtual Channel Support (Raspberry Pi 5) ===");
   data.push_back(
@@ -503,8 +498,8 @@ TestOutput CameraInterfacesTesting::testVirtualChannelSupport() {
 
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -519,7 +514,6 @@ TestOutput CameraInterfacesTesting::testVirtualChannelSupport() {
  */
 TestOutput CameraInterfacesTesting::testCameraClockGeneration() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("=== Camera Clock Generation (Raspberry Pi 5) ===");
 
@@ -585,8 +579,8 @@ TestOutput CameraInterfacesTesting::testCameraClockGeneration() {
 
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -601,7 +595,6 @@ TestOutput CameraInterfacesTesting::testCameraClockGeneration() {
  */
 TestOutput CameraInterfacesTesting::testCameraPowerSequencing() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("=== Camera Power Sequencing (Raspberry Pi 5) ===");
 
@@ -668,8 +661,8 @@ TestOutput CameraInterfacesTesting::testCameraPowerSequencing() {
 
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -684,7 +677,6 @@ TestOutput CameraInterfacesTesting::testCameraPowerSequencing() {
  */
 TestOutput CameraInterfacesTesting::testRaw8() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("=== RAW8 Pixel Format Support (Raspberry Pi 5) ===");
 
@@ -727,8 +719,8 @@ TestOutput CameraInterfacesTesting::testRaw8() {
   data.push_back("[INFO] Pi5 ISP supports RAW8 Bayer formats on all CSI ports");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -743,7 +735,6 @@ TestOutput CameraInterfacesTesting::testRaw8() {
  */
 TestOutput CameraInterfacesTesting::testRaw10() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("=== RAW10 Pixel Format Support (Raspberry Pi 5) ===");
 
@@ -787,8 +778,8 @@ TestOutput CameraInterfacesTesting::testRaw10() {
                  "automotive cameras on Orin");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -802,7 +793,6 @@ TestOutput CameraInterfacesTesting::testRaw10() {
  */
 TestOutput CameraInterfacesTesting::testRaw12() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("=== RAW12 Pixel Format Support (Raspberry Pi 5) ===");
 
@@ -846,8 +836,8 @@ TestOutput CameraInterfacesTesting::testRaw12() {
                  "imaging sensors");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -861,7 +851,6 @@ TestOutput CameraInterfacesTesting::testRaw12() {
  */
 TestOutput CameraInterfacesTesting::testRaw14() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("=== RAW14 Pixel Format Support (Raspberry Pi 5) ===");
 
@@ -905,8 +894,8 @@ TestOutput CameraInterfacesTesting::testRaw14() {
                  "camera sensors on Orin");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -921,7 +910,6 @@ TestOutput CameraInterfacesTesting::testRaw14() {
  */
 TestOutput CameraInterfacesTesting::testYuv422() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("=== YUV 4:2:2 Format Support (Raspberry Pi 5) ===");
 
@@ -977,8 +965,8 @@ TestOutput CameraInterfacesTesting::testYuv422() {
                  "serializer/deserializer camera links on Orin");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -993,7 +981,6 @@ TestOutput CameraInterfacesTesting::testYuv422() {
  */
 TestOutput CameraInterfacesTesting::testRgbFormats() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("=== RGB Pixel Format Support (Raspberry Pi 5) ===");
 
@@ -1036,8 +1023,8 @@ TestOutput CameraInterfacesTesting::testRgbFormats() {
                  "post-processed output formats");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -1052,7 +1039,6 @@ TestOutput CameraInterfacesTesting::testRgbFormats() {
  */
 TestOutput CameraInterfacesTesting::testIspPipelineProcessing() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("=== ISP Pipeline Processing (Raspberry Pi 5) ===");
   data.push_back("[INFO] Raspberry Pi 5 features a dedicated ISP with two "
@@ -1125,8 +1111,8 @@ TestOutput CameraInterfacesTesting::testIspPipelineProcessing() {
                  "MPix/s aggregate throughput");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -1141,7 +1127,6 @@ TestOutput CameraInterfacesTesting::testIspPipelineProcessing() {
  */
 TestOutput CameraInterfacesTesting::testAutoExposure() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("=== Auto Exposure (AE) Verification (Raspberry Pi 5) ===");
 
@@ -1198,8 +1183,8 @@ TestOutput CameraInterfacesTesting::testAutoExposure() {
                  "analog gain 1x-16x");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -1213,7 +1198,6 @@ TestOutput CameraInterfacesTesting::testAutoExposure() {
  */
 TestOutput CameraInterfacesTesting::testAutoWhiteBalance() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back(
       "=== Auto White Balance (AWB) Verification (Raspberry Pi 5) ===");
@@ -1263,8 +1247,8 @@ TestOutput CameraInterfacesTesting::testAutoWhiteBalance() {
                  "Bayesian estimation modes");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -1280,7 +1264,6 @@ TestOutput CameraInterfacesTesting::testAutoWhiteBalance() {
  */
 TestOutput CameraInterfacesTesting::testAutoFocus() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("=== Auto Focus (AF) Verification (Raspberry Pi 5) ===");
   data.push_back("[INFO] AF requires a VCM/motor-driven lens; automotive "
@@ -1321,8 +1304,8 @@ TestOutput CameraInterfacesTesting::testAutoFocus() {
                  "through Argus camera API");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -1337,7 +1320,6 @@ TestOutput CameraInterfacesTesting::testAutoFocus() {
  */
 TestOutput CameraInterfacesTesting::testLensShadingCorrection() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("=== Lens Shading Correction (LSC) (Raspberry Pi 5) ===");
   data.push_back("[INFO] Pi5 ISP implements hardware LSC with per-channel mesh "
@@ -1385,8 +1367,8 @@ TestOutput CameraInterfacesTesting::testLensShadingCorrection() {
                  "all 4 Bayer channels");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -1401,7 +1383,6 @@ TestOutput CameraInterfacesTesting::testLensShadingCorrection() {
  */
 TestOutput CameraInterfacesTesting::testDemosaicing() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("=== Bayer Demosaicing (Raspberry Pi 5) ===");
   data.push_back("[INFO] Pi5 ISP performs hardware Bayer demosaicing");
@@ -1445,8 +1426,8 @@ TestOutput CameraInterfacesTesting::testDemosaicing() {
                  "filter, supports HDR multi-exposure");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -1461,7 +1442,6 @@ TestOutput CameraInterfacesTesting::testDemosaicing() {
  */
 TestOutput CameraInterfacesTesting::testNoiseReduction() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("=== Noise Reduction (NR) Verification (Raspberry Pi 5) ===");
   data.push_back("[INFO] Orin ISP includes Spatial NR (SNR) and Temporal NR "
@@ -1500,8 +1480,8 @@ TestOutput CameraInterfacesTesting::testNoiseReduction() {
       "[INFO] TNR requires motion estimation engine; adds ~1 frame latency");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -1515,7 +1495,6 @@ TestOutput CameraInterfacesTesting::testNoiseReduction() {
  */
 TestOutput CameraInterfacesTesting::testEdgeEnhancement() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("=== Edge Enhancement / Sharpening (Raspberry Pi 5) ===");
   data.push_back("[INFO] Orin ISP implements hardware edge enhancement (EE) / "
@@ -1548,8 +1527,8 @@ TestOutput CameraInterfacesTesting::testEdgeEnhancement() {
       "[0.0, 1.0]");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -1563,7 +1542,6 @@ TestOutput CameraInterfacesTesting::testEdgeEnhancement() {
  */
 TestOutput CameraInterfacesTesting::testColorCorrectionMatrix() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("=== Color Correction Matrix (CCM) (Raspberry Pi 5) ===");
   data.push_back(
@@ -1603,8 +1581,8 @@ TestOutput CameraInterfacesTesting::testColorCorrectionMatrix() {
       "manual CCM override");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -1618,7 +1596,6 @@ TestOutput CameraInterfacesTesting::testColorCorrectionMatrix() {
  */
 TestOutput CameraInterfacesTesting::testGammaCorrection() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("=== Gamma Correction / Tone Mapping (Raspberry Pi 5) ===");
   data.push_back("[INFO] Orin ISP implements a 1024-entry LUT-based gamma "
@@ -1658,8 +1635,8 @@ TestOutput CameraInterfacesTesting::testGammaCorrection() {
                  "tone-curve controls");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;

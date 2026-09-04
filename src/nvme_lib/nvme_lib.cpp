@@ -4,6 +4,7 @@
  * @author sandesh ghimire
  * @copyright (C) Soccentric LLC */
 
+#include <iterator>
 #include "nvme_lib.h"
 
 #include <algorithm>
@@ -175,9 +176,11 @@ std::vector<std::string> NvmeTesting::getOneShotOnlyTests() {
 }
 
 std::vector<TestResult> NvmeTesting::runAllTests() {
+  const std::vector<std::string> names = getAvailableTests();
   std::vector<TestResult> results;
-  for (const auto &name : getAvailableTests())
-    results.push_back(runSingleTest(name));
+  results.reserve(names.size());
+  std::transform(names.begin(), names.end(), std::back_inserter(results),
+                 [this](const std::string &name) { return runSingleTest(name); });
   return results;
 }
 
@@ -195,12 +198,10 @@ TestResult NvmeTesting::runSingleTest(const std::string &testName) {
       {"testSmartHealth", &NvmeTesting::testSmartHealth},
       {"testPartitionEnumeration", &NvmeTesting::testPartitionEnumeration},
   };
-  for (const auto &e : table) {
-    if (testName == e.name) {
-      out = (this->*e.fn)();
-      break;
-    }
-  }
+  const auto entry = std::find_if(table.begin(), table.end(),
+      [&testName](const TestEntry &e) { return testName == e.name; });
+  if (entry != table.end())
+    out = (this->*entry->fn)();
 
   TestResult r;
   r.name = testName;

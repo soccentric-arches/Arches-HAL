@@ -9,6 +9,7 @@
 #include <algorithm>
 #include <chrono>
 #include <cmath>
+#include <iterator>
 #include <vector>
 
 namespace {
@@ -38,16 +39,19 @@ AccelerometerTesting::AccelerometerTesting(std::shared_ptr<SysfsProvider> sysfs,
 std::string AccelerometerTesting::firstAccelDeviceDir() const {
   if (!sysfs_)
     return "";
-  for (const auto &dev : sysfs_->listDir("/sys/bus/iio/devices")) {
-    if (!hasPrefix(dev, "iio:device"))
-      continue;
-    const std::string devDir = "/sys/bus/iio/devices/" + dev;
-    for (const auto &f : sysfs_->listDir(devDir)) {
-      if (f == "in_accel_x_raw")
-        return devDir;
-    }
-  }
-  return "";
+  const std::vector<std::string> devices = sysfs_->listDir("/sys/bus/iio/devices");
+  const auto it = std::find_if(devices.begin(), devices.end(),
+                               [this](const std::string &dev) {
+                                 if (!hasPrefix(dev, "iio:device"))
+                                   return false;
+                                 const std::vector<std::string> files =
+                                     sysfs_->listDir("/sys/bus/iio/devices/" + dev);
+                                 return std::find(files.begin(), files.end(),
+                                                  "in_accel_x_raw") != files.end();
+                               });
+  if (it == devices.end())
+    return "";
+  return "/sys/bus/iio/devices/" + *it;
 }
 
 TestOutput AccelerometerTesting::testAccelDeviceDetection() {
@@ -166,9 +170,11 @@ std::vector<std::string> AccelerometerTesting::getOneShotOnlyTests() {
 }
 
 std::vector<TestResult> AccelerometerTesting::runAllTests() {
+  const std::vector<std::string> names = getAvailableTests();
   std::vector<TestResult> results;
-  for (const auto &name : getAvailableTests())
-    results.push_back(runSingleTest(name));
+  results.reserve(names.size());
+  std::transform(names.begin(), names.end(), std::back_inserter(results),
+                 [this](const std::string &name) { return runSingleTest(name); });
   return results;
 }
 
@@ -187,12 +193,11 @@ TestResult AccelerometerTesting::runSingleTest(const std::string &testName) {
       {"testSamplingFrequency", &AccelerometerTesting::testSamplingFrequency},
       {"testMagnitudeSanity", &AccelerometerTesting::testMagnitudeSanity},
   };
-  for (const auto &e : table) {
-    if (testName == e.name) {
-      out = (this->*e.fn)();
-      break;
-    }
-  }
+  const auto entry = std::find_if(
+      table.begin(), table.end(),
+      [&testName](const TestEntry &e) { return testName == e.name; });
+  if (entry != table.end())
+    out = (this->*entry->fn)();
 
   TestResult r;
   r.name = testName;

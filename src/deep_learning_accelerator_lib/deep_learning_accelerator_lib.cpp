@@ -203,7 +203,6 @@ DeepLearningAcceleratorTesting::~DeepLearningAcceleratorTesting() {}
 // ---------------------------------------------------------------------------
 TestOutput DeepLearningAcceleratorTesting::testDla1Functionality() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("Pi5 primary AI accelerator: Hailo-8 (PCIe M.2 / HAT+)");
   data.push_back("Expected: " + std::string(HAILO8_DEV) + " device node");
@@ -241,8 +240,8 @@ TestOutput DeepLearningAcceleratorTesting::testDla1Functionality() {
 
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -255,7 +254,6 @@ TestOutput DeepLearningAcceleratorTesting::testDla1Functionality() {
 // ---------------------------------------------------------------------------
 TestOutput DeepLearningAcceleratorTesting::testDla2Functionality() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("Pi5 secondary AI accelerator: Coral USB Edge TPU (Google)");
   data.push_back("USB vendor ID: " + std::string(CORAL_USB_VENDOR) +
@@ -293,8 +291,8 @@ TestOutput DeepLearningAcceleratorTesting::testDla2Functionality() {
 
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -307,7 +305,7 @@ TestOutput DeepLearningAcceleratorTesting::testDla2Functionality() {
 // ---------------------------------------------------------------------------
 TestOutput DeepLearningAcceleratorTesting::testDualDlaConcurrentOperation() {
   std::vector<std::string> data;
-  bool passed = true;
+    bool passed = true;
 
   bool hailo = pathExists(HAILO8_DEV) || pathExists(HAILO8_SYSFS_MOD);
 
@@ -375,7 +373,6 @@ TestOutput DeepLearningAcceleratorTesting::testDualDlaConcurrentOperation() {
 // ---------------------------------------------------------------------------
 TestOutput DeepLearningAcceleratorTesting::testDlaClockFrequency() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back(
       "Hailo-8 internal DSP clock: ~700 MHz (not directly readable via sysfs)");
@@ -409,8 +406,8 @@ TestOutput DeepLearningAcceleratorTesting::testDlaClockFrequency() {
 
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -423,7 +420,7 @@ TestOutput DeepLearningAcceleratorTesting::testDlaClockFrequency() {
 // ---------------------------------------------------------------------------
 TestOutput DeepLearningAcceleratorTesting::testDlaPowerConsumption() {
   std::vector<std::string> data;
-  bool passed = true;
+    bool passed = true;
 
   data.push_back("Hailo-8 M.2 TDP: ~2.5 W via PCIe slot power");
   data.push_back("Pi5 PCIe slot provides up to 5 W (3.3 V @ 1.5 A)");
@@ -477,7 +474,7 @@ TestOutput DeepLearningAcceleratorTesting::testDlaPowerConsumption() {
  */
 TestOutput DeepLearningAcceleratorTesting::testConvolutionOperations() {
   std::vector<std::string> data;
-  bool passed = true;
+    bool passed = true;
 
   data.push_back("Testing convolution operation support on DLA (Pi5 + Hailo-8 "
                  "software emulation)");
@@ -551,7 +548,7 @@ TestOutput DeepLearningAcceleratorTesting::testConvolutionOperations() {
  */
 TestOutput DeepLearningAcceleratorTesting::testDeconvolutionOperations() {
   std::vector<std::string> data;
-  bool passed = true;
+    bool passed = true;
 
   data.push_back("Testing deconvolution (transposed convolution) support");
   data.push_back("DLA0 present: " +
@@ -600,7 +597,7 @@ TestOutput DeepLearningAcceleratorTesting::testDeconvolutionOperations() {
  */
 TestOutput DeepLearningAcceleratorTesting::testFullyConnectedLayers() {
   std::vector<std::string> data;
-  bool passed = true;
+    bool passed = true;
 
   data.push_back("Testing fully-connected (FC) layer support on DLA");
   data.push_back("DLA0 present: " +
@@ -648,7 +645,7 @@ TestOutput DeepLearningAcceleratorTesting::testFullyConnectedLayers() {
  */
 TestOutput DeepLearningAcceleratorTesting::testActivationFunctions() {
   std::vector<std::string> data;
-  bool passed = true;
+    bool passed = true;
 
   data.push_back("Testing activation function support (ReLU, LReLU, Sigmoid, "
                  "TanH, Clamp)");
@@ -735,7 +732,7 @@ TestOutput DeepLearningAcceleratorTesting::testActivationFunctions() {
  */
 TestOutput DeepLearningAcceleratorTesting::testPoolingOperations() {
   std::vector<std::string> data;
-  bool passed = true;
+    bool passed = true;
 
   data.push_back(
       "Testing pooling operation support on DLA (max-pool, avg-pool)");
@@ -805,7 +802,7 @@ TestOutput DeepLearningAcceleratorTesting::testPoolingOperations() {
  */
 TestOutput DeepLearningAcceleratorTesting::testBatchNormalization() {
   std::vector<std::string> data;
-  bool passed = true;
+    bool passed = true;
 
   data.push_back("Testing batch normalization support on DLA");
   data.push_back("DLA0 present: " +
@@ -861,7 +858,7 @@ TestOutput DeepLearningAcceleratorTesting::testBatchNormalization() {
  */
 TestOutput DeepLearningAcceleratorTesting::testElementwiseOperations() {
   std::vector<std::string> data;
-  bool passed = true;
+    bool passed = true;
 
   data.push_back("Testing element-wise operations on DLA (ADD, MUL, MAX)");
   data.push_back("DLA0 present: " +
@@ -930,7 +927,7 @@ TestOutput DeepLearningAcceleratorTesting::testElementwiseOperations() {
  */
 TestOutput DeepLearningAcceleratorTesting::testInt8Precision() {
   std::vector<std::string> data;
-  bool passed = true;
+    bool passed = true;
 
   data.push_back("Testing INT8 quantisation precision on DLA");
   data.push_back("DLA0 present: " +
@@ -990,7 +987,7 @@ TestOutput DeepLearningAcceleratorTesting::testInt8Precision() {
  */
 TestOutput DeepLearningAcceleratorTesting::testFp16Precision() {
   std::vector<std::string> data;
-  bool passed = true;
+    bool passed = true;
 
   data.push_back("Testing FP16 precision arithmetic on DLA");
   data.push_back("DLA0 present: " +
@@ -1065,7 +1062,7 @@ TestOutput DeepLearningAcceleratorTesting::testFp16Precision() {
  */
 TestOutput DeepLearningAcceleratorTesting::testStructuredSparsitySupport() {
   std::vector<std::string> data;
-  bool passed = true;
+    bool passed = true;
 
   data.push_back(
       "Testing structured sparsity (2:4 fine-grained) support on DLA");
@@ -1130,7 +1127,6 @@ TestOutput DeepLearningAcceleratorTesting::testStructuredSparsitySupport() {
  */
 TestOutput DeepLearningAcceleratorTesting::testHardwareSchedulerOperation() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("Testing DLA hardware scheduler (task queue / DMA engine)");
 
@@ -1194,8 +1190,8 @@ TestOutput DeepLearningAcceleratorTesting::testHardwareSchedulerOperation() {
 
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -1211,7 +1207,6 @@ TestOutput DeepLearningAcceleratorTesting::testHardwareSchedulerOperation() {
  */
 TestOutput DeepLearningAcceleratorTesting::testDlaTopsVerification() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("Verifying AI accelerator TOPS rating for Pi5");
   data.push_back("Hailo-8 present: " +
@@ -1259,8 +1254,8 @@ TestOutput DeepLearningAcceleratorTesting::testDlaTopsVerification() {
 
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -1275,7 +1270,7 @@ TestOutput DeepLearningAcceleratorTesting::testDlaTopsVerification() {
  */
 TestOutput DeepLearningAcceleratorTesting::testDlaThroughputTesting() {
   std::vector<std::string> data;
-  bool passed = true;
+    bool passed = true;
 
   int durMs = PERF_DURATION_MS;
   data.push_back("DLA sustained throughput test (" + std::to_string(durMs) +
@@ -1332,7 +1327,6 @@ TestOutput DeepLearningAcceleratorTesting::testDlaThroughputTesting() {
  */
 TestOutput DeepLearningAcceleratorTesting::testDlaLatencyMeasurements() {
   std::vector<std::string> data;
-  bool passed = true;
 
   const int RUNS = 50;
   data.push_back("DLA per-inference latency measurement (" +
@@ -1378,8 +1372,8 @@ TestOutput DeepLearningAcceleratorTesting::testDlaLatencyMeasurements() {
 
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -1395,7 +1389,7 @@ TestOutput DeepLearningAcceleratorTesting::testDlaLatencyMeasurements() {
  */
 TestOutput DeepLearningAcceleratorTesting::testDlaMemoryBandwidth() {
   std::vector<std::string> data;
-  bool passed = true;
+    bool passed = true;
 
   data.push_back(
       "Testing AI accelerator memory bandwidth (Pi5 LPDDR4X + PCIe channel)");
@@ -1462,7 +1456,7 @@ TestOutput DeepLearningAcceleratorTesting::testDlaMemoryBandwidth() {
  */
 TestOutput DeepLearningAcceleratorTesting::testDlaThermalBehavior() {
   std::vector<std::string> data;
-  bool passed = true;
+    bool passed = true;
 
   data.push_back("Testing DLA thermal behavior and thermal zone reporting");
 

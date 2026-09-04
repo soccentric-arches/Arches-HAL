@@ -199,7 +199,6 @@ GpuTesting::~GpuTesting() {}
 // ---------------------------------------------------------------------------
 TestOutput GpuTesting::testCudaCoresFunctionality() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("Platform: " + std::string(PLATFORM_NAME) +
                  " (VideoCore VII – no CUDA)");
@@ -251,14 +250,13 @@ TestOutput GpuTesting::testCudaCoresFunctionality() {
   data.push_back("NOTE: CUDA is NVIDIA-specific; VideoCore VII uses the "
                  "open-source Mesa/V3D driver.");
 
-  if (passed)
-    data.push_back("PASS: VideoCore VII GPU device verified (" +
-                   std::to_string(VC7_QUAD_CORE_COUNT) + " quad cores / " +
-                   std::to_string(VC7_SHADER_UNIT_COUNT) + " ALUs).");
+  data.push_back("PASS: VideoCore VII GPU device verified (" +
+                 std::to_string(VC7_QUAD_CORE_COUNT) + " quad cores / " +
+                 std::to_string(VC7_SHADER_UNIT_COUNT) + " ALUs).");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -272,7 +270,6 @@ TestOutput GpuTesting::testCudaCoresFunctionality() {
 // ---------------------------------------------------------------------------
 TestOutput GpuTesting::testTensorCoresOperation() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("Platform: Raspberry Pi 5 – VideoCore VII");
   data.push_back("INFO: VideoCore VII does NOT have hardware Tensor Cores.");
@@ -298,13 +295,12 @@ TestOutput GpuTesting::testTensorCoresOperation() {
   data.push_back("Vulkan compute path (via V3DV driver): " +
                  std::string(vulkanPresent ? "available" : "unavailable"));
 
-  if (passed)
-    data.push_back("PASS: Tensor core check complete (N/A for VC7; external AI "
-                   "accelerators scanned).");
+  data.push_back("PASS: Tensor core check complete (N/A for VC7; external AI "
+                 "accelerators scanned).");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -383,7 +379,6 @@ TestOutput GpuTesting::testGpuClockFrequencyStabilityAndThrottling() {
 // ---------------------------------------------------------------------------
 TestOutput GpuTesting::testGraphicsProcessingClustersBothClusters() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("Platform: Raspberry Pi 5 – VideoCore VII");
   data.push_back("VC7 structure: " + std::to_string(VC7_QUAD_CORE_COUNT) +
@@ -428,12 +423,11 @@ TestOutput GpuTesting::testGraphicsProcessingClustersBothClusters() {
 
   data.push_back("API: Vulkan 1.2 (V3DV), OpenGL ES 3.1 (V3D), OpenCL 3.0");
 
-  if (passed)
-    data.push_back("PASS: VideoCore VII quad-core slices verified.");
+  data.push_back("PASS: VideoCore VII quad-core slices verified.");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -447,7 +441,6 @@ TestOutput GpuTesting::testGraphicsProcessingClustersBothClusters() {
 // ---------------------------------------------------------------------------
 TestOutput GpuTesting::testTextureProcessingClustersAll8Tpcs() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("VideoCore VII: texture units integrated in each of the " +
                  std::to_string(VC7_QUAD_CORE_COUNT) + " quad cores.");
@@ -479,12 +472,11 @@ TestOutput GpuTesting::testTextureProcessingClustersAll8Tpcs() {
       "Texture features: bilinear/trilinear filtering, anisotropic, ASTC/ETC2");
   data.push_back("Max texture size: 4096×4096 (OpenGL ES 3.1)");
 
-  if (passed)
-    data.push_back("PASS: VC7 texture processing capability confirmed.");
+  data.push_back("PASS: VC7 texture processing capability confirmed.");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -498,7 +490,6 @@ TestOutput GpuTesting::testTextureProcessingClustersAll8Tpcs() {
 // ---------------------------------------------------------------------------
 TestOutput GpuTesting::testStreamingMultiprocessorsAll16Sms() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("VideoCore VII has no Streaming Multiprocessors (this is an "
                  "NVIDIA concept).");
@@ -532,13 +523,12 @@ TestOutput GpuTesting::testStreamingMultiprocessorsAll16Sms() {
   if (!csdInfo.empty())
     data.push_back("V3D registers/CSD: " + csdInfo.substr(0, 120));
 
-  if (passed)
-    data.push_back("PASS: VideoCore VII pipeline verified (" +
-                   std::to_string(VC7_QUAD_CORE_COUNT) + " quad cores).");
+  data.push_back("PASS: VideoCore VII pipeline verified (" +
+                 std::to_string(VC7_QUAD_CORE_COUNT) + " quad cores).");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -552,7 +542,6 @@ TestOutput GpuTesting::testStreamingMultiprocessorsAll16Sms() {
 // ---------------------------------------------------------------------------
 TestOutput GpuTesting::testRenderOutputUnitsAll32Rops() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("VideoCore VII uses tile-based deferred rendering (TBDR).");
   data.push_back("On-chip Tile Buffer (TLB) replaces traditional ROP units.");
@@ -582,12 +571,11 @@ TestOutput GpuTesting::testRenderOutputUnitsAll32Rops() {
       "Rendering pipeline: Binning → Rendering with on-chip tile buffer");
   data.push_back("Supported output formats: RGB565, RGBA8, RGBA16F, D24S8, …");
 
-  if (passed)
-    data.push_back("PASS: VC7 tile-based render output system verified.");
+  data.push_back("PASS: VC7 tile-based render output system verified.");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -600,7 +588,6 @@ TestOutput GpuTesting::testRenderOutputUnitsAll32Rops() {
 // ---------------------------------------------------------------------------
 TestOutput GpuTesting::testTextureMappingUnitsAll64Tmus() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back(
       "VideoCore VII: integrated texture samplers in each quad core.");
@@ -628,12 +615,11 @@ TestOutput GpuTesting::testTextureMappingUnitsAll64Tmus() {
   if (!mesaInfo.empty())
     data.push_back("Mesa texture info: " + mesaInfo.substr(0, 200));
 
-  if (passed)
-    data.push_back("PASS: VC7 texture mapping capability verified.");
+  data.push_back("PASS: VC7 texture mapping capability verified.");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -646,7 +632,6 @@ TestOutput GpuTesting::testTextureMappingUnitsAll64Tmus() {
 // ---------------------------------------------------------------------------
 TestOutput GpuTesting::testL1CachePerSm() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back(
       "VideoCore VII: per-quad-core instruction/data caches (V3D L1).");
@@ -679,12 +664,11 @@ TestOutput GpuTesting::testL1CachePerSm() {
   data.push_back("V3D L1 I-cache, D-cache: per-quad-core (firmware-managed)");
   data.push_back("V3D L2 unified: ~128 KB shared (implementation-defined)");
 
-  if (passed)
-    data.push_back("PASS: VC7 per-core cache structure documented.");
+  data.push_back("PASS: VC7 per-core cache structure documented.");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -697,7 +681,6 @@ TestOutput GpuTesting::testL1CachePerSm() {
 // ---------------------------------------------------------------------------
 TestOutput GpuTesting::testL2Cache() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("VideoCore VII shared L2 cache: ~128 KB (V3D implementation)");
 
@@ -727,12 +710,11 @@ TestOutput GpuTesting::testL2Cache() {
           "L2C debugfs not available; using device presence as proxy.");
   }
 
-  if (passed)
-    data.push_back("PASS: VC7 L2 cache verified.");
+  data.push_back("PASS: VC7 L2 cache verified.");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -746,7 +728,6 @@ TestOutput GpuTesting::testL2Cache() {
 // ---------------------------------------------------------------------------
 TestOutput GpuTesting::testCacheCoherencyAndHitRates() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back(
       "Cache coherency test: sequential vs. large-stride CPU memory access.");
@@ -797,12 +778,11 @@ TestOutput GpuTesting::testCacheCoherencyAndHitRates() {
     }
   }
 
-  if (passed)
-    data.push_back("PASS: Cache coherency and access pattern test completed.");
+  data.push_back("PASS: Cache coherency and access pattern test completed.");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -921,7 +901,6 @@ TestOutput GpuTesting::testInt8PerformanceVerification() {
 // ---------------------------------------------------------------------------
 TestOutput GpuTesting::testInt8SparsePerformance() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("VideoCore VII: no structured sparsity hardware.");
   data.push_back("Sparse INT8 inference on Pi5 is handled in software by "
@@ -944,13 +923,12 @@ TestOutput GpuTesting::testInt8SparsePerformance() {
   data.push_back(
       "50%-sparse INT8 dot product (1M elems): " + std::to_string(ms) + " ms");
 
-  if (passed)
-    data.push_back(
-        "PASS: Sparse INT8 test completed (software path on Cortex-A76).");
+  data.push_back(
+      "PASS: Sparse INT8 test completed (software path on Cortex-A76).");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -1007,7 +985,6 @@ TestOutput GpuTesting::testFp32ComputePerformance() {
 // ---------------------------------------------------------------------------
 TestOutput GpuTesting::testFp16ComputePerformance() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back(
       "VideoCore VII FP16: supported via Vulkan VK_KHR_shader_float16_int8");
@@ -1041,12 +1018,11 @@ TestOutput GpuTesting::testFp16ComputePerformance() {
     data.push_back(
         "Vulkan info: not available (vulkaninfo not installed or no display)");
 
-  if (passed)
-    data.push_back("PASS: FP16 compute capability verified on VC7.");
+  data.push_back("PASS: FP16 compute capability verified on VC7.");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -1060,7 +1036,6 @@ TestOutput GpuTesting::testFp16ComputePerformance() {
 // ---------------------------------------------------------------------------
 TestOutput GpuTesting::testFp16TensorCorePerformance() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("VideoCore VII: NO Tensor Cores (NVIDIA-exclusive hardware).");
   data.push_back("FP16 matrix operations on Pi5:");
@@ -1083,12 +1058,11 @@ TestOutput GpuTesting::testFp16TensorCorePerformance() {
   data.push_back("CPU 64×64×64 SGEMM: " + std::to_string(ms) + " ms, " +
                  std::to_string(gflops) + " GFLOPS");
 
-  if (passed)
-    data.push_back("PASS: FP16 matrix compute capability documented for Pi5.");
+  data.push_back("PASS: FP16 matrix compute capability documented for Pi5.");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -1102,7 +1076,6 @@ TestOutput GpuTesting::testFp16TensorCorePerformance() {
 // ---------------------------------------------------------------------------
 TestOutput GpuTesting::testMixedPrecisionOperations() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back(
       "Mixed precision on Pi5: FP16 inputs, FP32 accumulate (NEON/Vulkan)");
@@ -1129,12 +1102,11 @@ TestOutput GpuTesting::testMixedPrecisionOperations() {
   data.push_back("Supported formats: FP32, FP16 (NEON), INT8 (NEON sdot)");
   data.push_back("Vulkan: VK_KHR_shader_float16_int8, VK_KHR_16bit_storage");
 
-  if (passed)
-    data.push_back("PASS: Mixed-precision operations verified.");
+  data.push_back("PASS: Mixed-precision operations verified.");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -1205,7 +1177,6 @@ TestOutput GpuTesting::testGpuThermalThrottlingBehavior() {
 // ---------------------------------------------------------------------------
 TestOutput GpuTesting::testGpuPowerConsumptionAtVariousLoads() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("Pi5 board power: ~5 W idle, up to ~25 W full CPU+GPU load.");
   data.push_back("GPU-only contribution: ~2–5 W at max frequency.");
@@ -1238,12 +1209,11 @@ TestOutput GpuTesting::testGpuPowerConsumptionAtVariousLoads() {
 
   data.push_back("Power management: dvfs (devfreq) with ondemand governor.");
 
-  if (passed)
-    data.push_back("PASS: GPU power consumption test completed.");
+  data.push_back("PASS: GPU power consumption test completed.");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;

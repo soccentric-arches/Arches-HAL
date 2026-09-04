@@ -66,7 +66,6 @@ PowerManagementTesting::~PowerManagementTesting() {}
 // ---------------------------------------------------------------------------
 TestOutput PowerManagementTesting::testMaximumPerformanceMode() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("Maximum performance mode check (Pi5 CPUfreq governor)");
 
@@ -102,8 +101,8 @@ TestOutput PowerManagementTesting::testMaximumPerformanceMode() {
   data.push_back("PASS: Performance mode check complete.");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -115,7 +114,6 @@ TestOutput PowerManagementTesting::testMaximumPerformanceMode() {
 // ---------------------------------------------------------------------------
 TestOutput PowerManagementTesting::testPoweroptimizedModes() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("Power-optimized modes check (Pi5 CPUfreq + devfreq)");
 
@@ -145,8 +143,8 @@ TestOutput PowerManagementTesting::testPoweroptimizedModes() {
   data.push_back("PASS: Power-optimized modes check complete.");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -158,7 +156,6 @@ TestOutput PowerManagementTesting::testPoweroptimizedModes() {
 // ---------------------------------------------------------------------------
 TestOutput PowerManagementTesting::testIdlePowerConsumption() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("Idle power consumption check (Pi5)");
   data.push_back("Pi5 idle power: ~2.7W (official, active cooler off)");
@@ -186,8 +183,8 @@ TestOutput PowerManagementTesting::testIdlePowerConsumption() {
   data.push_back("PASS: Idle power check complete.");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -199,7 +196,6 @@ TestOutput PowerManagementTesting::testIdlePowerConsumption() {
 // ---------------------------------------------------------------------------
 TestOutput PowerManagementTesting::testSleepStates() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("Sleep/suspend states check (Pi5)");
 
@@ -220,8 +216,8 @@ TestOutput PowerManagementTesting::testSleepStates() {
   data.push_back("PASS: Sleep state check complete.");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -233,7 +229,6 @@ TestOutput PowerManagementTesting::testSleepStates() {
 // ---------------------------------------------------------------------------
 TestOutput PowerManagementTesting::testPowerStateTransitions() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("Power state transition check (Pi5)");
   data.push_back("NOTE: Test does NOT trigger state transitions.");
@@ -264,8 +259,8 @@ TestOutput PowerManagementTesting::testPowerStateTransitions() {
   data.push_back("PASS: Power state transition check complete.");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -277,7 +272,6 @@ TestOutput PowerManagementTesting::testPowerStateTransitions() {
 // ---------------------------------------------------------------------------
 TestOutput PowerManagementTesting::testWakeupSources() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("Wakeup sources check (Pi5)");
 
@@ -302,8 +296,8 @@ TestOutput PowerManagementTesting::testWakeupSources() {
   data.push_back("PASS: Wakeup sources check complete.");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -315,7 +309,6 @@ TestOutput PowerManagementTesting::testWakeupSources() {
 // ---------------------------------------------------------------------------
 TestOutput PowerManagementTesting::testPowerButtonFunctionality() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("Power button check (Pi5)");
   data.push_back(
@@ -339,8 +332,8 @@ TestOutput PowerManagementTesting::testPowerButtonFunctionality() {
   data.push_back("PASS: Power button check complete.");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -353,7 +346,6 @@ TestOutput PowerManagementTesting::testPowerButtonFunctionality() {
 // ---------------------------------------------------------------------------
 TestOutput PowerManagementTesting::test12vAsilQsLRail() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("12V ASIL QS-L rail check");
   data.push_back("NOTE: Pi5 does NOT have 12V ASIL safety rails (Jetson AGX "
@@ -372,8 +364,8 @@ TestOutput PowerManagementTesting::test12vAsilQsLRail() {
   data.push_back("PASS: 12V ASIL QS-L check complete (N/A on Pi5).");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -385,7 +377,6 @@ TestOutput PowerManagementTesting::test12vAsilQsLRail() {
 // ---------------------------------------------------------------------------
 TestOutput PowerManagementTesting::test12vAsilQsRRail() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("12V ASIL QS-R rail check");
   data.push_back("NOTE: Pi5 does NOT have 12V ASIL safety rails.");
@@ -393,8 +384,8 @@ TestOutput PowerManagementTesting::test12vAsilQsRRail() {
   data.push_back("PASS: 12V ASIL QS-R check complete (N/A on Pi5).");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -406,7 +397,6 @@ TestOutput PowerManagementTesting::test12vAsilQsRRail() {
 // ---------------------------------------------------------------------------
 TestOutput PowerManagementTesting::testAllInternalVoltageRails() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("Internal voltage rails check (Pi5 MXL7704 PMIC)");
 
@@ -453,8 +443,8 @@ TestOutput PowerManagementTesting::testAllInternalVoltageRails() {
   data.push_back("PASS: Voltage rails check complete.");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -466,7 +456,6 @@ TestOutput PowerManagementTesting::testAllInternalVoltageRails() {
 // ---------------------------------------------------------------------------
 TestOutput PowerManagementTesting::testPowerSequencing() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("Power sequencing check (Pi5 MXL7704 PMIC)");
   data.push_back(
@@ -487,8 +476,8 @@ TestOutput PowerManagementTesting::testPowerSequencing() {
   data.push_back("PASS: Power sequencing check complete.");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -500,7 +489,6 @@ TestOutput PowerManagementTesting::testPowerSequencing() {
 // ---------------------------------------------------------------------------
 TestOutput PowerManagementTesting::testPoweronReset() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("Power-on reset check (Pi5)");
 
@@ -519,8 +507,8 @@ TestOutput PowerManagementTesting::testPoweronReset() {
   data.push_back("PASS: Power-on reset check complete.");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -532,7 +520,7 @@ TestOutput PowerManagementTesting::testPoweronReset() {
 // ---------------------------------------------------------------------------
 TestOutput PowerManagementTesting::testBrownoutDetection() {
   std::vector<std::string> data;
-  bool passed = true;
+    bool passed = true;
 
   data.push_back("Brownout/under-voltage detection check (Pi5)");
 
@@ -581,7 +569,6 @@ TestOutput PowerManagementTesting::testBrownoutDetection() {
 // ---------------------------------------------------------------------------
 TestOutput PowerManagementTesting::testOvervoltageProtection() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("Overvoltage protection check (Pi5)");
   data.push_back(
@@ -611,8 +598,8 @@ TestOutput PowerManagementTesting::testOvervoltageProtection() {
   data.push_back("PASS: Overvoltage protection check complete.");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -624,7 +611,6 @@ TestOutput PowerManagementTesting::testOvervoltageProtection() {
 // ---------------------------------------------------------------------------
 TestOutput PowerManagementTesting::testUndervoltageProtection() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("Undervoltage protection check (Pi5)");
   data.push_back(
@@ -639,8 +625,8 @@ TestOutput PowerManagementTesting::testUndervoltageProtection() {
   data.push_back("PASS: Undervoltage protection check complete.");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -652,7 +638,6 @@ TestOutput PowerManagementTesting::testUndervoltageProtection() {
 // ---------------------------------------------------------------------------
 TestOutput PowerManagementTesting::testOvercurrentProtection() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("Overcurrent protection check (Pi5)");
   data.push_back("Pi5 USB-C input: polyfuse or USB PD current limiting.");
@@ -668,8 +653,8 @@ TestOutput PowerManagementTesting::testOvercurrentProtection() {
   data.push_back("PASS: Overcurrent protection check complete.");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -681,7 +666,6 @@ TestOutput PowerManagementTesting::testOvercurrentProtection() {
 // ---------------------------------------------------------------------------
 TestOutput PowerManagementTesting::testPowerSupplyRejection() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("Power supply noise rejection check (Pi5)");
   data.push_back(
@@ -697,8 +681,8 @@ TestOutput PowerManagementTesting::testPowerSupplyRejection() {
       "PASS: Power supply rejection check complete (documentation-based).");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -710,7 +694,6 @@ TestOutput PowerManagementTesting::testPowerSupplyRejection() {
 // ---------------------------------------------------------------------------
 TestOutput PowerManagementTesting::testRealtimePowerConsumption() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("Real-time power consumption (Pi5)");
   data.push_back(
@@ -749,8 +732,8 @@ TestOutput PowerManagementTesting::testRealtimePowerConsumption() {
   data.push_back("PASS: Power consumption check complete.");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -762,7 +745,6 @@ TestOutput PowerManagementTesting::testRealtimePowerConsumption() {
 // ---------------------------------------------------------------------------
 TestOutput PowerManagementTesting::testPercomponentPowerMeasurement() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("Per-component power measurement (Pi5)");
   data.push_back(
@@ -785,8 +767,8 @@ TestOutput PowerManagementTesting::testPercomponentPowerMeasurement() {
   data.push_back("PASS: Per-component power check complete.");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -798,7 +780,6 @@ TestOutput PowerManagementTesting::testPercomponentPowerMeasurement() {
 // ---------------------------------------------------------------------------
 TestOutput PowerManagementTesting::testPowerEfficiencyCalculation() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("Power efficiency calculation (Pi5)");
 
@@ -819,8 +800,8 @@ TestOutput PowerManagementTesting::testPowerEfficiencyCalculation() {
   data.push_back("PASS: Power efficiency calculation complete.");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -832,7 +813,6 @@ TestOutput PowerManagementTesting::testPowerEfficiencyCalculation() {
 // ---------------------------------------------------------------------------
 TestOutput PowerManagementTesting::testBatteryCharging() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("Battery charging check (Pi5)");
   data.push_back("Pi5 does NOT have a battery charging circuit.");
@@ -861,8 +841,8 @@ TestOutput PowerManagementTesting::testBatteryCharging() {
   data.push_back("PASS: Battery check complete.");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -874,7 +854,6 @@ TestOutput PowerManagementTesting::testBatteryCharging() {
 // ---------------------------------------------------------------------------
 TestOutput PowerManagementTesting::testUpsFunctionality() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("UPS functionality check (Pi5)");
   data.push_back("Pi5 does not have built-in UPS. UPS requires external HAT.");
@@ -903,8 +882,8 @@ TestOutput PowerManagementTesting::testUpsFunctionality() {
   data.push_back("PASS: UPS check complete.");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;

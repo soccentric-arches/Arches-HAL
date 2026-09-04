@@ -125,7 +125,7 @@ DebugAndDevelopmentInterfaces::~DebugAndDevelopmentInterfaces() {}
  */
 TestOutput DebugAndDevelopmentInterfaces::testJtagInterface() {
   std::vector<std::string> data;
-  bool passed = true;
+    bool passed = true;
 
   // 1. JTAG character device
   bool jtagDevPresent = pathExists(JTAG_DEV_PATH);
@@ -208,7 +208,7 @@ TestOutput DebugAndDevelopmentInterfaces::testJtagInterface() {
  */
 TestOutput DebugAndDevelopmentInterfaces::testSerialWireDebug() {
   std::vector<std::string> data;
-  bool passed = true;
+    bool passed = true;
 
   // 1. CoreSight bus must exist
   if (!isDir(CORESIGHT_BUS_PATH)) {
@@ -292,7 +292,7 @@ TestOutput DebugAndDevelopmentInterfaces::testSerialWireDebug() {
  */
 TestOutput DebugAndDevelopmentInterfaces::testDebugUart() {
   std::vector<std::string> data;
-  bool passed = true;
+    bool passed = true;
 
   // 1. Find all ttyAMA devices (RP1 High Speed UART)
   std::vector<std::string> thsDevices;
@@ -398,7 +398,7 @@ TestOutput DebugAndDevelopmentInterfaces::testDebugUart() {
  */
 TestOutput DebugAndDevelopmentInterfaces::testTracePort() {
   std::vector<std::string> data;
-  bool passed = true;
+    bool passed = true;
 
   // 1. CoreSight bus must exist
   if (!isDir(CORESIGHT_BUS_PATH)) {
@@ -523,7 +523,7 @@ TestOutput DebugAndDevelopmentInterfaces::testTracePort() {
  */
 TestOutput DebugAndDevelopmentInterfaces::testPerformanceCounters() {
   std::vector<std::string> data;
-  bool passed = true;
+    bool passed = true;
 
   // 1. perf_event_paranoid
   std::string paranoidStr = readLine(PERF_PARANOID_PATH);
@@ -657,7 +657,7 @@ TestOutput DebugAndDevelopmentInterfaces::testPerformanceCounters() {
  */
 TestOutput DebugAndDevelopmentInterfaces::testDebugAuthentication() {
   std::vector<std::string> data;
-  bool passed = true;
+    bool passed = true;
 
   // 1. RP1-fuse driver availability
   bool fusePresent = isDir(TEGRA_OTP_PATH);

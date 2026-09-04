@@ -4,6 +4,8 @@
  * @author sandesh ghimire
  * @copyright (C) Soccentric LLC */
 
+#include <algorithm>
+#include <iterator>
 #include "rtc_lib.h"
 
 #include <chrono>
@@ -181,9 +183,11 @@ std::vector<std::string> RtcTesting::getPeriodicSafeTests() {
 std::vector<std::string> RtcTesting::getOneShotOnlyTests() { return {}; }
 
 std::vector<TestResult> RtcTesting::runAllTests() {
+  const std::vector<std::string> names = getAvailableTests();
   std::vector<TestResult> results;
-  for (const auto &name : getAvailableTests())
-    results.push_back(runSingleTest(name));
+  results.reserve(names.size());
+  std::transform(names.begin(), names.end(), std::back_inserter(results),
+                 [this](const std::string &name) { return runSingleTest(name); });
   return results;
 }
 
@@ -201,12 +205,10 @@ TestResult RtcTesting::runSingleTest(const std::string &testName) {
       {"testAlarmCapability", &RtcTesting::testAlarmCapability},
       {"testClockSkew", &RtcTesting::testClockSkew},
   };
-  for (const auto &e : table) {
-    if (testName == e.name) {
-      out = (this->*e.fn)();
-      break;
-    }
-  }
+  const auto entry = std::find_if(table.begin(), table.end(),
+      [&testName](const TestEntry &e) { return testName == e.name; });
+  if (entry != table.end())
+    out = (this->*entry->fn)();
 
   TestResult r;
   r.name = testName;

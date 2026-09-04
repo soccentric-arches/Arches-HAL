@@ -55,7 +55,6 @@ DisplayInterfaces::~DisplayInterfaces() {}
 // ---------------------------------------------------------------------------
 TestOutput DisplayInterfaces::testDisplayPortOutput() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("DisplayPort output check (Pi5)");
   data.push_back(
@@ -77,8 +76,8 @@ TestOutput DisplayInterfaces::testDisplayPortOutput() {
       "PASS: DisplayPort check complete (native DP not supported on Pi5).");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -91,7 +90,6 @@ TestOutput DisplayInterfaces::testDisplayPortOutput() {
 // ---------------------------------------------------------------------------
 TestOutput DisplayInterfaces::testHdmiOutput() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("Pi5 micro-HDMI output check (HDMI0 and HDMI1)");
 
@@ -125,8 +123,8 @@ TestOutput DisplayInterfaces::testHdmiOutput() {
   data.push_back("PASS: HDMI output check complete.");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -138,7 +136,6 @@ TestOutput DisplayInterfaces::testHdmiOutput() {
 // ---------------------------------------------------------------------------
 TestOutput DisplayInterfaces::testMultiDisplaySupport() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back(
       "Multi-display support check (Pi5: 2x micro-HDMI, up to dual 4K@60Hz)");
@@ -166,8 +163,8 @@ TestOutput DisplayInterfaces::testMultiDisplaySupport() {
   data.push_back("PASS: Multi-display check complete.");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -179,7 +176,6 @@ TestOutput DisplayInterfaces::testMultiDisplaySupport() {
 // ---------------------------------------------------------------------------
 TestOutput DisplayInterfaces::testVariousResolutions() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("Supported resolutions check (Pi5 HDMI via VideoCore VII)");
 
@@ -200,8 +196,8 @@ TestOutput DisplayInterfaces::testVariousResolutions() {
   data.push_back("PASS: Resolution check complete.");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -213,7 +209,6 @@ TestOutput DisplayInterfaces::testVariousResolutions() {
 // ---------------------------------------------------------------------------
 TestOutput DisplayInterfaces::testVariousRefreshRates() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("Refresh rate support check (Pi5)");
   data.push_back("Pi5 HDMI 2.0: 24/25/30/50/60Hz at 4K, up to 120Hz at 1080p");
@@ -234,8 +229,8 @@ TestOutput DisplayInterfaces::testVariousRefreshRates() {
   data.push_back("PASS: Refresh rate check complete.");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -247,7 +242,6 @@ TestOutput DisplayInterfaces::testVariousRefreshRates() {
 // ---------------------------------------------------------------------------
 TestOutput DisplayInterfaces::testHdrSupport() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("HDR support check (Pi5)");
   data.push_back(
@@ -272,8 +266,8 @@ TestOutput DisplayInterfaces::testHdrSupport() {
   data.push_back("PASS: HDR support check complete.");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -285,7 +279,6 @@ TestOutput DisplayInterfaces::testHdrSupport() {
 // ---------------------------------------------------------------------------
 TestOutput DisplayInterfaces::testDisplayHotPlugDetection() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("Display hot-plug detection (HPD) check — Pi5 micro-HDMI");
 
@@ -310,8 +303,8 @@ TestOutput DisplayInterfaces::testDisplayHotPlugDetection() {
   data.push_back("PASS: Hot-plug detection check complete.");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;

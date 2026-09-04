@@ -57,7 +57,6 @@ SecurityFeaturesTesting::~SecurityFeaturesTesting() {}
 // ---------------------------------------------------------------------------
 TestOutput SecurityFeaturesTesting::testBootRomExecution() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("BCM2712 Boot ROM execution check");
   data.push_back(
@@ -86,8 +85,8 @@ TestOutput SecurityFeaturesTesting::testBootRomExecution() {
   data.push_back("PASS: Boot ROM execution check complete.");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -99,7 +98,6 @@ TestOutput SecurityFeaturesTesting::testBootRomExecution() {
 // ---------------------------------------------------------------------------
 TestOutput SecurityFeaturesTesting::testBootloaderSignatureVerification() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("Bootloader signature verification check (Pi5)");
   data.push_back("Pi5 supports optional RSA-2048 signed bootloader via OTP.");
@@ -128,8 +126,8 @@ TestOutput SecurityFeaturesTesting::testBootloaderSignatureVerification() {
   data.push_back("PASS: Bootloader signature check complete.");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -141,7 +139,6 @@ TestOutput SecurityFeaturesTesting::testBootloaderSignatureVerification() {
 // ---------------------------------------------------------------------------
 TestOutput SecurityFeaturesTesting::testKernelSignatureVerification() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("Kernel signature verification check (Pi5)");
 
@@ -170,8 +167,8 @@ TestOutput SecurityFeaturesTesting::testKernelSignatureVerification() {
   data.push_back("PASS: Kernel signature check complete.");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -183,7 +180,6 @@ TestOutput SecurityFeaturesTesting::testKernelSignatureVerification() {
 // ---------------------------------------------------------------------------
 TestOutput SecurityFeaturesTesting::testSecureBootChainOfTrust() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("Secure boot chain of trust check (Pi5)");
   data.push_back(
@@ -219,8 +215,8 @@ TestOutput SecurityFeaturesTesting::testSecureBootChainOfTrust() {
   data.push_back("PASS: Chain of trust check complete.");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -232,7 +228,6 @@ TestOutput SecurityFeaturesTesting::testSecureBootChainOfTrust() {
 // ---------------------------------------------------------------------------
 TestOutput SecurityFeaturesTesting::testHardwareRootOfTrust() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("Hardware root of trust check (Pi5)");
   data.push_back("Pi5 hardware RoT: BCM2712 OTP + immutable BootROM");
@@ -262,8 +257,8 @@ TestOutput SecurityFeaturesTesting::testHardwareRootOfTrust() {
   data.push_back("PASS: Hardware RoT check complete.");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -275,7 +270,6 @@ TestOutput SecurityFeaturesTesting::testHardwareRootOfTrust() {
 // ---------------------------------------------------------------------------
 TestOutput SecurityFeaturesTesting::testSecureStorage() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("Secure storage check (Pi5)");
 
@@ -302,8 +296,8 @@ TestOutput SecurityFeaturesTesting::testSecureStorage() {
   data.push_back("PASS: Secure storage check complete.");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -315,7 +309,6 @@ TestOutput SecurityFeaturesTesting::testSecureStorage() {
 // ---------------------------------------------------------------------------
 TestOutput SecurityFeaturesTesting::testCryptographicAccelerators() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back(
       "Cryptographic accelerators check (Pi5 — ARMv8.2-A Cortex-A76)");
@@ -360,8 +353,8 @@ TestOutput SecurityFeaturesTesting::testCryptographicAccelerators() {
 
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -373,7 +366,7 @@ TestOutput SecurityFeaturesTesting::testCryptographicAccelerators() {
 // ---------------------------------------------------------------------------
 TestOutput SecurityFeaturesTesting::testHardwareRandomNumberGenerator() {
   std::vector<std::string> data;
-  bool passed = true;
+    bool passed = true;
 
   data.push_back("Hardware RNG check (Pi5: BCM2712 HRNG, /dev/hwrng)");
 
@@ -446,7 +439,6 @@ TestOutput SecurityFeaturesTesting::testHardwareRandomNumberGenerator() {
 // ---------------------------------------------------------------------------
 TestOutput SecurityFeaturesTesting::testMemoryEncryption() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("Memory encryption check (Pi5 LPDDR4X)");
   data.push_back(
@@ -476,8 +468,8 @@ TestOutput SecurityFeaturesTesting::testMemoryEncryption() {
       "PASS: Memory encryption check complete (software-only on Pi5).");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -489,7 +481,6 @@ TestOutput SecurityFeaturesTesting::testMemoryEncryption() {
 // ---------------------------------------------------------------------------
 TestOutput SecurityFeaturesTesting::testDebugPortSecurity() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("Debug port security check (Pi5)");
 
@@ -522,8 +513,8 @@ TestOutput SecurityFeaturesTesting::testDebugPortSecurity() {
   data.push_back("PASS: Debug port security check complete.");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -535,7 +526,6 @@ TestOutput SecurityFeaturesTesting::testDebugPortSecurity() {
 // ---------------------------------------------------------------------------
 TestOutput SecurityFeaturesTesting::testJtagSecurity() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("JTAG security check (Pi5)");
   data.push_back(
@@ -562,8 +552,8 @@ TestOutput SecurityFeaturesTesting::testJtagSecurity() {
   data.push_back("PASS: JTAG security check complete.");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;

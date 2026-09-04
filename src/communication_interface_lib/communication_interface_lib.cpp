@@ -146,7 +146,7 @@ TestOutput CommunicationInterfaceTesting::testAllUartPortsFunctionality() {
     }
   }
 
-  bool allOk = true;
+    bool allOk = true;
   int openCount = 0;
   for (const auto &port : thsPorts) {
     int fd = open(port.c_str(), O_RDWR | O_NOCTTY | O_NONBLOCK);
@@ -233,7 +233,7 @@ TestOutput CommunicationInterfaceTesting::testVariousBaudRates() {
     }
   }
 
-  bool allOk = true;
+    bool allOk = true;
   const std::string &port = ports[0]; // Use first available port
   int fd = open(port.c_str(), O_RDWR | O_NOCTTY | O_NONBLOCK);
   if (fd < 0) {
@@ -337,7 +337,7 @@ TestOutput CommunicationInterfaceTesting::testHardwareFlowControl() {
     }
   }
 
-  bool allOk = true;
+    bool allOk = true;
   for (const auto &port : ports) {
     int fd = open(port.c_str(), O_RDWR | O_NOCTTY | O_NONBLOCK);
     if (fd < 0) {
@@ -420,7 +420,6 @@ TestOutput CommunicationInterfaceTesting::testParityChecking() {
     }
   }
 
-  bool allOk = true;
   const std::string &port = ports[0];
   int fd = open(port.c_str(), O_RDWR | O_NOCTTY | O_NONBLOCK);
   if (fd < 0) {
@@ -461,8 +460,8 @@ TestOutput CommunicationInterfaceTesting::testParityChecking() {
       "[INFO] Pi5 RP1 UART supports 8N1, 8E1, 8O1, and 7-bit variants");
   {
     TestOutput _out;
-    _out.status = allOk ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = allOk ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -493,7 +492,6 @@ TestOutput CommunicationInterfaceTesting::testStopBitConfiguration() {
     }
   }
 
-  bool allOk = true;
   const std::string &port = ports[0];
   int fd = open(port.c_str(), O_RDWR | O_NOCTTY | O_NONBLOCK);
   if (fd < 0) {
@@ -542,8 +540,8 @@ TestOutput CommunicationInterfaceTesting::testStopBitConfiguration() {
       "[INFO] Pi5 RP1 UART supports 1 and 2 stop bit configurations");
   {
     TestOutput _out;
-    _out.status = allOk ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = allOk ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -846,7 +844,7 @@ TestOutput CommunicationInterfaceTesting::testSpiMasterMode() {
     }
   }
 
-  bool allOk = true;
+    bool allOk = true;
   for (const auto &dev : spiDevs) {
     int fd = open(dev.c_str(), O_RDWR);
     if (fd < 0) {
@@ -978,7 +976,6 @@ TestOutput CommunicationInterfaceTesting::testVariousSpiClockSpeeds() {
     }
   }
 
-  bool allOk = true;
   for (const auto &dev : spiDevs) {
     int fd = open(dev.c_str(), O_RDWR);
     if (fd < 0) {
@@ -1007,8 +1004,8 @@ TestOutput CommunicationInterfaceTesting::testVariousSpiClockSpeeds() {
 
   {
     TestOutput _out;
-    _out.status = allOk ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = allOk ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -1048,7 +1045,7 @@ TestOutput CommunicationInterfaceTesting::testSpiModes() {
     }
   }
 
-  bool allOk = true;
+    bool allOk = true;
   const std::string &dev = spiDevs[0];
   int fd = open(dev.c_str(), O_RDWR);
   if (fd < 0) {
@@ -1089,6 +1086,9 @@ TestOutput CommunicationInterfaceTesting::testSpiModes() {
 
   {
     TestOutput _out;
+    // cppcheck-suppress knownConditionTrueFalse — SPI_IOC_WR_MODE is a system-
+    // header macro invisible to cppcheck's preprocessor, so it analyzes only
+    // the #else path where allOk is trivially true; the real build defines it.
     _out.status = allOk ? hal::Status::PASS : hal::Status::FAIL;
     _out.severity = allOk ? hal::Severity::INFO : hal::Severity::ERROR;
     for (size_t _i = 0; _i < data.size(); ++_i)
@@ -1364,7 +1364,7 @@ TestOutput CommunicationInterfaceTesting::testI2cMasterMode() {
     }
   }
 
-  bool allOk = true;
+    bool allOk = true;
   for (const auto &dev : i2cDevs) {
     int fd = open(dev.c_str(), O_RDWR);
     if (fd < 0) {
@@ -1864,7 +1864,6 @@ TestOutput CommunicationInterfaceTesting::testCan20a() {
     }
   }
 
-  bool allOk = true;
   for (const auto &iface : canIfaces) {
     std::string ifName = iface.substr(iface.rfind('/') + 1);
     std::string type = readFile(iface + "/type");
@@ -1880,8 +1879,8 @@ TestOutput CommunicationInterfaceTesting::testCan20a() {
                  " type can bitrate 500000");
   {
     TestOutput _out;
-    _out.status = allOk ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = allOk ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;

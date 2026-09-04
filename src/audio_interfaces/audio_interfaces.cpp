@@ -109,7 +109,7 @@ int AudioInterfaces::countAlsaPcmDevices() const {
 
 TestOutput AudioInterfaces::testI2sInterface() {
   TestOutput out = makePassed();
-  bool passed = true;
+    bool passed = true;
 
   // ALSA cards
   std::string cardsContent;
@@ -191,7 +191,7 @@ TestOutput AudioInterfaces::testI2sInterface() {
 
 TestOutput AudioInterfaces::testAudioInput() {
   TestOutput out = makePassed();
-  bool passed = true;
+    bool passed = true;
 
   auto sndDevs = listDir("/dev/snd");
   std::vector<std::string> captureDevs;
@@ -240,7 +240,7 @@ TestOutput AudioInterfaces::testAudioInput() {
 
 TestOutput AudioInterfaces::testAudioOutput() {
   TestOutput out = makePassed();
-  bool passed = true;
+    bool passed = true;
 
   auto sndDevs = listDir("/dev/snd");
   std::vector<std::string> playbackDevs;
@@ -288,7 +288,7 @@ TestOutput AudioInterfaces::testAudioOutput() {
 
 TestOutput AudioInterfaces::testAudioSampleRates() {
   TestOutput out = makePassed();
-  bool passed = true;
+    bool passed = true;
 
   const std::vector<std::string> requiredRates = {"8000", "16000", "44100",
                                                   "48000", "96000"};
@@ -346,7 +346,7 @@ TestOutput AudioInterfaces::testAudioSampleRates() {
 
 TestOutput AudioInterfaces::testAudioBitDepths() {
   TestOutput out = makePassed();
-  bool passed = true;
+    bool passed = true;
 
   const std::vector<std::string> required = {"16", "24", "32"};
   const std::vector<std::string> orinFormats = {"S8",     "S16_LE",  "S20_3LE",
@@ -405,7 +405,7 @@ TestOutput AudioInterfaces::testAudioBitDepths() {
 
 TestOutput AudioInterfaces::testMultiChannelAudio() {
   TestOutput out = makePassed();
-  bool passed = true;
+    bool passed = true;
 
   const int requiredChannels = 8;
   int orinMaxChannels = 0;
@@ -474,7 +474,7 @@ TestOutput AudioInterfaces::testMultiChannelAudio() {
 
 TestOutput AudioInterfaces::testAudioDmaTransfers() {
   TestOutput out = makePassed();
-  bool passed = true;
+    bool passed = true;
 
   // Check DMA channels
   auto dmaDevs = listDir("/sys/class/dma");
@@ -512,7 +512,7 @@ TestOutput AudioInterfaces::testAudioDmaTransfers() {
 
 TestOutput AudioInterfaces::testAudioLatency() {
   TestOutput out = makePassed();
-  bool passed = true;
+    bool passed = true;
 
   const std::string asoundBase = "/proc/asound";
   auto cardDirs = listDir(asoundBase, "card");

@@ -58,7 +58,6 @@ WatchdogAndResetTesting::~WatchdogAndResetTesting() {}
 // ---------------------------------------------------------------------------
 TestOutput WatchdogAndResetTesting::testWatchdogTimerFunctionality() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("Watchdog timer test (Pi5: RP1 watchdog, /dev/watchdog0)");
 
@@ -119,8 +118,8 @@ TestOutput WatchdogAndResetTesting::testWatchdogTimerFunctionality() {
 
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -132,7 +131,6 @@ TestOutput WatchdogAndResetTesting::testWatchdogTimerFunctionality() {
 // ---------------------------------------------------------------------------
 TestOutput WatchdogAndResetTesting::testWatchdogTimeoutConfiguration() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("Watchdog timeout configuration check (Pi5)");
 
@@ -171,8 +169,8 @@ TestOutput WatchdogAndResetTesting::testWatchdogTimeoutConfiguration() {
   data.push_back("PASS: Timeout configuration check complete.");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -185,7 +183,6 @@ TestOutput WatchdogAndResetTesting::testWatchdogTimeoutConfiguration() {
 // ---------------------------------------------------------------------------
 TestOutput WatchdogAndResetTesting::testWatchdogResetGeneration() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("Watchdog reset generation capability check");
   data.push_back(
@@ -227,8 +224,8 @@ TestOutput WatchdogAndResetTesting::testWatchdogResetGeneration() {
 
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -240,7 +237,6 @@ TestOutput WatchdogAndResetTesting::testWatchdogResetGeneration() {
 // ---------------------------------------------------------------------------
 TestOutput WatchdogAndResetTesting::testWatchdogInterruptGeneration() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("Watchdog interrupt/pretimeout check (Pi5 RP1 watchdog)");
 
@@ -277,8 +273,8 @@ TestOutput WatchdogAndResetTesting::testWatchdogInterruptGeneration() {
   data.push_back("PASS: Interrupt/pretimeout check complete.");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -290,7 +286,6 @@ TestOutput WatchdogAndResetTesting::testWatchdogInterruptGeneration() {
 // ---------------------------------------------------------------------------
 TestOutput WatchdogAndResetTesting::testPoweronReset() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("Power-on reset check (Pi5)");
 
@@ -328,8 +323,8 @@ TestOutput WatchdogAndResetTesting::testPoweronReset() {
   data.push_back("PASS: Power-on reset check complete.");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -341,7 +336,6 @@ TestOutput WatchdogAndResetTesting::testPoweronReset() {
 // ---------------------------------------------------------------------------
 TestOutput WatchdogAndResetTesting::testHardwareResetButton() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("Hardware reset button check (Pi5)");
   data.push_back("Pi5 has a dedicated reset button (J2 header) wired to RP1.");
@@ -366,8 +360,8 @@ TestOutput WatchdogAndResetTesting::testHardwareResetButton() {
                  "physical access).");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -379,7 +373,6 @@ TestOutput WatchdogAndResetTesting::testHardwareResetButton() {
 // ---------------------------------------------------------------------------
 TestOutput WatchdogAndResetTesting::testSoftwareReset() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("Software reset capability check (Pi5)");
   data.push_back("NOTE: Test does NOT trigger reset.");
@@ -404,8 +397,8 @@ TestOutput WatchdogAndResetTesting::testSoftwareReset() {
   data.push_back("PASS: Software reset capability confirmed.");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -418,7 +411,6 @@ TestOutput WatchdogAndResetTesting::testSoftwareReset() {
 // ---------------------------------------------------------------------------
 TestOutput WatchdogAndResetTesting::testWatchdogReset() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("Watchdog reset history check (Pi5)");
 
@@ -448,8 +440,8 @@ TestOutput WatchdogAndResetTesting::testWatchdogReset() {
   data.push_back("PASS: Watchdog reset history check complete.");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -461,7 +453,6 @@ TestOutput WatchdogAndResetTesting::testWatchdogReset() {
 // ---------------------------------------------------------------------------
 TestOutput WatchdogAndResetTesting::testThermalReset() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("Thermal reset check (Pi5)");
   data.push_back("BCM2712 soft thermal shutdown at " +
@@ -499,8 +490,8 @@ TestOutput WatchdogAndResetTesting::testThermalReset() {
   data.push_back("PASS: Thermal reset history check complete.");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -512,7 +503,6 @@ TestOutput WatchdogAndResetTesting::testThermalReset() {
 // ---------------------------------------------------------------------------
 TestOutput WatchdogAndResetTesting::testResetReasonLogging() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("Reset reason logging check (Pi5)");
 
@@ -557,8 +547,8 @@ TestOutput WatchdogAndResetTesting::testResetReasonLogging() {
   data.push_back("PASS: Reset reason logging check complete.");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;

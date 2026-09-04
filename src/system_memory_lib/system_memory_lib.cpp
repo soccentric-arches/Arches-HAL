@@ -126,7 +126,7 @@ SystemMemoryTesting::~SystemMemoryTesting() {}
 // ---------------------------------------------------------------------------
 TestOutput SystemMemoryTesting::testAll64gbMemoryAccessibility() {
   std::vector<std::string> data;
-  bool passed = true;
+    bool passed = true;
 
   data.push_back("Platform: " + std::string(PLATFORM_NAME) + " — LPDDR4X-4267");
   data.push_back("NOTE: Pi5 ships with 4 GB or 8 GB RAM (not 64 GB).");
@@ -170,7 +170,6 @@ TestOutput SystemMemoryTesting::testAll64gbMemoryAccessibility() {
 // ---------------------------------------------------------------------------
 TestOutput SystemMemoryTesting::testMemoryBankTesting() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("LPDDR4X bank structure: single 64-bit channel (Pi5)");
 
@@ -197,8 +196,8 @@ TestOutput SystemMemoryTesting::testMemoryBankTesting() {
   data.push_back("PASS: Memory bank topology verified.");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -211,7 +210,6 @@ TestOutput SystemMemoryTesting::testMemoryBankTesting() {
 // ---------------------------------------------------------------------------
 TestOutput SystemMemoryTesting::test256bitMemoryInterface() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("Memory bus width: " + std::to_string(MEM_BUS) +
                  "-bit (LPDDR4X-4267)");
@@ -226,8 +224,8 @@ TestOutput SystemMemoryTesting::test256bitMemoryInterface() {
   data.push_back("PASS: 64-bit LPDDR4X memory interface confirmed for Pi5.");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -240,7 +238,6 @@ TestOutput SystemMemoryTesting::test256bitMemoryInterface() {
 // ---------------------------------------------------------------------------
 TestOutput SystemMemoryTesting::testMemoryClockFrequency() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("Pi5 LPDDR4X-4267 memory speed: 4267 MT/s");
   data.push_back("Effective clock: 2133 MHz (DDR — dual data rate)");
@@ -269,8 +266,8 @@ TestOutput SystemMemoryTesting::testMemoryClockFrequency() {
   data.push_back("PASS: LPDDR4X clock frequency confirmed at spec: 4267 MT/s.");
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -283,7 +280,7 @@ TestOutput SystemMemoryTesting::testMemoryClockFrequency() {
 // ---------------------------------------------------------------------------
 TestOutput SystemMemoryTesting::testMemoryBandwidth() {
   std::vector<std::string> data;
-  bool passed = true;
+    bool passed = true;
 
   data.push_back("LPDDR4X-4267 memory bandwidth microbenchmark (memcpy)");
   data.push_back("Buffer size: 256 MB");
@@ -319,7 +316,7 @@ TestOutput SystemMemoryTesting::testMemoryBandwidth() {
 // ---------------------------------------------------------------------------
 TestOutput SystemMemoryTesting::testMemoryLatencyMeasurements() {
   std::vector<std::string> data;
-  bool passed = true;
+    bool passed = true;
 
   data.push_back("Memory latency measurements (pointer-chasing)");
 
@@ -364,7 +361,6 @@ TestOutput SystemMemoryTesting::testMemoryLatencyMeasurements() {
 // ---------------------------------------------------------------------------
 TestOutput SystemMemoryTesting::testMemoryErrorCorrection() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("Memory error correction status for Pi5");
   data.push_back("Pi5 LPDDR4X-4267: NO hardware ECC support.");
@@ -394,8 +390,8 @@ TestOutput SystemMemoryTesting::testMemoryErrorCorrection() {
 
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -408,7 +404,7 @@ TestOutput SystemMemoryTesting::testMemoryErrorCorrection() {
 // ---------------------------------------------------------------------------
 TestOutput SystemMemoryTesting::testMemoryThermalBehavior() {
   std::vector<std::string> data;
-  bool passed = true;
+    bool passed = true;
 
   data.push_back(
       "Memory thermal behavior under load (Pi5 shared LPDDR4X/SoC die)");
@@ -454,7 +450,7 @@ TestOutput SystemMemoryTesting::testMemoryThermalBehavior() {
 // ---------------------------------------------------------------------------
 TestOutput SystemMemoryTesting::testSequentialReadwritePerformance() {
   std::vector<std::string> data;
-  bool passed = true;
+    bool passed = true;
 
   data.push_back("Sequential memory read/write performance (256 MB buffer)");
 
@@ -504,7 +500,7 @@ TestOutput SystemMemoryTesting::testSequentialReadwritePerformance() {
 // ---------------------------------------------------------------------------
 TestOutput SystemMemoryTesting::testRandomReadwritePerformance() {
   std::vector<std::string> data;
-  bool passed = true;
+    bool passed = true;
 
   data.push_back("Random memory access performance (64 MB, pointer-chasing)");
 
@@ -537,7 +533,7 @@ TestOutput SystemMemoryTesting::testRandomReadwritePerformance() {
 // ---------------------------------------------------------------------------
 TestOutput SystemMemoryTesting::testMemoryAllocationdeallocation() {
   std::vector<std::string> data;
-  bool passed = true;
+    bool passed = true;
 
   data.push_back("Memory allocation/deallocation stress test");
 
@@ -590,7 +586,7 @@ TestOutput SystemMemoryTesting::testMemoryAllocationdeallocation() {
 // ---------------------------------------------------------------------------
 TestOutput SystemMemoryTesting::testMemoryFragmentationHandling() {
   std::vector<std::string> data;
-  bool passed = true;
+    bool passed = true;
 
   data.push_back("Memory fragmentation stress test");
 
@@ -646,7 +642,7 @@ TestOutput SystemMemoryTesting::testMemoryFragmentationHandling() {
 // ---------------------------------------------------------------------------
 TestOutput SystemMemoryTesting::testOutofmemoryConditions() {
   std::vector<std::string> data;
-  bool passed = true;
+    bool passed = true;
 
   data.push_back("OOM condition check");
 
@@ -704,7 +700,7 @@ TestOutput SystemMemoryTesting::testOutofmemoryConditions() {
 // ---------------------------------------------------------------------------
 TestOutput SystemMemoryTesting::testMemoryLeaksDetection() {
   std::vector<std::string> data;
-  bool passed = true;
+    bool passed = true;
 
   data.push_back("Memory leak detection (basic VmRSS monitoring)");
 
@@ -766,7 +762,6 @@ TestOutput SystemMemoryTesting::testMemoryLeaksDetection() {
 // ---------------------------------------------------------------------------
 TestOutput SystemMemoryTesting::testDmaTofromMemory() {
   std::vector<std::string> data;
-  bool passed = true;
 
   data.push_back("DMA subsystem check (Pi5 BCM2712 DMA controller)");
 
@@ -803,8 +798,8 @@ TestOutput SystemMemoryTesting::testDmaTofromMemory() {
 
   {
     TestOutput _out;
-    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -817,7 +812,7 @@ TestOutput SystemMemoryTesting::testDmaTofromMemory() {
 // ---------------------------------------------------------------------------
 TestOutput SystemMemoryTesting::testConcurrentMemoryAccessPatterns() {
   std::vector<std::string> data;
-  bool passed = true;
+    bool passed = true;
 
   data.push_back("Concurrent memory access (4 threads × 64 MB each)");
 

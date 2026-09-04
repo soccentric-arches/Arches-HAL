@@ -4,6 +4,7 @@
  * @author sandesh ghimire
  * @copyright (C) Soccentric LLC */
 
+#include <iterator>
 #include "can_bus_lib.h"
 
 #include <algorithm>
@@ -152,9 +153,11 @@ std::vector<std::string> CanBusTesting::getPeriodicSafeTests() {
 std::vector<std::string> CanBusTesting::getOneShotOnlyTests() { return {}; }
 
 std::vector<TestResult> CanBusTesting::runAllTests() {
+  const std::vector<std::string> names = getAvailableTests();
   std::vector<TestResult> results;
-  for (const auto &name : getAvailableTests())
-    results.push_back(runSingleTest(name));
+  results.reserve(names.size());
+  std::transform(names.begin(), names.end(), std::back_inserter(results),
+                 [this](const std::string &name) { return runSingleTest(name); });
   return results;
 }
 
@@ -172,12 +175,10 @@ TestResult CanBusTesting::runSingleTest(const std::string &testName) {
       {"testBitrateRead", &CanBusTesting::testBitrateRead},
       {"testCanState", &CanBusTesting::testCanState},
   };
-  for (const auto &e : table) {
-    if (testName == e.name) {
-      out = (this->*e.fn)();
-      break;
-    }
-  }
+  const auto entry = std::find_if(table.begin(), table.end(),
+      [&testName](const TestEntry &e) { return testName == e.name; });
+  if (entry != table.end())
+    out = (this->*entry->fn)();
 
   TestResult r;
   r.name = testName;

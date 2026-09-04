@@ -4,6 +4,7 @@
  * @author sandesh ghimire
  * @copyright (C) Soccentric LLC */
 
+#include <iterator>
 #include "i2c_lib.h"
 
 #include <algorithm>
@@ -174,9 +175,11 @@ std::vector<std::string> I2cTesting::getOneShotOnlyTests() {
 }
 
 std::vector<TestResult> I2cTesting::runAllTests() {
+  const std::vector<std::string> names = getAvailableTests();
   std::vector<TestResult> results;
-  for (const auto &name : getAvailableTests())
-    results.push_back(runSingleTest(name));
+  results.reserve(names.size());
+  std::transform(names.begin(), names.end(), std::back_inserter(results),
+                 [this](const std::string &name) { return runSingleTest(name); });
   return results;
 }
 
