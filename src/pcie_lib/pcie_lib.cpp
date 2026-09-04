@@ -681,6 +681,7 @@ TestOutput PcieTesting::testPcieWriteBandwidth() {
 TestOutput PcieTesting::testPcieLatency() {
   std::vector<std::string> devices = getPcieDevices();
   std::vector<std::string> data;
+  bool overallPass = true;
 
   if (devices.empty()) {
     {
@@ -756,7 +757,6 @@ TestOutput PcieTesting::testPcieLatency() {
   data.push_back("[INFO] Values include kernel/OS overhead on top of PCIe "
                  "config-space TLP round-trip");
   {
-    bool overallPass = true;
     TestOutput _out;
     _out.status = overallPass ? hal::Status::PASS : hal::Status::FAIL;
     _out.severity = overallPass ? hal::Severity::INFO : hal::Severity::ERROR;
@@ -777,7 +777,6 @@ TestOutput PcieTesting::testPcieLatency() {
 TestOutput PcieTesting::testPcieErrorHandling() {
   std::vector<std::string> devices = getPcieDevices();
   std::vector<std::string> data;
-  bool overallPass = true;
 
   if (devices.empty()) {
     {
@@ -867,6 +866,7 @@ TestOutput PcieTesting::testPcieErrorHandling() {
   }
 
   {
+    bool overallPass = true;
     TestOutput _out;
     _out.status = overallPass ? hal::Status::PASS : hal::Status::FAIL;
     _out.severity = overallPass ? hal::Severity::INFO : hal::Severity::ERROR;
