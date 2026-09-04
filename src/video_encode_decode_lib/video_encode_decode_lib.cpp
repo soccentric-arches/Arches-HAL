@@ -428,13 +428,12 @@ TestOutput VideoEncodeDecodeTesting::testMultipleStreamEncoding() {
   data.push_back("V4L2 M2M device node: " +
                  std::string(encPresent ? "PRESENT" : "NOT FOUND"));
   if (!encPresent) {
-    passed = false;
     data.push_back("FAIL: V4L2 M2M device node missing – multi-stream encode "
                    "unavailable.");
     {
       TestOutput _out;
-      _out.status = hal::Status::PASS;
-      _out.severity = hal::Severity::INFO;
+      _out.status = hal::Status::FAIL;
+      _out.severity = hal::Severity::ERROR;
       for (size_t _i = 0; _i < data.size(); ++_i)
         _out.reason["detail_" + std::to_string(_i)] = data[_i];
       return _out;
@@ -503,13 +502,12 @@ TestOutput VideoEncodeDecodeTesting::testVariousResolutions() {
                  std::string(decPresent ? "YES" : "NO"));
 
   if (!encPresent && !decPresent) {
-    passed = false;
     data.push_back("FAIL: Neither bcm2835-codec nor rpivid/bcm2835-codec "
                    "device nodes found.");
     {
       TestOutput _out;
-      _out.status = hal::Status::PASS;
-      _out.severity = hal::Severity::INFO;
+      _out.status = hal::Status::FAIL;
+      _out.severity = hal::Severity::ERROR;
       for (size_t _i = 0; _i < data.size(); ++_i)
         _out.reason["detail_" + std::to_string(_i)] = data[_i];
       return _out;
@@ -567,13 +565,12 @@ TestOutput VideoEncodeDecodeTesting::testVariousBitrates() {
   data.push_back("V4L2 M2M device node: " +
                  std::string(encPresent ? "PRESENT" : "NOT FOUND"));
   if (!encPresent) {
-    passed = false;
     data.push_back(
         "FAIL: bcm2835-codec not available – cannot verify bitrate range.");
     {
       TestOutput _out;
-      _out.status = hal::Status::PASS;
-      _out.severity = hal::Severity::INFO;
+      _out.status = hal::Status::FAIL;
+      _out.severity = hal::Severity::ERROR;
       for (size_t _i = 0; _i < data.size(); ++_i)
         _out.reason["detail_" + std::to_string(_i)] = data[_i];
       return _out;
@@ -632,13 +629,12 @@ TestOutput VideoEncodeDecodeTesting::testVariousFrameRates() {
                  std::string(decPresent ? "YES" : "NO"));
 
   if (!encPresent && !decPresent) {
-    passed = false;
     data.push_back(
         "FAIL: Neither bcm2835-codec nor rpivid/bcm2835-codec found.");
     {
       TestOutput _out;
-      _out.status = hal::Status::PASS;
-      _out.severity = hal::Severity::INFO;
+      _out.status = hal::Status::FAIL;
+      _out.severity = hal::Severity::ERROR;
       for (size_t _i = 0; _i < data.size(); ++_i)
         _out.reason["detail_" + std::to_string(_i)] = data[_i];
       return _out;
@@ -691,12 +687,11 @@ TestOutput VideoEncodeDecodeTesting::testEncoderQualitySettings() {
   data.push_back("V4L2 M2M device node: " +
                  std::string(encPresent ? "PRESENT" : "NOT FOUND"));
   if (!encPresent) {
-    passed = false;
     data.push_back("FAIL: bcm2835-codec device not found.");
     {
       TestOutput _out;
-      _out.status = hal::Status::PASS;
-      _out.severity = hal::Severity::INFO;
+      _out.status = hal::Status::FAIL;
+      _out.severity = hal::Severity::ERROR;
       for (size_t _i = 0; _i < data.size(); ++_i)
         _out.reason["detail_" + std::to_string(_i)] = data[_i];
       return _out;
@@ -753,12 +748,11 @@ TestOutput VideoEncodeDecodeTesting::testEncoderLatency() {
   data.push_back("V4L2 M2M device node: " +
                  std::string(encPresent ? "PRESENT" : "NOT FOUND"));
   if (!encPresent) {
-    passed = false;
     data.push_back("FAIL: bcm2835-codec device not found.");
     {
       TestOutput _out;
-      _out.status = hal::Status::PASS;
-      _out.severity = hal::Severity::INFO;
+      _out.status = hal::Status::FAIL;
+      _out.severity = hal::Severity::ERROR;
       for (size_t _i = 0; _i < data.size(); ++_i)
         _out.reason["detail_" + std::to_string(_i)] = data[_i];
       return _out;
@@ -1082,12 +1076,11 @@ TestOutput VideoEncodeDecodeTesting::testMultipleStreamDecoding() {
       std::string(dec2Present ? "PRESENT" : "not found (may share node)"));
 
   if (!decPresent) {
-    passed = false;
     data.push_back("FAIL: rpivid/bcm2835-codec device node missing.");
     {
       TestOutput _out;
-      _out.status = hal::Status::PASS;
-      _out.severity = hal::Severity::INFO;
+      _out.status = hal::Status::FAIL;
+      _out.severity = hal::Severity::ERROR;
       for (size_t _i = 0; _i < data.size(); ++_i)
         _out.reason["detail_" + std::to_string(_i)] = data[_i];
       return _out;
@@ -1131,12 +1124,11 @@ TestOutput VideoEncodeDecodeTesting::test4k8kDecoding() {
   data.push_back("rpivid/bcm2835-codec device node: " +
                  std::string(decPresent ? "PRESENT" : "NOT FOUND"));
   if (!decPresent) {
-    passed = false;
     data.push_back("FAIL: rpivid/bcm2835-codec device node missing.");
     {
       TestOutput _out;
-      _out.status = hal::Status::PASS;
-      _out.severity = hal::Severity::INFO;
+      _out.status = hal::Status::FAIL;
+      _out.severity = hal::Severity::ERROR;
       for (size_t _i = 0; _i < data.size(); ++_i)
         _out.reason["detail_" + std::to_string(_i)] = data[_i];
       return _out;
@@ -1195,12 +1187,11 @@ TestOutput VideoEncodeDecodeTesting::testDecoderLatency() {
   data.push_back("rpivid/bcm2835-codec device node: " +
                  std::string(decPresent ? "PRESENT" : "NOT FOUND"));
   if (!decPresent) {
-    passed = false;
     data.push_back("FAIL: rpivid/bcm2835-codec device not found.");
     {
       TestOutput _out;
-      _out.status = hal::Status::PASS;
-      _out.severity = hal::Severity::INFO;
+      _out.status = hal::Status::FAIL;
+      _out.severity = hal::Severity::ERROR;
       for (size_t _i = 0; _i < data.size(); ++_i)
         _out.reason["detail_" + std::to_string(_i)] = data[_i];
       return _out;
@@ -1253,12 +1244,11 @@ TestOutput VideoEncodeDecodeTesting::testCorruptStreamHandling() {
   data.push_back("rpivid/bcm2835-codec device node: " +
                  std::string(decPresent ? "PRESENT" : "NOT FOUND"));
   if (!decPresent) {
-    passed = false;
     data.push_back("FAIL: rpivid/bcm2835-codec device node missing.");
     {
       TestOutput _out;
-      _out.status = hal::Status::PASS;
-      _out.severity = hal::Severity::INFO;
+      _out.status = hal::Status::FAIL;
+      _out.severity = hal::Severity::ERROR;
       for (size_t _i = 0; _i < data.size(); ++_i)
         _out.reason["detail_" + std::to_string(_i)] = data[_i];
       return _out;
@@ -1669,13 +1659,12 @@ TestOutput VideoEncodeDecodeTesting::testNvjpgThroughput() {
   data.push_back("bcm2835-codec MJPEG device node: " +
                  std::string(jpgPresent ? "PRESENT" : "NOT FOUND"));
   if (!jpgPresent) {
-    passed = false;
     data.push_back("FAIL: bcm2835-codec MJPEG device node missing – throughput "
                    "test skipped.");
     {
       TestOutput _out;
-      _out.status = hal::Status::PASS;
-      _out.severity = hal::Severity::INFO;
+      _out.status = hal::Status::FAIL;
+      _out.severity = hal::Severity::ERROR;
       for (size_t _i = 0; _i < data.size(); ++_i)
         _out.reason["detail_" + std::to_string(_i)] = data[_i];
       return _out;

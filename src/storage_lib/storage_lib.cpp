@@ -189,13 +189,12 @@ TestOutput StorageTesting::testEmmc51InterfaceFunctionality() {
                  std::string(devPresent ? "YES" : "NO"));
 
   if (!devPresent) {
-    passed = false;
     data.push_back(
         "FAIL: SD card block device not found. No SD card inserted?");
     {
       TestOutput _out;
-      _out.status = hal::Status::PASS;
-      _out.severity = hal::Severity::INFO;
+      _out.status = hal::Status::FAIL;
+      _out.severity = hal::Severity::ERROR;
       for (size_t _i = 0; _i < data.size(); ++_i)
         _out.reason["detail_" + std::to_string(_i)] = data[_i];
       return _out;
@@ -311,8 +310,8 @@ TestOutput StorageTesting::testSequentialReadPerformance() {
     data.push_back("SKIP: SD card not present.");
     {
       TestOutput _out;
-      _out.status = hal::Status::PASS;
-      _out.severity = hal::Severity::INFO;
+      _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
+      _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
       for (size_t _i = 0; _i < data.size(); ++_i)
         _out.reason["detail_" + std::to_string(_i)] = data[_i];
       return _out;
@@ -466,8 +465,8 @@ TestOutput StorageTesting::testRandomReadIops() {
     data.push_back("SKIP: SD card not present.");
     {
       TestOutput _out;
-      _out.status = hal::Status::PASS;
-      _out.severity = hal::Severity::INFO;
+      _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
+      _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
       for (size_t _i = 0; _i < data.size(); ++_i)
         _out.reason["detail_" + std::to_string(_i)] = data[_i];
       return _out;
@@ -862,8 +861,8 @@ TestOutput StorageTesting::testNvmeReadwritePerformance() {
     data.push_back("SKIP: NVMe not present — test not applicable.");
     {
       TestOutput _out;
-      _out.status = hal::Status::PASS;
-      _out.severity = hal::Severity::INFO;
+      _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
+      _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
       for (size_t _i = 0; _i < data.size(); ++_i)
         _out.reason["detail_" + std::to_string(_i)] = data[_i];
       return _out;
@@ -941,8 +940,8 @@ TestOutput StorageTesting::testNvmeThermalThrottling() {
     data.push_back("SKIP: NVMe not present.");
     {
       TestOutput _out;
-      _out.status = hal::Status::PASS;
-      _out.severity = hal::Severity::INFO;
+      _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
+      _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
       for (size_t _i = 0; _i < data.size(); ++_i)
         _out.reason["detail_" + std::to_string(_i)] = data[_i];
       return _out;
