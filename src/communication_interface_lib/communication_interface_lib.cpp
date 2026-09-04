@@ -9,6 +9,7 @@
 #include "../platform_rpi5.h"
 
 #include <algorithm>
+#include <iterator>
 #include <cerrno>
 #include <climits>
 #include <cstring>
@@ -646,9 +647,8 @@ TestOutput CommunicationInterfaceTesting::testUartInterruptHandling() {
     auto lines = grepInterrupts(kw);
     if (!lines.empty()) {
       foundAny = true;
-      for (const auto &line : lines) {
-        data.push_back("[PASS] IRQ: " + line);
-      }
+      std::transform(lines.begin(), lines.end(), std::back_inserter(data),
+                      [&](const auto &line) { return "[PASS] IRQ: " + line; });
     }
   }
 
@@ -756,9 +756,8 @@ TestOutput CommunicationInterfaceTesting::testAllSpiControllers() {
   if (!spiDevs.empty()) {
     data.push_back("[INFO] spidev nodes found: " +
                    std::to_string(spiDevs.size()));
-    for (const auto &d : spiDevs) {
-      data.push_back("[PASS] " + d + ": present");
-    }
+    std::transform(spiDevs.begin(), spiDevs.end(), std::back_inserter(data),
+                    [&](const auto &d) { return "[PASS] " + d + ": present"; });
   } else {
     data.push_back(
         "[INFO] No /dev/spidev* nodes found (spidev module may not be loaded)");
@@ -961,10 +960,8 @@ TestOutput CommunicationInterfaceTesting::testVariousSpiClockSpeeds() {
     data.push_back(
         "[INFO] No spidev nodes found; documenting supported speeds");
     data.push_back("[INFO] Pi5 SPI supports up to 40 MHz (QSPI up to 133 MHz)");
-    for (const auto &sp : speeds) {
-      data.push_back("[INFO] " + sp.first + " (" + std::to_string(sp.second) +
-                     " Hz): supported");
-    }
+    std::transform(speeds.begin(), speeds.end(), std::back_inserter(data),
+                    [&](const auto &sp) { return "[INFO] " + sp.first + " (" + std::to_string(sp.second) + " Hz): supported"; });
     {
       TestOutput _out;
       _out.status = hal::Status::PASS;
@@ -1030,9 +1027,8 @@ TestOutput CommunicationInterfaceTesting::testSpiModes() {
   if (spiDevs.empty()) {
     data.push_back(
         "[INFO] No spidev nodes; Pi5 RP1 SPI supports all 4 SPI modes");
-    for (const auto &m : modes) {
-      data.push_back("[INFO] " + m.first + ": supported by hardware");
-    }
+    std::transform(modes.begin(), modes.end(), std::back_inserter(data),
+                    [&](const auto &m) { return "[INFO] " + m.first + ": supported by hardware"; });
     {
       TestOutput _out;
       _out.status = hal::Status::SKIPPED;
@@ -1265,9 +1261,8 @@ TestOutput CommunicationInterfaceTesting::testMultipleSpiDevices() {
   for (const auto &kv : busDev) {
     data.push_back("[INFO] SPI bus " + std::to_string(kv.first) + ": " +
                    std::to_string(kv.second.size()) + " device(s)");
-    for (const auto &dev : kv.second) {
-      data.push_back("  " + dev);
-    }
+    std::transform(kv.second.begin(), kv.second.end(), std::back_inserter(data),
+                    [&](const auto &dev) { return "  " + dev; });
   }
 
   {
@@ -1758,9 +1753,8 @@ TestOutput CommunicationInterfaceTesting::testMultimasterArbitration() {
   if (!i2cIrqs.empty()) {
     data.push_back("[INFO] I2C interrupt handlers registered (" +
                    std::to_string(i2cIrqs.size()) + " entries):");
-    for (const auto &irq : i2cIrqs) {
-      data.push_back("  " + irq);
-    }
+    std::transform(i2cIrqs.begin(), i2cIrqs.end(), std::back_inserter(data),
+                    [&](const auto &irq) { return "  " + irq; });
     data.push_back("[PASS] I2C interrupt infrastructure active; "
                    "arbitration-lost handled by IRQ");
   } else {
@@ -2027,9 +2021,8 @@ TestOutput CommunicationInterfaceTesting::testVariousCanBitrates() {
   if (canIfaces.empty()) {
     data.push_back(
         "[INFO] No CAN interfaces found; documenting supported bitrates");
-    for (const auto &br : supportedBitrates) {
-      data.push_back("[INFO] " + br + " bps: supported by mttcan");
-    }
+    std::transform(supportedBitrates.begin(), supportedBitrates.end(), std::back_inserter(data),
+                    [&](const auto &br) { return "[INFO] " + br + " bps: supported by mttcan"; });
     {
       TestOutput _out;
       _out.status = hal::Status::PASS;
@@ -2120,9 +2113,8 @@ TestOutput CommunicationInterfaceTesting::testCanErrorDetection() {
   auto canIrqs = grepInterrupts("mttcan");
   if (!canIrqs.empty()) {
     data.push_back("[PASS] mttcan interrupt handlers registered:");
-    for (const auto &irq : canIrqs) {
-      data.push_back("  " + irq);
-    }
+    std::transform(canIrqs.begin(), canIrqs.end(), std::back_inserter(data),
+                    [&](const auto &irq) { return "  " + irq; });
   }
 
   {
