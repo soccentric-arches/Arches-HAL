@@ -189,6 +189,7 @@ TestOutput StorageTesting::testEmmc51InterfaceFunctionality() {
                  std::string(devPresent ? "YES" : "NO"));
 
   if (!devPresent) {
+    data.push_back(
         "FAIL: SD card block device not found. No SD card inserted?");
     {
       TestOutput _out;
