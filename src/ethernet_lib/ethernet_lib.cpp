@@ -348,8 +348,6 @@ TestOutput EthernetTesting::testJumboFramesSupport() {
     data.push_back("ip link: " + maxMtu);
 
   // Check if BCM genet driver supports jumbo frames
-  std::string driver = ethReadFile("/sys/class/net/" + std::string(ETH_IFACE) +
-                                   "/device/uevent");
   data.push_back("Pi5 GbE driver: bcmgenet (BCM2712 built-in MAC)");
 
   if (mtu >= 9000) {
@@ -669,8 +667,8 @@ TestOutput EthernetTesting::testTsnTimePrecision() {
   if (!chrony.empty())
     data.push_back("chrony: " + chrony);
 
-  std::string ptp =
-      ethRunCmd("ptp4l -i eth0 -q -2 --summary_interval=0 2>/dev/null &");
+  // Keep the probe invocation; only the result was unused.
+  (void)ethRunCmd("ptp4l -i eth0 -q -2 --summary_interval=0 2>/dev/null &");
   data.push_back("Time sync method: chrony/NTP for software-only Pi5 TSN.");
   data.push_back("PASS: Time precision check complete.");
   {

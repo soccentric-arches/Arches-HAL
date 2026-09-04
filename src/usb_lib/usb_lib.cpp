@@ -776,7 +776,6 @@ TestOutput UsbTesting::testUsbMassStorageDevices() {
     std::string ifClass = readSysfs(dev + "/bInterfaceClass");
     std::string ifSub = readSysfs(dev + "/bInterfaceSubClass");
     std::string ifProtocol = readSysfs(dev + "/bInterfaceProtocol");
-    std::string driver = readSysfs(dev + "/driver"); // symlink target name
 
     if (ifClass == "08") {
       // Check for block device node created by the driver

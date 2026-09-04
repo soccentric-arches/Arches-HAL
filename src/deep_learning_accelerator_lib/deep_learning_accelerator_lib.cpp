@@ -114,9 +114,6 @@ static std::vector<std::string> listDirWithPrefix(const std::string &dir,
 static std::string probeHailoLinkStatus() {
   // Hailo-8 exposes a PCIe endpoint; check via lspci or sysfs
   // PCI vendor:device for Hailo-8 is 1e60:2864
-  std::string lspci =
-      readSysfsLine("/sys/bus/pci/devices/"); // not a file, just check
-  // Try hailo module info
   std::string mod = readSysfsLine(HAILO8_SYSFS_MOD + std::string("/version"));
   if (!mod.empty())
     return "hailo_pci v" + mod;

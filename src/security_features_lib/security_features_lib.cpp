@@ -286,7 +286,6 @@ TestOutput SecurityFeaturesTesting::testSecureStorage() {
                  std::string(cryptsetup ? "present" : "not installed"));
 
   // Check for fscrypt
-  std::string fscrypt =
       secRunCmd("cat /proc/filesystems 2>/dev/null | grep ext4");
   data.push_back("fscrypt: available via ext4 encryption (kernel 5.4+)");
 

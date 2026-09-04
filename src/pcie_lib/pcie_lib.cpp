@@ -966,10 +966,9 @@ TestOutput PcieTesting::testPciePowerManagement() {
                  std::to_string(unknownCount) + " unknown");
 
   {
-    bool overallPass = true;
     TestOutput _out;
-    _out.status = overallPass ? hal::Status::PASS : hal::Status::FAIL;
-    _out.severity = overallPass ? hal::Severity::INFO : hal::Severity::ERROR;
+    _out.status = hal::Status::PASS;
+    _out.severity = hal::Severity::INFO;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;

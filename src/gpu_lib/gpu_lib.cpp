@@ -1052,6 +1052,10 @@ TestOutput GpuTesting::testFp16TensorCorePerformance() {
       for (int j = 0; j < N_dim; ++j)
         C[i * N_dim + j] += A[i * K + k] * B[k * N_dim + j];
   auto t1 = std::chrono::steady_clock::now();
+  // Sink the result so the SGEMM loop is not dead-store-eliminated at -O3.
+  volatile float csumSink = 0.0f;
+  for (float v : C)
+    csumSink += v;
   double ms = std::chrono::duration<double, std::milli>(t1 - t0).count();
   long long flops = 2LL * M * K * N_dim;
   double gflops = static_cast<double>(flops) / ms / 1e6;

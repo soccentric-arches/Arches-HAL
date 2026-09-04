@@ -2044,8 +2044,6 @@ TestOutput CommunicationInterfaceTesting::testVariousCanBitrates() {
   for (const auto &iface : canIfaces) {
     std::string ifName = iface.substr(iface.rfind('/') + 1);
     // Read bitrate from sysfs statistics / netlink info
-    std::string bitrate =
-        readFile(iface + "/statistics/tx_bytes"); // placeholder
     std::string state = readFile(iface + "/operstate");
 
     data.push_back("[INFO] " + ifName + ": state=" + state);

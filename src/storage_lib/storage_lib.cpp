@@ -208,8 +208,6 @@ TestOutput StorageTesting::testEmmc51InterfaceFunctionality() {
   std::string type = storReadFile(MMCBLK_SYSFS + std::string("/device/type"));
   std::string speed =
       storReadFile(MMCBLK_SYSFS + std::string("/device/speed_class"));
-  std::string hs =
-      storReadFile(MMCBLK_SYSFS + std::string("/device/preferred_erase_size"));
 
   if (!name.empty())
     data.push_back("Card name: " + name);
@@ -430,8 +428,6 @@ TestOutput StorageTesting::testSequentialWritePerformance() {
   if (!speedClass.empty())
     data.push_back("SD speed class: " + speedClass);
 
-  std::string videoClass =
-      storReadFile(MMCBLK_SYSFS + std::string("/device/dsr"));
   // Also report from /proc/partitions
   std::string partInfo =
       storRunCmd("lsblk -d -o NAME,SIZE,TRAN /dev/mmcblk0 2>/dev/null");
