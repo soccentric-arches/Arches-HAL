@@ -666,7 +666,6 @@ TestOutput ClockAndTimingTesting::testPllLockStatus() {
     if (readSysFile("/proc/uptime", uptime)) {
       data.push_back("System uptime: " + uptime +
                      " s (PLLSYS implicitly locked)");
-      pllpFound = true;
     } else {
       data.push_back("FAIL: Cannot confirm PLLSYS lock");
       allRequiredOk = false;

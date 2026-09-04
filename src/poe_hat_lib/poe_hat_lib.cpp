@@ -272,7 +272,6 @@ TestOutput PoeHatTesting::testFanControl() {
         "2>/dev/null | head -2");
     if (!coolDev.empty()) {
       data.push_back("[PASS] Thermal cooling device found:\n" + coolDev);
-      found = true;
     } else {
       data.push_back("[INFO] No PoE HAT fan control found in hwmon or thermal "
                      "cooling devices");

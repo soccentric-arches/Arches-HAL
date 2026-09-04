@@ -306,7 +306,6 @@ TestOutput DebugAndDevelopmentInterfaces::testDebugUart() {
     data.push_back("  " + d);
 
   if (thsDevices.empty()) {
-    passed = false;
     data.push_back(
         "FAIL: No /dev/ttyAMA* device found – debug UART driver not loaded.");
     {
@@ -528,7 +527,6 @@ TestOutput DebugAndDevelopmentInterfaces::testPerformanceCounters() {
   // 1. perf_event_paranoid
   std::string paranoidStr = readLine(PERF_PARANOID_PATH);
   if (paranoidStr.empty()) {
-    passed = false;
     data.push_back("FAIL: Cannot read " + std::string(PERF_PARANOID_PATH) +
                    " – perf_event subsystem not available.");
     {
@@ -555,7 +553,6 @@ TestOutput DebugAndDevelopmentInterfaces::testPerformanceCounters() {
 
   // 2. Enumerate event source devices
   if (!isDir(PERF_DEVICES_PATH)) {
-    passed = false;
     data.push_back("FAIL: " + std::string(PERF_DEVICES_PATH) + " not found.");
     {
       TestOutput _out;

@@ -143,7 +143,6 @@ TestOutput UsbTesting::testUsbHostMode() {
     data.push_back("[PASS] xhci-hcd platform driver is bound: " + xhciRP1);
   }
   if (!driverPresent && pathExists(xhciHcd)) {
-    driverPresent = true;
     data.push_back("[PASS] xhci-hcd driver bound: " + xhciHcd);
   }
 

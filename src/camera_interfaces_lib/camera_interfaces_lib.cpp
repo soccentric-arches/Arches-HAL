@@ -1295,7 +1295,6 @@ TestOutput CameraInterfacesTesting::testAutoFocus() {
   for (int i = 0; i < 4; ++i) {
     std::string foc = "/dev/focuser" + std::to_string(i);
     if (pathExists(foc)) {
-      afFound = true;
       data.push_back("[PASS] Focuser device node: " + foc);
     }
   }
