@@ -79,7 +79,7 @@ static std::vector<std::string> listDir(const std::string &path) {
   DIR *dir = opendir(path.c_str());
   if (!dir)
     return entries;
-  struct dirent *ent;
+  const struct dirent *ent;
   while ((ent = readdir(dir)) != nullptr) {
     std::string name = ent->d_name;
     if (name == "." || name == "..")

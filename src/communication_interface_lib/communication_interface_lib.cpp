@@ -59,7 +59,7 @@ std::vector<std::string> listDevNodes(const std::string &dir,
   DIR *dp = opendir(dir.c_str());
   if (!dp)
     return result;
-  struct dirent *de;
+  const struct dirent *de;
   while ((de = readdir(dp)) != nullptr) {
     std::string name = de->d_name;
     if (name.rfind(prefix, 0) == 0) {

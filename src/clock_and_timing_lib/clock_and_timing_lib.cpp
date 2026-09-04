@@ -274,7 +274,7 @@ TestOutput ClockAndTimingTesting::testPcieReferenceClock() {
       }
     }
     int devCount = 0;
-    struct dirent *entry;
+    const struct dirent *entry;
     while ((entry = ::readdir(dir)) != nullptr) {
       if (entry->d_name[0] != '.')
         ++devCount;
@@ -357,7 +357,7 @@ TestOutput ClockAndTimingTesting::testUsbReferenceClock() {
   DIR *dir = ::opendir(usbBus.c_str());
   if (dir) {
     int cnt = 0;
-    struct dirent *e;
+    const struct dirent *e;
     while ((e = ::readdir(dir)) != nullptr)
       if (e->d_name[0] != '.')
         ++cnt;
@@ -437,7 +437,7 @@ TestOutput ClockAndTimingTesting::testEthernetReferenceClock() {
   }
 
   std::vector<std::string> ifaces;
-  struct dirent *e;
+  const struct dirent *e;
   while ((e = ::readdir(dir)) != nullptr) {
     std::string n = e->d_name;
     if (n == "." || n == "lo" || n == "..")
@@ -844,7 +844,7 @@ TestOutput ClockAndTimingTesting::testRtcAccuracy() {
 
   char rtcBuf[64]{}, sysBuf[64]{};
   ::strftime(rtcBuf, sizeof(rtcBuf), "%Y-%m-%d %H:%M:%S", &rtcTmStd);
-  struct tm *sysTmPtr = ::gmtime(&sysEpoch);
+  const struct tm *sysTmPtr = ::gmtime(&sysEpoch);
   ::strftime(sysBuf, sizeof(sysBuf), "%Y-%m-%d %H:%M:%S", sysTmPtr);
 
   long diffSec =
@@ -1059,7 +1059,7 @@ TestOutput ClockAndTimingTesting::testRtcAlarmFunctionality() {
   curStd.tm_year = curTm.tm_year;
   curStd.tm_isdst = 0;
   time_t futureEpoch = ::timegm(&curStd) + 5;
-  struct tm *futureTm = ::gmtime(&futureEpoch);
+  const struct tm *futureTm = ::gmtime(&futureEpoch);
 
   struct rtc_time alarmTm {};
   alarmTm.tm_sec = futureTm->tm_sec;

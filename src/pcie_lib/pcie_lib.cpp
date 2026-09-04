@@ -2037,7 +2037,7 @@ std::vector<std::string> PcieTesting::getPcieDevices() {
   std::vector<std::string> devices;
   DIR *dir = opendir("/sys/bus/pci/devices");
   if (dir) {
-    struct dirent *entry;
+    const struct dirent *entry;
     while ((entry = readdir(dir)) != nullptr) {
       if (entry->d_name[0] != '.') {
         devices.push_back(std::string("/sys/bus/pci/devices/") + entry->d_name);

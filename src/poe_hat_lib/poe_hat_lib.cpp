@@ -66,7 +66,7 @@ static std::vector<std::string> poeListHwmon() {
   DIR *d = opendir(base.c_str());
   if (!d)
     return nodes;
-  struct dirent *e;
+  const struct dirent *e;
   while ((e = readdir(d)) != nullptr) {
     std::string n = e->d_name;
     if (n.find("hwmon") == 0)

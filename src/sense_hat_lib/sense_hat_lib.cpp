@@ -67,7 +67,7 @@ static std::vector<std::string> shListIioDevices() {
   DIR *d = opendir(base.c_str());
   if (!d)
     return devs;
-  struct dirent *e;
+  const struct dirent *e;
   while ((e = readdir(d)) != nullptr) {
     std::string n = e->d_name;
     if (n.find("iio:device") == 0 && !shReadFile(base + n + "/name").empty())

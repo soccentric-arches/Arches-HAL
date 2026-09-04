@@ -74,7 +74,7 @@ static std::vector<std::string> getUsbDevices() {
   DIR *dir = opendir(base.c_str());
   if (!dir)
     return devs;
-  struct dirent *entry;
+  const struct dirent *entry;
   while ((entry = readdir(dir)) != nullptr) {
     std::string name = entry->d_name;
     if (name == "." || name == "..")
@@ -210,7 +210,7 @@ TestOutput UsbTesting::testUsbDeviceMode() {
   }
 
   int udcCount = 0;
-  struct dirent *entry;
+  const struct dirent *entry;
   while ((entry = readdir(dir)) != nullptr) {
     std::string name = entry->d_name;
     if (name == "." || name == "..")
@@ -472,7 +472,7 @@ TestOutput UsbTesting::testUsbPowerDelivery() {
   DIR *dir = opendir(psSysfs.c_str());
   int pdEntries = 0;
   if (dir) {
-    struct dirent *entry;
+    const struct dirent *entry;
     while ((entry = readdir(dir)) != nullptr) {
       std::string name = entry->d_name;
       if (name == "." || name == "..")
@@ -929,7 +929,7 @@ TestOutput UsbTesting::testUsbNetworkAdapters() {
   const std::string netClass = "/sys/class/net";
   DIR *dir = opendir(netClass.c_str());
   if (dir) {
-    struct dirent *entry;
+    const struct dirent *entry;
     while ((entry = readdir(dir)) != nullptr) {
       std::string iface = entry->d_name;
       if (iface == "." || iface == ".." || iface == "lo")
