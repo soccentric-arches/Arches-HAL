@@ -6,6 +6,7 @@
 #include <cstdlib>
 #include <fstream>
 #include <sstream>
+#include <stdexcept>
 #include <sys/stat.h>
 
 namespace {
@@ -129,6 +130,11 @@ Stm32TransportConfig Stm32Transport::fromEnvironment() {
 
 std::vector<std::uint8_t>
 Stm32Transport::encodeFrame(const Stm32ProtocolFrame &frame) {
+  // Payload length is a single byte on the wire (max 255).
+  if (frame.payload.size() > 255) {
+    throw std::invalid_argument("STM32 frame payload exceeds 255 bytes (" +
+                                std::to_string(frame.payload.size()) + ")");
+  }
   std::vector<std::uint8_t> raw;
   raw.reserve(frame.payload.size() + 6);
   raw.push_back(arches::platform::STM32_SOF);
@@ -242,8 +248,12 @@ Stm32Transport::roundTrip(const Stm32ProtocolFrame &frame) const {
       result.detail = "Protocol encode/decode verification failed.";
     } else {
       result.status = hal::Status::PASS;
-      result.detail = config_.mockMode ? "Mock STM32 round-trip succeeded."
-                                       : "STM32 round-trip succeeded.";
+      // Be explicit about what actually happened: without real MCU I/O this
+      // is a host-side protocol self-verification, not a hardware response.
+      result.detail = config_.mockMode
+                          ? "Mock STM32 round-trip succeeded."
+                          : "Host-side protocol self-verification succeeded "
+                            "(no MCU I/O performed).";
       result.response = decoded.payload;
     }
   }

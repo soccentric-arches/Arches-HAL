@@ -2,7 +2,7 @@
  * @file camera_module3_lib.h
  * @brief Header file for CameraModule3Testing class
  * @author sandesh ghimire
- * @copyright (C) Lucid Motors */
+ * @copyright (C) Soccentric LLC */
 #ifndef CAMERAMODULE3TESTING_H
 #define CAMERAMODULE3TESTING_H
 #include "lib_base.h"

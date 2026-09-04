@@ -10,7 +10,7 @@
  *
  * Tests use V4L2 sysfs, libcamera CLI tools, media-ctl, and dmesg.
  * @author sandesh ghimire
- * @copyright (C) Lucid Motors
+ * @copyright (C) Soccentric LLC
  */
 
 #include "camera_module3_lib.h"

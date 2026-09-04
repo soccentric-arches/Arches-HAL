@@ -7,7 +7,7 @@
  *        gyroscope, and magnetometer channels via /sys/bus/iio/devices/.
  *        If no IMU is connected, tests pass with an informational warning.
  * @author sandesh ghimire
- * @copyright (C) Lucid Motors
+ * @copyright (C) Soccentric LLC
  */
 
 #include "imu_lib.h"
@@ -340,9 +340,9 @@ TestOutput ImuTesting::testImuTemperatureCompensation() {
     std::string tempOff = imuReadFile(dev + "/in_temp_offset");
     if (!tempRaw.empty()) {
       std::string name = imuReadFile(dev + "/name");
-      double raw = std::stod(tempRaw);
-      double scale = tempScale.empty() ? 1.0 : std::stod(tempScale);
-      double off = tempOff.empty() ? 0.0 : std::stod(tempOff);
+      double raw = parseDoubleOr(tempRaw, 0.0);
+      double scale = tempScale.empty() ? 1.0 : parseDoubleOr(tempScale, 1.0);
+      double off = tempOff.empty() ? 0.0 : parseDoubleOr(tempOff, 0.0);
       double tempC = (raw + off) * scale;
       data.push_back("[PASS] " + name + " die temp: " + std::to_string(tempC) +
                      " °C");

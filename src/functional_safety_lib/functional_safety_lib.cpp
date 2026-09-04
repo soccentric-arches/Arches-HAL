@@ -7,7 +7,7 @@
  *        map Jetson-specific tests (lockstep CPU, ASIL rails) to Pi5
  * equivalents.
  * @author sandesh ghimire
- * @copyright (C) Lucid Motors
+ * @copyright (C) Soccentric LLC
  */
 
 #include "functional_safety_lib.h"
@@ -125,7 +125,7 @@ TestOutput FunctionalSafetyTesting::testEccOnMemories() {
 
   // pstore as memory-error proxy
   std::string pstoreFiles = fsRunCmd("ls /sys/fs/pstore/ 2>/dev/null | wc -l");
-  bool cleanPstore = (std::stoi(pstoreFiles.empty() ? "0" : pstoreFiles) == 0);
+  bool cleanPstore = parseIntOr(pstoreFiles, 0) == 0;
   data.push_back(cleanPstore ? "[PASS] pstore empty — no recorded memory faults"
                              : "[WARN] pstore entries: " + pstoreFiles);
 

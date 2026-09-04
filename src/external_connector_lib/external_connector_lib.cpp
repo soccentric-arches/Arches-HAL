@@ -7,7 +7,7 @@
  *        CAN tests use SocketCAN (can0) if a MCP2515 or SN65HVD230 HAT is
  * fitted.
  * @author sandesh ghimire
- * @copyright (C) Lucid Motors
+ * @copyright (C) Soccentric LLC
  */
 
 #include "external_connector_lib.h"
@@ -670,7 +670,7 @@ TestOutput ExternalConnectorTesting::testAllConnectorPinAssignments() {
   // Enumerate GPIO lines and compare against expected count (27 user-accessible
   // GPIOs)
   std::string gpioCount = ecRunCmd("gpioinfo 2>/dev/null | grep -c 'line'");
-  int count = gpioCount.empty() ? 0 : std::stoi(gpioCount);
+  int count = static_cast<int>(parseIntOr(gpioCount, 0));
   bool gpioOk = (count >= 27);
   data.push_back(gpioOk ? "[PASS] GPIO lines: " + std::to_string(count)
                         : "[WARN] GPIO lines: " + std::to_string(count) +

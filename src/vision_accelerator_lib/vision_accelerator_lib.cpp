@@ -9,7 +9,7 @@
  *          - "DMA engine" → BCM2712 DMA controllers
  *          - "Computer vision" → V4L2 ISP (bcm2835-isp) + OpenCV + TFLite
  * @author sandesh ghimire
- * @copyright (C) Lucid Motors
+ * @copyright (C) Soccentric LLC
  */
 
 #include "vision_accelerator_lib.h"
@@ -174,15 +174,16 @@ TestOutput VisionAcceleratorTesting::testScalarExecutionUnits() {
       "cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq 2>/dev/null");
   if (!cpuFreq.empty())
     data.push_back("[INFO] CPU0 current freq: " +
-                   std::to_string(std::stoi(cpuFreq) / 1000) + " MHz");
+                   std::to_string(parseIntOr(cpuFreq, 0) / 1000) + " MHz");
 
   std::string maxFreq = vaRunCmd(
       "cat /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_max_freq 2>/dev/null");
-  data.push_back("[INFO] CPU max freq: " +
-                 (maxFreq.empty()
-                      ? "N/A"
-                      : std::to_string(std::stoi(maxFreq) / 1000) + " MHz") +
-                 " (rated " + std::to_string(RPI5_CPU_MAX_FREQ_MHZ) + " MHz)");
+  data.push_back(
+      "[INFO] CPU max freq: " +
+      (maxFreq.empty()
+           ? "N/A"
+           : std::to_string(parseIntOr(maxFreq, 0) / 1000) + " MHz") +
+      " (rated " + std::to_string(RPI5_CPU_MAX_FREQ_MHZ) + " MHz)");
 
   {
     TestOutput _out;

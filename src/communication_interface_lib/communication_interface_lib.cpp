@@ -1039,8 +1039,9 @@ TestOutput CommunicationInterfaceTesting::testSpiModes() {
     }
     {
       TestOutput _out;
-      _out.status = hal::Status::PASS;
+      _out.status = hal::Status::SKIPPED;
       _out.severity = hal::Severity::INFO;
+      _out.reason["detail"] = "no spidev device nodes present";
       for (size_t _i = 0; _i < data.size(); ++_i)
         _out.reason["detail_" + std::to_string(_i)] = data[_i];
       return _out;
@@ -1055,8 +1056,9 @@ TestOutput CommunicationInterfaceTesting::testSpiModes() {
                    ": cannot open – documenting hardware capability");
     {
       TestOutput _out;
-      _out.status = hal::Status::PASS;
+      _out.status = hal::Status::SKIPPED;
       _out.severity = hal::Severity::INFO;
+      _out.reason["detail"] = "could not open " + dev;
       for (size_t _i = 0; _i < data.size(); ++_i)
         _out.reason["detail_" + std::to_string(_i)] = data[_i];
       return _out;

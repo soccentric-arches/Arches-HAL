@@ -7,7 +7,7 @@
  *        and basic NMEA data can be obtained.  If no receiver is connected,
  *        tests pass with an informational warning.
  * @author sandesh ghimire
- * @copyright (C) Lucid Motors
+ * @copyright (C) Soccentric LLC
  */
 
 #include "gnss_lib.h"
@@ -220,7 +220,11 @@ TestOutput GnssTesting::testPositionAccuracy() {
     while (std::getline(ss, token, ',')) {
       if (idx == 8 && !token.empty()) {
         data.push_back("[INFO] HDOP: " + token);
-        double hdop = std::stod(token);
+        double hdop = parseDoubleOr(token, -1.0);
+        if (hdop < 0.0) {
+          data.push_back("[WARN] HDOP unparseable");
+          continue;
+        }
         data.push_back(hdop < 2.0 ? "[PASS] HDOP < 2.0 (good accuracy)"
                                   : "[WARN] HDOP >= 2.0 (poor geometry)");
       }
@@ -289,7 +293,10 @@ TestOutput GnssTesting::testGnssAntennaConnection() {
     int idx = 0;
     while (std::getline(ss, token, ',')) {
       if (idx == 3 && !token.empty()) {
-        int svCount = std::stoi(token);
+        int svCount = static_cast<int>(parseIntOr(token, -1));
+        if (svCount < 0) {
+          data.push_back("[WARN] Satellite count unparseable");
+        }
         data.push_back("[INFO] Satellites in view: " + std::to_string(svCount));
         data.push_back(svCount >= 4
                            ? "[PASS] Antenna receiving signal from " +

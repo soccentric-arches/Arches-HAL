@@ -5,7 +5,6 @@
  * @copyright (C) Soccentric LLC */
 
 #include "lib_base.h"
-#include "platform_rpi5.h"
 #include <chrono>
 #include <iostream>
 #include <stdexcept>
@@ -129,6 +128,12 @@ void TestBase::runTests(
           break;
       }
     });
+  } else if (mode == TestMode::LONG_TERM || mode == TestMode::EVENT_BASED) {
+    // These modes have dedicated entry points; route loudly instead of
+    // silently doing nothing.
+    std::cerr << "[TestBase] ERROR: runTests() does not support mode "
+              << static_cast<int>(mode)
+              << "; use runLongTerm() or runEventTest()\n";
   }
 }
 

@@ -125,6 +125,8 @@ TestOutput MipiDsiTesting::testDsiHostDriverBinding() {
   }
   if (connector.empty())
     return makeSkipped("no DSI connectors present");
+  if (!isSafeName(connector))
+    return makeSkipped("suspicious connector name, refusing to run readlink");
   const std::string link =
       runCommand(cmd_, "readlink -f /sys/class/drm/" + connector +
                            "/device/driver 2>/dev/null");

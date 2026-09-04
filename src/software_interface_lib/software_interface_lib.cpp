@@ -96,7 +96,7 @@ TestOutput SoftwareInterfaceTesting::testLinuxKernelBoot() {
   // Uptime
   std::string uptimeStr = swReadFile("/proc/uptime");
   if (!uptimeStr.empty()) {
-    double uptime = std::stod(uptimeStr);
+    double uptime = parseDoubleOr(uptimeStr, -1.0);
     data.push_back(
         "[PASS] Uptime: " + std::to_string(static_cast<int>(uptime)) + "s");
   }
@@ -557,7 +557,7 @@ TestOutput SoftwareInterfaceTesting::testSensorDriverFramework() {
   // hwmon sensors (BCM2712 thermal + MXL7704 PMIC)
   std::string hwmonCount = swRunCmd("ls /sys/class/hwmon/ 2>/dev/null | wc -l");
   data.push_back("[INFO] hwmon devices: " + hwmonCount);
-  if (std::stoi(hwmonCount.empty() ? "0" : hwmonCount) > 0) {
+  if (parseIntOr(hwmonCount, 0) > 0) {
     std::string hwmonNames =
         swRunCmd("for d in /sys/class/hwmon/hwmon*; do n=$(cat $d/name "
                  "2>/dev/null); echo $d: $n; done 2>/dev/null");
@@ -573,8 +573,8 @@ TestOutput SoftwareInterfaceTesting::testSensorDriverFramework() {
   std::string inputCount = swRunCmd("ls /sys/class/input/ 2>/dev/null | wc -l");
   data.push_back("[INFO] Input devices: " + inputCount);
 
-  bool hasSensors = (std::stoi(hwmonCount.empty() ? "0" : hwmonCount) > 0) ||
-                    (std::stoi(tzCount.empty() ? "0" : tzCount) > 0);
+  bool hasSensors =
+      (parseIntOr(hwmonCount, 0) > 0) || (parseIntOr(tzCount, 0) > 0);
   {
     TestOutput _out;
     _out.status = hasSensors ? hal::Status::PASS : hal::Status::FAIL;

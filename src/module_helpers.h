@@ -15,6 +15,7 @@
 #include "lib_base.h"
 #include "provider_base.h"
 
+#include <cctype>
 #include <memory>
 #include <string>
 #include <vector>
@@ -71,6 +72,38 @@ inline void addDetail(TestOutput &out, const std::string &key,
 }
 
 // ============================================================
+// Numeric parsing helpers (exception-safe)
+// ============================================================
+
+/// Parse a double from s; returns fallback on empty/invalid input.
+/// Use instead of bare std::stod on sysfs/command output so a malformed
+/// value becomes a graceful skip/default rather than a thrown exception.
+inline double parseDoubleOr(const std::string &s, double fallback) {
+  try {
+    size_t pos = 0;
+    double v = std::stod(s, &pos);
+    if (pos != s.size())
+      return fallback;
+    return v;
+  } catch (...) {
+    return fallback;
+  }
+}
+
+/// Parse an integer from s; returns fallback on empty/invalid input.
+inline long long parseIntOr(const std::string &s, long long fallback) {
+  try {
+    size_t pos = 0;
+    long long v = std::stoll(s, &pos);
+    if (pos != s.size())
+      return fallback;
+    return v;
+  } catch (...) {
+    return fallback;
+  }
+}
+
+// ============================================================
 // Periodic-safe test classification
 // ============================================================
 
@@ -98,6 +131,22 @@ filterPeriodicSafe(const std::vector<std::string> &allTests,
 // ============================================================
 // Common sysfs reading helpers (use injected providers)
 // ============================================================
+
+/// True when name is safe to interpolate into a shell command:
+/// alphanumeric, underscore, hyphen, dot, colon only, non-empty,
+/// no leading hyphen (so it cannot be parsed as a command flag).
+/// Sysfs/devfs entry names come from the kernel and match this, but
+/// providers are injectable — validate before building command strings.
+inline bool isSafeName(const std::string &name) {
+  if (name.empty() || name[0] == '-')
+    return false;
+  for (const char c : name) {
+    if (!(std::isalnum(static_cast<unsigned char>(c)) || c == '_' || c == '-' ||
+          c == '.' || c == ':'))
+      return false;
+  }
+  return true;
+}
 
 /// Read a sysfs file and return its trimmed content.
 inline std::string readSysfs(const std::shared_ptr<SysfsProvider> &sysfs,

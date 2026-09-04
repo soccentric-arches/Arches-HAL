@@ -2,7 +2,7 @@
  * @file sense_hat_lib.h
  * @brief Header file for SenseHatTesting class
  * @author sandesh ghimire
- * @copyright (C) Lucid Motors */
+ * @copyright (C) Soccentric LLC */
 #ifndef SENSEHATTESTING_H
 #define SENSEHATTESTING_H
 #include "lib_base.h"

@@ -69,9 +69,9 @@ TestOutput AccelerometerTesting::testAxisReads() {
   if (x < 0 || y < 0 || z < 0)
     return makeFailed("one or more axis reads failed");
   TestOutput out = makePassed("axis samples read");
-  addMetric(out, "accel_x_raw", static_cast<double>(x));
-  addMetric(out, "accel_y_raw", static_cast<double>(y));
-  addMetric(out, "accel_z_raw", static_cast<double>(z));
+  addMetric(out, "accel_x_raw", static_cast<int64_t>(x));
+  addMetric(out, "accel_y_raw", static_cast<int64_t>(y));
+  addMetric(out, "accel_z_raw", static_cast<int64_t>(z));
   return out;
 }
 
@@ -144,8 +144,10 @@ TestOutput AccelerometerTesting::testMagnitudeSanity() {
   const bool sane = magnitudeG >= 0.2 && magnitudeG <= 2.0;
   TestOutput out = makePassed(sane ? "static magnitude within expected range"
                                    : "static magnitude out of expected range");
-  if (!sane)
+  if (!sane) {
     out.status = hal::Status::FAIL;
+    out.severity = hal::Severity::ERROR;
+  }
   addMetric(out, "magnitude_g", magnitudeG);
   return out;
 }

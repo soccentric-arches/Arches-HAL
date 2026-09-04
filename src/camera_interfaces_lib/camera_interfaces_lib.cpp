@@ -148,7 +148,7 @@ TestOutput CameraInterfacesTesting::testAllCsi2LanesFunctionality() {
   }
   if (!unicamFound) {
     // Fallback: check kernel module
-    if (isModuleLoaded("unicam") || isModuleLoaded("unicam")) {
+    if (isModuleLoaded("unicam") || isModuleLoaded("bcm2835_unicam")) {
       unicamFound = true;
       data.push_back("[PASS] Unicam kernel module is loaded");
     } else {
@@ -211,6 +211,20 @@ TestOutput CameraInterfacesTesting::testAllCsi2LanesFunctionality() {
     data.push_back("[INFO] /proc/device-tree/unicam not found");
   }
 
+  // No hardware evidence at all (no Unicam device/module, no video nodes,
+  // no DT node) — report SKIP rather than an unconditional PASS.
+  if (!unicamFound && videoDev.empty() && !pathExists(dtCamera)) {
+    TestOutput _out;
+    _out.status = hal::Status::SKIPPED;
+    _out.severity = hal::Severity::INFO;
+    _out.reason["detail"] =
+        "camera subsystem not present (no Unicam device/module, no "
+        "/dev/video* nodes, no device-tree node)";
+    for (size_t _i = 0; _i < data.size(); ++_i)
+      _out.reason["detail_" + std::to_string(_i)] = data[_i];
+    return _out;
+  }
+
   {
     TestOutput _out;
     _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
@@ -234,7 +248,7 @@ TestOutput CameraInterfacesTesting::testCsi2DphyOperation() {
   data.push_back("=== CSI-2 D-PHY Operation (Raspberry Pi 5) ===");
 
   // Check kernel module
-  bool modLoaded = isModuleLoaded("unicam") || isModuleLoaded("unicam");
+  bool modLoaded = isModuleLoaded("unicam") || isModuleLoaded("bcm2835_unicam");
   if (modLoaded)
     data.push_back("[PASS] Unicam/unicam kernel module loaded (D-PHY capable)");
   else
@@ -680,8 +694,10 @@ TestOutput CameraInterfacesTesting::testRaw8() {
                    "ISP/Unicam hardware");
     {
       TestOutput _out;
-      _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-      _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+      _out.status = hal::Status::SKIPPED;
+      _out.severity = hal::Severity::INFO;
+      _out.reason["detail"] =
+          "no /dev/video* nodes present; camera hardware absent";
       for (size_t _i = 0; _i < data.size(); ++_i)
         _out.reason["detail_" + std::to_string(_i)] = data[_i];
       return _out;
@@ -737,8 +753,10 @@ TestOutput CameraInterfacesTesting::testRaw10() {
                    "ISP/Unicam hardware");
     {
       TestOutput _out;
-      _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-      _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+      _out.status = hal::Status::SKIPPED;
+      _out.severity = hal::Severity::INFO;
+      _out.reason["detail"] =
+          "no /dev/video* nodes present; camera hardware absent";
       for (size_t _i = 0; _i < data.size(); ++_i)
         _out.reason["detail_" + std::to_string(_i)] = data[_i];
       return _out;
@@ -794,8 +812,10 @@ TestOutput CameraInterfacesTesting::testRaw12() {
                    "ISP hardware");
     {
       TestOutput _out;
-      _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-      _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+      _out.status = hal::Status::SKIPPED;
+      _out.severity = hal::Severity::INFO;
+      _out.reason["detail"] =
+          "no /dev/video* nodes present; camera hardware absent";
       for (size_t _i = 0; _i < data.size(); ++_i)
         _out.reason["detail_" + std::to_string(_i)] = data[_i];
       return _out;
@@ -851,8 +871,10 @@ TestOutput CameraInterfacesTesting::testRaw14() {
                    "ISP hardware");
     {
       TestOutput _out;
-      _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-      _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+      _out.status = hal::Status::SKIPPED;
+      _out.severity = hal::Severity::INFO;
+      _out.reason["detail"] =
+          "no /dev/video* nodes present; camera hardware absent";
       for (size_t _i = 0; _i < data.size(); ++_i)
         _out.reason["detail_" + std::to_string(_i)] = data[_i];
       return _out;
@@ -909,8 +931,10 @@ TestOutput CameraInterfacesTesting::testYuv422() {
         "[INFO] No /dev/video* nodes; Orin ISP supports YUV 4:2:2 output");
     {
       TestOutput _out;
-      _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-      _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+      _out.status = hal::Status::SKIPPED;
+      _out.severity = hal::Severity::INFO;
+      _out.reason["detail"] =
+          "no /dev/video* nodes present; camera hardware absent";
       for (size_t _i = 0; _i < data.size(); ++_i)
         _out.reason["detail_" + std::to_string(_i)] = data[_i];
       return _out;
@@ -979,8 +1003,10 @@ TestOutput CameraInterfacesTesting::testRgbFormats() {
         "[INFO] No /dev/video* nodes; Orin ISP supports RGB output formats");
     {
       TestOutput _out;
-      _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-      _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+      _out.status = hal::Status::SKIPPED;
+      _out.severity = hal::Severity::INFO;
+      _out.reason["detail"] =
+          "no /dev/video* nodes present; camera hardware absent";
       for (size_t _i = 0; _i < data.size(); ++_i)
         _out.reason["detail_" + std::to_string(_i)] = data[_i];
       return _out;
@@ -1125,8 +1151,10 @@ TestOutput CameraInterfacesTesting::testAutoExposure() {
                    "stack on Orin");
     {
       TestOutput _out;
-      _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-      _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+      _out.status = hal::Status::SKIPPED;
+      _out.severity = hal::Severity::INFO;
+      _out.reason["detail"] =
+          "no /dev/video* nodes present; camera hardware absent";
       for (size_t _i = 0; _i < data.size(); ++_i)
         _out.reason["detail_" + std::to_string(_i)] = data[_i];
       return _out;
@@ -1195,8 +1223,10 @@ TestOutput CameraInterfacesTesting::testAutoWhiteBalance() {
     data.push_back("[INFO] No camera nodes; AWB handled by Argus/ISP on Orin");
     {
       TestOutput _out;
-      _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
-      _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
+      _out.status = hal::Status::SKIPPED;
+      _out.severity = hal::Severity::INFO;
+      _out.reason["detail"] =
+          "no /dev/video* nodes present; camera hardware absent";
       for (size_t _i = 0; _i < data.size(); ++_i)
         _out.reason["detail_" + std::to_string(_i)] = data[_i];
       return _out;

@@ -6,7 +6,7 @@
  *        Physical tests (humidity chamber, vibration table, EMI/EMC lab) are
  *        documented but cannot be performed programmatically.
  * @author sandesh ghimire
- * @copyright (C) Lucid Motors
+ * @copyright (C) Soccentric LLC
  */
 
 #include "environmental_lib.h"
@@ -82,7 +82,14 @@ TestOutput EnvironmentalTesting::testTemperatureRange() {
     std::string type = envReadFile(base + "/type");
     if (tempStr.empty())
       continue;
-    double tempC = std::stod(tempStr) / 1000.0;
+    double tempC = 0.0;
+    try {
+      tempC = std::stod(tempStr) / 1000.0;
+    } catch (...) {
+      data.push_back("[WARN] zone" + std::to_string(z) +
+                     ": unreadable temperature value \"" + tempStr + "\"");
+      continue;
+    }
     bool ok =
         tempC >= 0.0 && tempC < static_cast<double>(RPI5_THERMAL_THROTTLE_C);
     data.push_back((ok ? "[PASS] " : "[WARN] ") +

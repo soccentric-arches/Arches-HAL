@@ -8,7 +8,7 @@
  *        External GMSL-2 deserializers (MAX96724/DS90UB954) may be present on
  *        camera HATs; tests probe for those over I2C.
  * @author sandesh ghimire
- * @copyright (C) Lucid Motors
+ * @copyright (C) Soccentric LLC
  */
 
 #include "serializer_deserializer_lib.h"

@@ -119,6 +119,8 @@ TestOutput UartTesting::testBaudRateRead() {
   const std::string port = firstSerialPort();
   if (port.empty())
     return makeSkipped("no hardware serial port to query");
+  if (!isSafeName(port))
+    return makeSkipped("suspicious serial port name, refusing to run stty");
   const std::string out =
       runCommand(cmd_, "stty -F /dev/" + port + " 2>/dev/null");
   if (out.empty())
@@ -147,6 +149,8 @@ TestOutput UartTesting::testDriverBinding() {
   const std::string port = firstSerialPort();
   if (port.empty())
     return makeSkipped("no hardware serial port to check");
+  if (!isSafeName(port))
+    return makeSkipped("suspicious serial port name, refusing to run readlink");
   const std::string link =
       runCommand(cmd_, "readlink -f /sys/class/tty/" + port +
                            "/device/driver 2>/dev/null");

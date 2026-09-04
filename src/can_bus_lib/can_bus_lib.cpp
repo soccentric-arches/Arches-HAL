@@ -99,6 +99,9 @@ TestOutput CanBusTesting::testBitrateRead() {
   const std::string iface = firstCanInterface();
   if (iface.empty())
     return makeSkipped("no CAN interfaces present");
+  if (!isSafeName(iface))
+    return makeFailed("suspicious CAN interface name, refusing to run ip: " +
+                      iface);
   const std::string out =
       runCommand(cmd_, "ip -details link show " + iface + " 2>/dev/null");
   if (out.empty())

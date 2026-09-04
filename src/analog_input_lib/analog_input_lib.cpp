@@ -101,7 +101,7 @@ TestOutput AnalogInputTesting::testRawRead() {
   if (raw < 0)
     return makeFailed("raw read failed for " + rawFile);
   TestOutput out = makePassed("raw ADC sample read");
-  addMetric(out, "raw", static_cast<double>(raw));
+  addMetric(out, "raw", static_cast<int64_t>(raw));
   addDetail(out, "channel_file", rawFile);
   return out;
 }
@@ -167,10 +167,12 @@ TestOutput AnalogInputTesting::testSaturationCheck() {
                                    firstVal == 1023 || firstVal == 65535);
   TestOutput out = makePassed(railing ? "samples constant at rail — check input"
                                       : "samples collected");
-  if (railing)
+  if (railing) {
     out.status = hal::Status::FAIL;
-  addMetric(out, "samples_min", static_cast<double>(minVal));
-  addMetric(out, "samples_max", static_cast<double>(maxVal));
+    out.severity = hal::Severity::ERROR;
+  }
+  addMetric(out, "samples_min", static_cast<int64_t>(minVal));
+  addMetric(out, "samples_max", static_cast<int64_t>(maxVal));
   return out;
 }
 

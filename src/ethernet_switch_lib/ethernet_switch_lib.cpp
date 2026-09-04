@@ -7,7 +7,7 @@
  *        MDIO) may be present on a carrier board.  Tests probe for DSA
  *        (Distributed Switch Architecture) devices and Linux switchdev.
  * @author sandesh ghimire
- * @copyright (C) Lucid Motors
+ * @copyright (C) Soccentric LLC
  */
 
 #include "ethernet_switch_lib.h"

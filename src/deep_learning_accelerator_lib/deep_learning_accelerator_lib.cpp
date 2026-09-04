@@ -659,12 +659,13 @@ TestOutput DeepLearningAcceleratorTesting::testActivationFunctions() {
   static const float inputs[] = {-2.0f, -1.0f, 0.0f, 1.0f, 2.0f};
   constexpr int N = 5;
 
-  // ReLU: max(0, x)
+  // ReLU: max(0, x) — expected values hard-coded so a regression in the
+  // computation path is actually detectable.
+  static const float reluExpected[] = {0.0f, 0.0f, 0.0f, 1.0f, 2.0f};
   bool reluOk = true;
   for (int i = 0; i < N; ++i) {
-    float expected = std::max(0.0f, inputs[i]);
     float got = inputs[i] > 0.0f ? inputs[i] : 0.0f;
-    if (std::fabs(got - expected) > 1e-5f)
+    if (std::fabs(got - reluExpected[i]) > 1e-5f)
       reluOk = false;
   }
   data.push_back("ReLU correctness:    " +
@@ -673,12 +674,12 @@ TestOutput DeepLearningAcceleratorTesting::testActivationFunctions() {
     passed = false;
 
   // Leaky ReLU: α=0.1
+  static const float lreluExpected[] = {-0.2f, -0.1f, 0.0f, 1.0f, 2.0f};
   bool lreluOk = true;
   const float alpha = 0.1f;
   for (int i = 0; i < N; ++i) {
-    float expected = inputs[i] >= 0.0f ? inputs[i] : alpha * inputs[i];
     float got = inputs[i] >= 0.0f ? inputs[i] : alpha * inputs[i];
-    if (std::fabs(got - expected) > 1e-5f)
+    if (std::fabs(got - lreluExpected[i]) > 1e-5f)
       lreluOk = false;
   }
   data.push_back("Leaky ReLU (α=0.1) correctness: " +
@@ -687,11 +688,12 @@ TestOutput DeepLearningAcceleratorTesting::testActivationFunctions() {
     passed = false;
 
   // Sigmoid: 1/(1+exp(-x))
+  static const float sigExpected[] = {0.11920292f, 0.26894143f, 0.5f,
+                                      0.73105858f, 0.88079708f};
   bool sigOk = true;
   for (int i = 0; i < N; ++i) {
-    float expected = 1.0f / (1.0f + std::exp(-inputs[i]));
     float got = 1.0f / (1.0f + std::exp(-inputs[i]));
-    if (std::fabs(got - expected) > 1e-4f)
+    if (std::fabs(got - sigExpected[i]) > 1e-4f)
       sigOk = false;
   }
   data.push_back("Sigmoid correctness: " +
@@ -822,17 +824,11 @@ TestOutput DeepLearningAcceleratorTesting::testBatchNormalization() {
   for (int i = 0; i < ch; ++i)
     bnOut[i] = gamma * (x[i] - mu) / sqrtVar + beta;
 
-  // Expected: gamma*(-1/1)*1+0.5=-1.5, gamma*(0)*1+0.5=0.5,
-  //           gamma*(1/1)*1+0.5=2.5, gamma*(2/1)*1+0.5=4.5
-  bool bnOk =
-      std::fabs(bnOut[0] - (-1.5f + beta - beta + beta)) < 0.05f; // loose check
-  // Recompute precisely
-  float expected[ch];
+  // Expected values hard-coded: y = -1.5, 0.5, 2.5, 4.5 for x = 1..4.
+  static const float bnExpected[] = {-1.5f, 0.5f, 2.5f, 4.5f};
+  bool bnOk = true;
   for (int i = 0; i < ch; ++i)
-    expected[i] = gamma * (x[i] - mu) / sqrtVar + beta;
-  bnOk = true;
-  for (int i = 0; i < ch; ++i)
-    if (std::fabs(bnOut[i] - expected[i]) > 1e-4f)
+    if (std::fabs(bnOut[i] - bnExpected[i]) > 1e-4f)
       bnOk = false;
 
   data.push_back("BN correctness (4-channel, γ=2, β=0.5): " +
@@ -875,12 +871,16 @@ TestOutput DeepLearningAcceleratorTesting::testElementwiseOperations() {
   const float B[] = {2.0f, 3.0f, -1.0f, 4.0f};
   const int N = 4;
 
+  // Expected results hard-coded so a regression is detectable.
+  static const float addExpected[] = {3.0f, 1.0f, 2.0f, 8.0f};
+  static const float mulExpected[] = {2.0f, -6.0f, -3.0f, 16.0f};
+  static const float maxExpected[] = {2.0f, 3.0f, 3.0f, 4.0f};
+
   // ADD
   bool addOk = true;
   for (int i = 0; i < N; ++i) {
     float got = A[i] + B[i];
-    float exp = A[i] + B[i];
-    if (std::fabs(got - exp) > 1e-5f)
+    if (std::fabs(got - addExpected[i]) > 1e-5f)
       addOk = false;
   }
   data.push_back("Element-wise ADD correctness: " +
@@ -890,8 +890,7 @@ TestOutput DeepLearningAcceleratorTesting::testElementwiseOperations() {
   bool mulOk = true;
   for (int i = 0; i < N; ++i) {
     float got = A[i] * B[i];
-    float exp = A[i] * B[i];
-    if (std::fabs(got - exp) > 1e-5f)
+    if (std::fabs(got - mulExpected[i]) > 1e-5f)
       mulOk = false;
   }
   data.push_back("Element-wise MUL correctness: " +
@@ -901,8 +900,7 @@ TestOutput DeepLearningAcceleratorTesting::testElementwiseOperations() {
   bool maxOk = true;
   for (int i = 0; i < N; ++i) {
     float got = std::max(A[i], B[i]);
-    float exp = std::max(A[i], B[i]);
-    if (std::fabs(got - exp) > 1e-5f)
+    if (std::fabs(got - maxExpected[i]) > 1e-5f)
       maxOk = false;
   }
   data.push_back("Element-wise MAX correctness: " +
@@ -1519,15 +1517,9 @@ TestOutput DeepLearningAcceleratorTesting::testDlaThermalBehavior() {
     }
   }
 
-  // Check thermal throttling via clock reduction
-  // Replace probeDlaCoreClock() calls (no longer applicable)
-  long long currentClk = -1LL; // Hailo-8 clock not exposed via Pi5 sysfs
-  if (currentClk > 0) {
-    double clkMHz = 0.0; // Hailo-8 internal clock not accessible from host
-    (void)clkMHz;
-    data.push_back("Hailo-8 internal DSP clock: ~700 MHz (not accessible from "
-                   "Pi5 sysfs).");
-  }
+  // Hailo-8 internal clock is not exposed via Pi5 sysfs.
+  data.push_back("Hailo-8 internal DSP clock: ~700 MHz (not accessible from "
+                 "Pi5 sysfs).");
 
   data.push_back("Pi5 thermal protection: firmware throttles CPU/GPU at 80 °C, "
                  "shutdown at 85 °C.");

@@ -232,17 +232,17 @@ TestOutput ThermalManagementTesting::testBoardAmbientTemperature() {
 
   auto zone1 = thermal_->readZone(1);
   if (!zone1.valid) {
-    out.reason["rp1_zone"] = "RP1 south-bridge zone not available.";
+    out.reason["secondary_zone"] = "Secondary thermal zone not available.";
     out.monitoring["board_temp_c"] = std::string("N/A");
   } else {
-    out.reason["rp1_zone"] =
+    out.reason["secondary_zone"] =
         zone1.name + ": " + std::to_string(zone1.temperatureC) + " °C";
-    out.metrics["rp1_temperature_c"] = zone1.temperatureC;
+    out.metrics["secondary_zone_temperature_c"] = zone1.temperatureC;
     out.monitoring["board_temp_c"] = zone1.temperatureC;
     if (zone1.temperatureC > 85.0) {
       out.status = hal::Status::FAIL;
       out.severity = hal::Severity::WARNING;
-      out.reason["warning"] = "RP1 south-bridge temperature above 85°C.";
+      out.reason["warning"] = "Secondary zone temperature above 85°C.";
     }
   }
 

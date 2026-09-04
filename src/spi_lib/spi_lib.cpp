@@ -96,6 +96,8 @@ TestOutput SpiTesting::testLoopbackTransfer() {
   const std::string dev = firstWithPrefix(sysfs_, "/dev", "spidev");
   if (dev.empty())
     return makeSkipped("no spidev device node for loopback");
+  if (!isSafeName(dev))
+    return makeSkipped("suspicious spidev name, refusing to run spidev_test");
   const std::string out =
       runCommand(cmd_, "spidev_test -D /dev/" + dev + " -v -s 1000000 2>&1");
   if (out.empty())

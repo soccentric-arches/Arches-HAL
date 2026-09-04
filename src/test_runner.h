@@ -155,7 +155,7 @@ static int trParsePositiveInt(const std::string &s, const std::string &name) {
 }
 
 // ---------------------------------------------------------------------------
-// Built-in Raspberry Pi 5 hardware monitor items
+// Built-in Arches (Jetson) hardware monitor items
 // ---------------------------------------------------------------------------
 
 static std::string trReadFirstExisting(const std::vector<std::string> &paths) {
@@ -436,11 +436,13 @@ static void trPrintUsage(const std::string &name) {
       << "  " << name
       << " long-term  <interval_ms> <duration>   run for fixed duration\n"
       << "  " << name
-      << " monitor-test <interval_ms> <duration> long-term + Pi5 hw monitors\n"
+      << " monitor-test <interval_ms> <duration> long-term + Arches hw "
+         "monitors\n"
       << "  " << name
       << " event <poll_ms> <criteria> [max_dur]  fire callback on criteria\n"
       << "\nDuration: 500ms  30s  5m  2h  1d  (plain integer = ms)\n"
-      << "Criteria: any-fail | all-fail | all-pass | fail-rate-above-N\n";
+      << "Criteria: any-fail | all-fail | all-pass | fail-rate-above-N\n"
+      << "\n--strict: exit 1 if any test FAIL/ERROR (SKIPPED does not fail)\n";
 }
 
 // ---------------------------------------------------------------------------
@@ -456,12 +458,48 @@ template <typename T> static void trWaitForCompletion(T &tester) {
 }
 
 // ---------------------------------------------------------------------------
+// Strict-exit helper: true when any result failed or errored.
+// SKIPPED tests do not count — absent hardware is an expected CI condition.
+// ---------------------------------------------------------------------------
+
+static bool trHasFailures(const std::vector<TestResult> &results) {
+  for (const auto &r : results) {
+    switch (r.output.status) {
+    case hal::Status::FAIL:
+    case hal::Status::ERROR:
+    case hal::Status::TIMEOUT:
+    case hal::Status::ABORTED:
+      return true;
+    default:
+      break;
+    }
+  }
+  return false;
+}
+
+// ---------------------------------------------------------------------------
 // Main template entry point — instantiated once per test binary
 // ---------------------------------------------------------------------------
 
 template <typename T>
 int runTestApp(const std::string &appName, int argc, char *argv[]) {
-  std::string mode_str = (argc > 1) ? argv[1] : "one-shot";
+  // --strict: exit non-zero when any test FAILs/ERRORs (opt-in so existing
+  // CI flows keep their current contract). SKIPPED never fails the binary.
+  bool strict = false;
+  std::vector<const char *> effectiveArgv;
+  effectiveArgv.reserve(static_cast<std::size_t>(argc));
+  effectiveArgv.push_back(argv[0]);
+  for (int i = 1; i < argc; ++i) {
+    if (std::string(argv[i]) == "--strict") {
+      strict = true;
+    } else {
+      effectiveArgv.push_back(argv[i]);
+    }
+  }
+  const int effectiveArgc = static_cast<int>(effectiveArgv.size());
+  const char *const *args = effectiveArgv.data();
+
+  std::string mode_str = (effectiveArgc > 1) ? effectiveArgv[1] : "one-shot";
 
   if (mode_str == "--help" || mode_str == "-h") {
     trPrintUsage(appName);
@@ -471,135 +509,152 @@ int runTestApp(const std::string &appName, int argc, char *argv[]) {
   // ---- ONE SHOT ----------------------------------------------------------
   if (mode_str == "one-shot" || mode_str == "SINGLE_SHOT") {
     T tester;
-    std::cout << appName << " [one-shot]\n";
+    bool failed = false;
+    std::cout << appName << " [one-shot]" << (strict ? " [strict]" : "")
+              << "\n";
     tester.runTests(TestMode::SINGLE_SHOT,
-                    [](const std::vector<TestResult> &r) { trPrintTable(r); });
+                    [&failed](const std::vector<TestResult> &r) {
+                      trPrintTable(r);
+                      failed = trHasFailures(r);
+                    });
     std::cout << appName << " completed.\n";
-    return 0;
+    return (strict && failed) ? 1 : 0;
   }
 
   // ---- MONITORING (indefinite) -------------------------------------------
   if (mode_str == "monitoring") {
     int interval_ms = 1000;
-    if (argc > 2) {
-      interval_ms = trParsePositiveInt(argv[2], "interval_ms");
+    if (effectiveArgc > 2) {
+      interval_ms = trParsePositiveInt(args[2], "interval_ms");
       if (interval_ms < 0)
         return 1;
     }
     T tester;
     int cycle = 0;
+    bool failed = false;
     std::cout << appName << " [monitoring] interval=" << interval_ms << "ms"
-              << "  Ctrl+C to stop\n";
+              << (strict ? " [strict]" : "") << "  Ctrl+C to stop\n";
     std::signal(SIGINT, testRunnerSigHandler);
     tester.runTests(
         TestMode::MONITORING,
-        [&cycle](const std::vector<TestResult> &r) {
+        [&cycle, &failed](const std::vector<TestResult> &r) {
           trPrintCycleHeader(++cycle, "monitoring", true);
           trPrintTable(r);
+          if (trHasFailures(r))
+            failed = true;
         },
         interval_ms);
     trWaitForCompletion(tester);
     std::cout << "\n" << appName << " monitoring stopped.\n";
-    return 0;
+    return (strict && failed) ? 1 : 0;
   }
 
   // ---- LONG TERM ---------------------------------------------------------
   if (mode_str == "long-term") {
-    if (argc < 4) {
+    if (effectiveArgc < 4) {
       std::cerr << "Usage: " << appName
                 << " long-term <interval_ms> <duration>\n";
       return 1;
     }
-    int interval_ms = trParsePositiveInt(argv[2], "interval_ms");
+    int interval_ms = trParsePositiveInt(args[2], "interval_ms");
     if (interval_ms < 0)
       return 1;
-    long long duration_ms = trParseDuration(argv[3]);
+    long long duration_ms = trParseDuration(args[3]);
     if (duration_ms < 0)
       return 1;
     T tester;
+    bool failed = false;
     std::cout << appName << " [long-term] interval=" << interval_ms
               << "ms  duration=" << duration_ms << "ms"
-              << "  Ctrl+C to abort early\n";
+              << (strict ? " [strict]" : "") << "  Ctrl+C to abort early\n";
     std::signal(SIGINT, testRunnerSigHandler);
     tester.runLongTerm(interval_ms, duration_ms,
-                       [](const std::vector<TestResult> &r, int cycle) {
+                       [&failed](const std::vector<TestResult> &r, int cycle) {
                          trPrintCycleHeader(cycle, "long-term", false);
                          trPrintTable(r);
+                         if (trHasFailures(r))
+                           failed = true;
                        });
     trWaitForCompletion(tester);
     std::cout << "\n" << appName << " long-term completed.\n";
-    return 0;
+    return (strict && failed) ? 1 : 0;
   }
 
   // ---- MONITORING TEST ---------------------------------------------------
   if (mode_str == "monitor-test") {
-    if (argc < 4) {
+    if (effectiveArgc < 4) {
       std::cerr << "Usage: " << appName
                 << " monitor-test <interval_ms> <duration>\n";
       return 1;
     }
-    int interval_ms = trParsePositiveInt(argv[2], "interval_ms");
+    int interval_ms = trParsePositiveInt(args[2], "interval_ms");
     if (interval_ms < 0)
       return 1;
-    long long duration_ms = trParseDuration(argv[3]);
+    long long duration_ms = trParseDuration(args[3]);
     if (duration_ms < 0)
       return 1;
     T tester;
+    bool failed = false;
     std::cout << appName << " [monitor-test] interval=" << interval_ms
               << "ms  duration=" << duration_ms << "ms"
-              << "  Ctrl+C to abort early\n";
+              << (strict ? " [strict]" : "") << "  Ctrl+C to abort early\n";
     std::signal(SIGINT, testRunnerSigHandler);
     tester.runMonitoringTest(interval_ms, duration_ms, trArchesMonitorItems(),
-                             [](const MonitoringSnapshot &snap) {
+                             [&failed](const MonitoringSnapshot &snap) {
                                trPrintCycleHeader(snap.cycle, "monitor-test",
                                                   false);
                                trPrintMonitorData(snap.monitorData);
                                trPrintTable(snap.testResults);
+                               if (trHasFailures(snap.testResults))
+                                 failed = true;
                              });
     trWaitForCompletion(tester);
     std::cout << "\n" << appName << " monitor-test completed.\n";
-    return 0;
+    return (strict && failed) ? 1 : 0;
   }
 
   // ---- EVENT TEST --------------------------------------------------------
   if (mode_str == "event") {
-    if (argc < 4) {
+    if (effectiveArgc < 4) {
       std::cerr << "Usage: " << appName
                 << " event <poll_ms> <criteria> [max_duration]\n";
       trPrintUsage(appName);
       return 1;
     }
-    int poll_ms = trParsePositiveInt(argv[2], "poll_ms");
+    int poll_ms = trParsePositiveInt(args[2], "poll_ms");
     if (poll_ms < 0)
       return 1;
-    EventCriteria criteria = trMakeCriteria(argv[3]);
+    EventCriteria criteria = trMakeCriteria(args[3]);
     long long max_dur_ms = 0;
-    if (argc > 4) {
-      max_dur_ms = trParseDuration(argv[4]);
+    if (effectiveArgc > 4) {
+      max_dur_ms = trParseDuration(args[4]);
       if (max_dur_ms < 0)
         return 1;
     }
     T tester;
     int event_count = 0;
+    bool failed = false;
     std::cout << appName << " [event] poll=" << poll_ms << "ms"
               << "  criteria='" << criteria.description << "'"
               << (max_dur_ms > 0 ? "  max=" + std::to_string(max_dur_ms) + "ms"
                                  : "  no timeout")
-              << "  Ctrl+C to abort\n";
+              << (strict ? " [strict]" : "") << "  Ctrl+C to abort\n";
     std::signal(SIGINT, testRunnerSigHandler);
     tester.runEventTest(
         poll_ms, criteria,
-        [&event_count](const std::vector<TestResult> &r) {
+        [&event_count, &failed](const std::vector<TestResult> &r) {
           ++event_count;
           std::cout << "\n*** EVENT FIRED #" << event_count << " ***\n";
           trPrintTable(r);
+          if (trHasFailures(r))
+            failed = true;
         },
         max_dur_ms);
     trWaitForCompletion(tester);
     std::cout << "\n"
               << appName << " event test completed."
               << "  Events fired: " << event_count << "\n";
-    return 0;
+    return (strict && failed) ? 1 : 0;
   }
 
   // ---- FALLBACK: unknown argument → one-shot with warning ----------------
@@ -607,7 +662,11 @@ int runTestApp(const std::string &appName, int argc, char *argv[]) {
             << "'. Running one-shot.\n";
   trPrintUsage(appName);
   T tester;
+  bool failed = false;
   tester.runTests(TestMode::SINGLE_SHOT,
-                  [](const std::vector<TestResult> &r) { trPrintTable(r); });
-  return 0;
+                  [&failed](const std::vector<TestResult> &r) {
+                    trPrintTable(r);
+                    failed = trHasFailures(r);
+                  });
+  return (strict && failed) ? 1 : 0;
 }

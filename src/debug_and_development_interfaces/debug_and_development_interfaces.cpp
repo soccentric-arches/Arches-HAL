@@ -540,7 +540,7 @@ TestOutput DebugAndDevelopmentInterfaces::testPerformanceCounters() {
       return _out;
     }
   }
-  int paranoid = std::stoi(paranoidStr);
+  int paranoid = static_cast<int>(parseIntOr(paranoidStr, -1));
   data.push_back("perf_event_paranoid: " + paranoidStr);
   if (paranoid > 2) {
     data.push_back(

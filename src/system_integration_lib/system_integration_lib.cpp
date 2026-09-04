@@ -6,7 +6,7 @@
  *        bandwidth + storage), and Pi5-specific AI/sensor-fusion pipelines
  *        using libcamera, GStreamer, TFLite, and OpenCV.
  * @author sandesh ghimire
- * @copyright (C) Lucid Motors
+ * @copyright (C) Soccentric LLC
  */
 
 #include "system_integration_lib.h"
@@ -111,8 +111,9 @@ TestOutput SystemIntegrationTesting::testConcurrentOperationOfAllSubsystems() {
   // Thermal check after load
   std::string temp = siReadFile("/sys/class/thermal/thermal_zone0/temp");
   if (!temp.empty())
-    data.push_back("[INFO] CPU temp: " +
-                   std::to_string(std::stoi(temp) / 1000) + " °C under load");
+    data.push_back(
+        "[INFO] CPU temp: " + std::to_string(parseIntOr(temp, 0) / 1000) +
+        " °C under load");
 
   {
     TestOutput _out;

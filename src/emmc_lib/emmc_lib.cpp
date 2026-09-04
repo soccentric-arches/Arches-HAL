@@ -113,11 +113,13 @@ TestOutput EmmcTesting::testLifeTimeHealth() {
   const bool exceeded = (a > 10) || (b > 10);
   TestOutput out = makePassed(exceeded ? "eMMC life time estimate exceeded"
                                        : "eMMC life time within spec");
-  if (exceeded)
+  if (exceeded) {
     out.status = hal::Status::FAIL;
-  addMetric(out, "life_time_a", static_cast<double>(a));
+    out.severity = hal::Severity::ERROR;
+  }
+  addMetric(out, "life_time_a", static_cast<int64_t>(a));
   if (b > 0)
-    addMetric(out, "life_time_b", static_cast<double>(b));
+    addMetric(out, "life_time_b", static_cast<int64_t>(b));
   return out;
 }
 
@@ -138,7 +140,7 @@ TestOutput EmmcTesting::testPreEolInfo() {
     return makeSkipped("pre_eol_info value unparseable: " + eol);
   if (val == 0x01) {
     TestOutput out = makePassed("eMMC pre-EOL status normal");
-    addMetric(out, "pre_eol_info", static_cast<double>(val));
+    addMetric(out, "pre_eol_info", static_cast<int64_t>(val));
     return out;
   }
   const char *desc = (val == 0x02) ? "warning (reserved)"

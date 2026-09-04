@@ -12,7 +12,7 @@
  *
  * All paths are accessed via Linux sysfs / IIO / evdev.
  * @author sandesh ghimire
- * @copyright (C) Lucid Motors
+ * @copyright (C) Soccentric LLC
  */
 
 #include "sense_hat_lib.h"
@@ -206,9 +206,9 @@ TestOutput SenseHatTesting::testTemperatureSensor() {
     std::string scale = shReadFile(dev + "/in_temp_scale");
     std::string offs = shReadFile(dev + "/in_temp_offset");
     if (!raw.empty()) {
-      double r = std::stod(raw);
-      double s = scale.empty() ? 1.0 : std::stod(scale);
-      double o = offs.empty() ? 0.0 : std::stod(offs);
+      double r = parseDoubleOr(raw, 0.0);
+      double s = scale.empty() ? 1.0 : parseDoubleOr(scale, 1.0);
+      double o = offs.empty() ? 0.0 : parseDoubleOr(offs, 0.0);
       double t = (r + o) * s;
       data.push_back("[PASS] HTS221 temperature: " + std::to_string(t) + " °C");
       found = true;
@@ -255,8 +255,8 @@ TestOutput SenseHatTesting::testHumiditySensor() {
     std::string raw = shReadFile(dev + "/in_humidityrelative_raw");
     std::string scale = shReadFile(dev + "/in_humidityrelative_scale");
     if (!raw.empty()) {
-      double r = std::stod(raw);
-      double s = scale.empty() ? 1.0 : std::stod(scale);
+      double r = parseDoubleOr(raw, 0.0);
+      double s = scale.empty() ? 1.0 : parseDoubleOr(scale, 1.0);
       data.push_back("[PASS] HTS221 humidity: " + std::to_string(r * s) +
                      " %RH");
       found = true;
@@ -295,8 +295,8 @@ TestOutput SenseHatTesting::testPressureSensor() {
     std::string raw = shReadFile(dev + "/in_pressure_raw");
     std::string scale = shReadFile(dev + "/in_pressure_scale");
     if (!raw.empty()) {
-      double r = std::stod(raw);
-      double s = scale.empty() ? 1.0 : std::stod(scale);
+      double r = parseDoubleOr(raw, 0.0);
+      double s = scale.empty() ? 1.0 : parseDoubleOr(scale, 1.0);
       data.push_back("[PASS] LPS25H pressure: " + std::to_string(r * s) +
                      " kPa");
       found = true;
@@ -307,8 +307,9 @@ TestOutput SenseHatTesting::testPressureSensor() {
     std::string tScale = shReadFile(dev + "/in_temp_scale");
     std::string tOff = shReadFile(dev + "/in_temp_offset");
     if (!tRaw.empty()) {
-      double t = (std::stod(tRaw) + (tOff.empty() ? 0.0 : std::stod(tOff))) *
-                 (tScale.empty() ? 1.0 : std::stod(tScale));
+      double t = (parseDoubleOr(tRaw, 0.0) +
+                  (tOff.empty() ? 0.0 : parseDoubleOr(tOff, 0.0))) *
+                 (tScale.empty() ? 1.0 : parseDoubleOr(tScale, 1.0));
       data.push_back("[INFO] LPS25H die temperature: " + std::to_string(t) +
                      " °C");
     }

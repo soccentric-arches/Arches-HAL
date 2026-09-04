@@ -11,7 +11,7 @@
  *
  * Tests use hwmon sysfs, I2C tools, ethtool, vcgencmd, and thermal sysfs.
  * @author sandesh ghimire
- * @copyright (C) Lucid Motors
+ * @copyright (C) Soccentric LLC
  */
 
 #include "poe_hat_lib.h"
@@ -198,14 +198,17 @@ TestOutput PoeHatTesting::testPowerMonitoring() {
     std::string c1 = poeReadFile(hw + "/curr1_input");
     std::string p1 = poeReadFile(hw + "/power1_input");
     if (!v1.empty())
-      data.push_back("[INFO]   Voltage: " + std::to_string(std::stoi(v1)) +
+      data.push_back("[INFO]   Voltage: " +
+                     std::to_string(static_cast<int>(parseIntOr(v1, 0))) +
                      " mV");
     if (!c1.empty())
-      data.push_back("[INFO]   Current: " + std::to_string(std::stoi(c1)) +
+      data.push_back("[INFO]   Current: " +
+                     std::to_string(static_cast<int>(parseIntOr(c1, 0))) +
                      " mA");
     if (!p1.empty())
       data.push_back(
-          "[INFO]   Power:   " + std::to_string(std::stoi(p1) / 1000) + " mW");
+          "[INFO]   Power:   " +
+          std::to_string(static_cast<int>(parseIntOr(p1, 0)) / 1000) + " mW");
     found = true;
     break;
   }
@@ -333,7 +336,7 @@ TestOutput PoeHatTesting::testThermalProtection() {
   // Read CPU temp
   std::string tempRaw =
       poeReadFile(std::string(RPI5_THERMAL_CPU_ZONE) + "/temp");
-  double tempC = tempRaw.empty() ? 0.0 : std::stod(tempRaw) / 1000.0;
+  double tempC = tempRaw.empty() ? 0.0 : parseDoubleOr(tempRaw, 0.0) / 1000.0;
   data.push_back("[INFO] CPU temperature: " + std::to_string(tempC) + " °C");
   data.push_back("[INFO] Pi5 throttle threshold: " +
                  std::to_string(RPI5_THERMAL_THROTTLE_C) + " °C");
@@ -418,7 +421,7 @@ TestOutput PoeHatTesting::testPowerDelivery() {
       "[INFO] CPU temp before stress: " +
       (tempBefore.empty()
            ? "N/A"
-           : std::to_string(std::stod(tempBefore) / 1000.0) + " °C"));
+           : std::to_string(parseDoubleOr(tempBefore, 0.0) / 1000.0) + " °C"));
 
   // 2-second CPU stress
   std::string stressOut = poeRunCmd(
@@ -438,10 +441,11 @@ TestOutput PoeHatTesting::testPowerDelivery() {
   // Post-stress temperature
   std::string tempAfter =
       poeReadFile(std::string(RPI5_THERMAL_CPU_ZONE) + "/temp");
-  data.push_back("[INFO] CPU temp after stress: " +
-                 (tempAfter.empty()
-                      ? "N/A"
-                      : std::to_string(std::stod(tempAfter) / 1000.0) + " °C"));
+  data.push_back(
+      "[INFO] CPU temp after stress: " +
+      (tempAfter.empty()
+           ? "N/A"
+           : std::to_string(parseDoubleOr(tempAfter, 0.0) / 1000.0) + " °C"));
 
   data.push_back(
       "[INFO] PoE+ HAT rated for Pi5 maximum load (~8-9 W CPU full load)");

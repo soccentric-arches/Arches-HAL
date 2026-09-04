@@ -125,8 +125,10 @@ TestOutput BatteryTesting::testBatteryHealth() {
       100.0 * static_cast<double>(full) / static_cast<double>(design);
   TestOutput out = makePassed(health >= 50.0 ? "battery health acceptable"
                                              : "battery health degraded");
-  if (health < 50.0)
+  if (health < 50.0) {
     out.status = hal::Status::FAIL;
+    out.severity = hal::Severity::WARNING;
+  }
   addMetric(out, "health_percent", health);
   return out;
 }

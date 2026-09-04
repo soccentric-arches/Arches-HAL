@@ -407,10 +407,11 @@ TestOutput AudioInterfaces::testMultiChannelAudio() {
   TestOutput out = makePassed();
   bool passed = true;
 
-  const int maxChannels = 8;
-  const int orinMaxChannels = 16;
+  const int requiredChannels = 8;
+  int orinMaxChannels = 0;
 
-  // Check active hw_params
+  // Check active hw_params: read the actual "channels:" value from each
+  // open PCM subdevice rather than assuming a hard-coded platform value.
   const std::string asoundBase = "/proc/asound";
   auto cardDirs = listDir(asoundBase, "card");
   for (const auto &cardDir : cardDirs) {
@@ -423,6 +424,11 @@ TestOutput AudioInterfaces::testMultiChannelAudio() {
         std::istringstream ss(content);
         std::string line;
         while (std::getline(ss, line)) {
+          if (line.rfind("channels:", 0) == 0) {
+            const int ch = static_cast<int>(parseIntOr(line.substr(9), 0));
+            if (ch > orinMaxChannels)
+              orinMaxChannels = ch;
+          }
           if (line.find("channel") != std::string::npos)
             addDetail(out, cardDir + "_" + pcmDir, line);
         }
@@ -430,14 +436,25 @@ TestOutput AudioInterfaces::testMultiChannelAudio() {
     }
   }
 
+  if (orinMaxChannels == 0) {
+    // No PCM stream is open, so the kernel exposes no channel count.
+    // Report that honestly instead of hard-coding a platform value.
+    out.status = hal::Status::SKIPPED;
+    out.severity = hal::Severity::INFO;
+    addDetail(out, "detail",
+              "no active PCM stream exposing hw_params channels; "
+              "start playback/capture and re-run");
+    return out;
+  }
+
   addDetail(out, "max_channels",
             "HW max channels: " + std::to_string(orinMaxChannels));
   addMetric(out, "max_channels", int64_t(orinMaxChannels));
   addMonitor(out, "max_channels", int64_t(orinMaxChannels));
 
-  if (orinMaxChannels >= maxChannels) {
+  if (orinMaxChannels >= requiredChannels) {
     addDetail(out, "result",
-              "Multi-channel requirement (" + std::to_string(maxChannels) +
+              "Multi-channel requirement (" + std::to_string(requiredChannels) +
                   " ch): met");
   } else {
     addDetail(out, "error", "HW max channels < required");

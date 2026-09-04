@@ -7,7 +7,7 @@
  *        Physical burn-in, solder-joint, and thermal-cycling procedures cannot
  *        be performed programmatically; those tests report observable proxies.
  * @author sandesh ghimire
- * @copyright (C) Lucid Motors
+ * @copyright (C) Soccentric LLC
  */
 
 #include "reliability_lib.h"
@@ -86,7 +86,7 @@ TestOutput ReliabilityTesting::testBurninTesting() {
 
   std::string tempStr = relReadFile("/sys/class/thermal/thermal_zone0/temp");
   if (!tempStr.empty()) {
-    double tempC = std::stod(tempStr) / 1000.0;
+    double tempC = parseDoubleOr(tempStr, -1.0) / 1000.0;
     data.push_back("[INFO] SoC temp after stress: " + std::to_string(tempC) +
                    " °C");
     data.push_back(tempC < static_cast<double>(RPI5_THERMAL_THROTTLE_C)
@@ -117,7 +117,7 @@ TestOutput ReliabilityTesting::testPowerCycling() {
 
   std::string uptime = relReadFile("/proc/uptime");
   if (!uptime.empty()) {
-    double sec = std::stod(uptime);
+    double sec = parseDoubleOr(uptime, -1.0);
     data.push_back("[PASS] Uptime: " + std::to_string(static_cast<int>(sec)) +
                    "s");
   }
@@ -163,7 +163,9 @@ TestOutput ReliabilityTesting::testThermalCycling() {
     std::string type = relReadFile(base + "/type");
     if (tempStr.empty())
       continue;
-    double tempC = std::stod(tempStr) / 1000.0;
+    double tempC = parseDoubleOr(tempStr, -1.0) / 1000.0;
+    if (tempC < 0.0)
+      continue;
     bool ok =
         tempC >= 0.0 && tempC < static_cast<double>(RPI5_THERMAL_SHUTDOWN_C);
     data.push_back((ok ? "[PASS] " : "[WARN] ") + type + ": " +
@@ -193,15 +195,15 @@ TestOutput ReliabilityTesting::testMtbf() {
 
   std::string uptimeStr = relReadFile("/proc/uptime");
   if (!uptimeStr.empty())
-    data.push_back("[INFO] Uptime: " +
-                   std::to_string(static_cast<long>(std::stod(uptimeStr))) +
-                   "s");
+    data.push_back(
+        "[INFO] Uptime: " +
+        std::to_string(static_cast<long>(parseDoubleOr(uptimeStr, 0.0))) + "s");
 
   data.push_back("[INFO] Pi5 has no on-die ECC DRAM; MTBF via hardware fault "
                  "counters only");
 
   std::string pstoreCount = relRunCmd("ls /sys/fs/pstore/ 2>/dev/null | wc -l");
-  bool pstoreOops = std::stoi(pstoreCount.empty() ? "0" : pstoreCount) > 0;
+  bool pstoreOops = parseIntOr(pstoreCount, 0) > 0;
   data.push_back(pstoreOops ? "[WARN] pstore crash entries: " + pstoreCount
                             : "[PASS] pstore empty — no prior crash records");
 
