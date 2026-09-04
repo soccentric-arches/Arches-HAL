@@ -603,9 +603,8 @@ TestOutput CommunicationInterfaceTesting::testUartDmaOperation() {
   if (!dmaIrqs.empty()) {
     data.push_back("[INFO] GPCDMA interrupts registered (" +
                    std::to_string(dmaIrqs.size()) + " entries)");
-    for (const auto &irq : dmaIrqs) {
-      data.push_back("  " + irq);
-    }
+    std::transform(dmaIrqs.begin(), dmaIrqs.end(), std::back_inserter(data),
+                    [&](const auto &irq) { return "  " + irq; });
   }
 
   if (foundControllers == 0) {
