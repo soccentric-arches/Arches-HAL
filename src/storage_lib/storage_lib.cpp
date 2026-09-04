@@ -252,7 +252,6 @@ TestOutput StorageTesting::testFullCapacityVerification() {
     data.push_back("SD capacity (sectors): " + std::to_string(sectors));
     data.push_back("SD capacity (GB): " + std::to_string(gb));
     if (gb < 2.0) {
-      passed = false;
       data.push_back("FAIL: SD card capacity < 2 GB — suspiciously small.");
     } else {
       data.push_back("PASS: SD card capacity verified: " + std::to_string(gb) +
@@ -285,8 +284,8 @@ TestOutput StorageTesting::testFullCapacityVerification() {
 
   {
     TestOutput _out;
-    _out.status = hal::Status::PASS;
-    _out.severity = hal::Severity::INFO;
+    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
+    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -335,7 +334,6 @@ TestOutput StorageTesting::testSequentialReadPerformance() {
                  " MB/s");
 
   if (mbps < SD_MIN_SEQ_READ_MBS) {
-    passed = false;
     data.push_back("FAIL: SD sequential read below threshold.");
   } else {
     data.push_back("PASS: SD sequential read meets minimum requirement.");
@@ -348,7 +346,6 @@ TestOutput StorageTesting::testSequentialReadPerformance() {
       data.push_back("NVMe sequential read: " + std::to_string(nvmeMbps) +
                      " MB/s");
       if (nvmeMbps < NVME_MIN_SEQ_READ_MBS) {
-        passed = false;
         data.push_back("FAIL: NVMe read below " +
                        std::to_string(NVME_MIN_SEQ_READ_MBS) +
                        " MB/s threshold.");
@@ -358,8 +355,8 @@ TestOutput StorageTesting::testSequentialReadPerformance() {
 
   {
     TestOutput _out;
-    _out.status = hal::Status::PASS;
-    _out.severity = hal::Severity::INFO;
+    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
+    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -432,7 +429,6 @@ TestOutput StorageTesting::testSequentialWritePerformance() {
     data.push_back("lsblk: " + partInfo);
 
   if (mbps < SD_MIN_SEQ_WRITE_MBS) {
-    passed = false;
     data.push_back("FAIL: Write speed below minimum " +
                    std::to_string(SD_MIN_SEQ_WRITE_MBS) + " MB/s.");
   } else {
@@ -441,8 +437,8 @@ TestOutput StorageTesting::testSequentialWritePerformance() {
 
   {
     TestOutput _out;
-    _out.status = hal::Status::PASS;
-    _out.severity = hal::Severity::INFO;
+    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
+    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -488,7 +484,6 @@ TestOutput StorageTesting::testRandomReadIops() {
   data.push_back("Minimum threshold: " + std::to_string(SD_MIN_RAND_READ_IOPS));
 
   if (iops < SD_MIN_RAND_READ_IOPS) {
-    passed = false;
     data.push_back("FAIL: Random read IOPS below minimum threshold.");
   } else {
     data.push_back("PASS: Random read IOPS meets requirement.");
@@ -496,8 +491,8 @@ TestOutput StorageTesting::testRandomReadIops() {
 
   {
     TestOutput _out;
-    _out.status = hal::Status::PASS;
-    _out.severity = hal::Severity::INFO;
+    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
+    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -565,7 +560,6 @@ TestOutput StorageTesting::testRandomWriteIops() {
                  std::to_string(SD_MIN_RAND_WRITE_IOPS));
 
   if (iops < SD_MIN_RAND_WRITE_IOPS) {
-    passed = false;
     data.push_back("FAIL: Random write IOPS below minimum threshold.");
   } else {
     data.push_back("PASS: Random write IOPS test passed.");
@@ -573,8 +567,8 @@ TestOutput StorageTesting::testRandomWriteIops() {
 
   {
     TestOutput _out;
-    _out.status = hal::Status::PASS;
-    _out.severity = hal::Severity::INFO;
+    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
+    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -646,7 +640,6 @@ TestOutput StorageTesting::testBadBlockManagement() {
   data.push_back("SD card kernel error count (dmesg): " +
                  std::to_string(sdErrors));
   if (sdErrors > 0) {
-    passed = false;
     data.push_back("WARNING: SD card errors detected in kernel log.");
   }
 
@@ -666,8 +659,8 @@ TestOutput StorageTesting::testBadBlockManagement() {
     data.push_back("PASS: No bad block errors detected.");
   {
     TestOutput _out;
-    _out.status = hal::Status::PASS;
-    _out.severity = hal::Severity::INFO;
+    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
+    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -695,7 +688,6 @@ TestOutput StorageTesting::testPowerLossProtection() {
   } else if (fsType == "vfat" || fsType == "fat32") {
     data.push_back("WARNING: FAT filesystem has no journaling — not power-loss "
                    "resistant.");
-    passed = false;
   } else {
     data.push_back("INFO: Filesystem type: " + fsType +
                    " — check journal status manually.");
@@ -714,8 +706,8 @@ TestOutput StorageTesting::testPowerLossProtection() {
 
   {
     TestOutput _out;
-    _out.status = hal::Status::PASS;
-    _out.severity = hal::Severity::INFO;
+    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
+    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -738,7 +730,6 @@ TestOutput StorageTesting::testEmmcTemperatureMonitoring() {
     double socC = socTempMC / 1000.0;
     data.push_back("BCM2712 SoC temperature: " + std::to_string(socC) + " °C");
     if (socC > 80.0) {
-      passed = false;
       data.push_back(
           "WARNING: SoC temperature above 80°C — may affect storage.");
     }
@@ -759,7 +750,6 @@ TestOutput StorageTesting::testEmmcTemperatureMonitoring() {
         data.push_back("NVMe temperature (hwmon): " + std::to_string(nvmeC) +
                        " °C");
         if (nvmeC > NVME_TEMP_MAX_C) {
-          passed = false;
           data.push_back("FAIL: NVMe temperature above " +
                          std::to_string(NVME_TEMP_MAX_C) + " °C.");
         }
@@ -773,8 +763,8 @@ TestOutput StorageTesting::testEmmcTemperatureMonitoring() {
                         : "FAIL: Temperature issue detected.");
   {
     TestOutput _out;
-    _out.status = hal::Status::PASS;
-    _out.severity = hal::Severity::INFO;
+    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
+    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -885,7 +875,6 @@ TestOutput StorageTesting::testNvmeReadwritePerformance() {
   data.push_back("Minimum: " + std::to_string(NVME_MIN_SEQ_READ_MBS) + " MB/s");
 
   if (readMbps < NVME_MIN_SEQ_READ_MBS) {
-    passed = false;
     data.push_back("FAIL: NVMe read below minimum threshold.");
   } else {
     data.push_back("PASS: NVMe read performance meets requirement.");
@@ -918,8 +907,8 @@ TestOutput StorageTesting::testNvmeReadwritePerformance() {
 
   {
     TestOutput _out;
-    _out.status = hal::Status::PASS;
-    _out.severity = hal::Severity::INFO;
+    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
+    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
@@ -968,7 +957,6 @@ TestOutput StorageTesting::testNvmeThermalThrottling() {
       data.push_back("NVMe temperature (hwmon): " + std::to_string(tempC) +
                      " °C");
       if (tempC > NVME_TEMP_MAX_C) {
-        passed = false;
         data.push_back("FAIL: NVMe temperature above " +
                        std::to_string(NVME_TEMP_MAX_C) +
                        " °C throttle threshold.");
@@ -988,8 +976,8 @@ TestOutput StorageTesting::testNvmeThermalThrottling() {
                         : "FAIL: NVMe thermal issue.");
   {
     TestOutput _out;
-    _out.status = hal::Status::PASS;
-    _out.severity = hal::Severity::INFO;
+    _out.status = passed ? hal::Status::PASS : hal::Status::FAIL;
+    _out.severity = passed ? hal::Severity::INFO : hal::Severity::ERROR;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
     return _out;
