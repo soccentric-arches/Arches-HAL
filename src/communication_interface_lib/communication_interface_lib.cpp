@@ -699,7 +699,7 @@ TestOutput CommunicationInterfaceTesting::testConsoledebugUart() {
         std::string baud;
         if (comma != std::string::npos) {
           baud = consoleDevice.substr(comma + 1);
-          consoleDevice = consoleDevice.substr(0, comma);
+          consoleDevice.resize(comma);
         }
         data.push_back("[PASS] Console UART: /dev/" + consoleDevice +
                        (baud.empty() ? "" : " at " + baud + " baud"));
@@ -1086,10 +1086,12 @@ TestOutput CommunicationInterfaceTesting::testSpiModes() {
 
   {
     TestOutput _out;
-    // cppcheck-suppress knownConditionTrueFalse — SPI_IOC_WR_MODE is a system-
-    // header macro invisible to cppcheck's preprocessor, so it analyzes only
-    // the #else path where allOk is trivially true; the real build defines it.
+    // cppcheck-suppress knownConditionTrueFalse
+    // SPI_IOC_WR_MODE is a system-header macro invisible to cppcheck's
+    // preprocessor, so it analyzes only the #else path where allOk is
+    // trivially true; the real build defines it.
     _out.status = allOk ? hal::Status::PASS : hal::Status::FAIL;
+    // cppcheck-suppress knownConditionTrueFalse
     _out.severity = allOk ? hal::Severity::INFO : hal::Severity::ERROR;
     for (size_t _i = 0; _i < data.size(); ++_i)
       _out.reason["detail_" + std::to_string(_i)] = data[_i];
@@ -1992,7 +1994,7 @@ TestOutput CommunicationInterfaceTesting::testCanFd() {
     }
   }
 
-  if (!anyFd && !canIfaces.empty()) {
+  if (!anyFd) {
     data.push_back(
         "[INFO] CAN FD may need interface to be brought up with 'fd on'");
   }

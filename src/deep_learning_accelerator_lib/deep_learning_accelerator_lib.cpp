@@ -154,14 +154,14 @@ static double probeDlaTemperature() {
 static long long probeDlaPowerMilliWatts() {
   // Pi5 MXL7704 PMIC may expose rails via hwmon
   auto hwmons = listDirWithPrefix("/sys/class/hwmon", "hwmon");
-  for (auto &hm : hwmons) {
+  for (const auto &hm : hwmons) {
     long long pwr = readSysfsInt(hm + "/power1_input");
     if (pwr > 0)
       return pwr / 1000; // µW→mW
   }
   // INA219 on I2C bus (optional add-on)
   auto i2cDev = listDirWithPrefix("/sys/bus/i2c/drivers/ina219", "");
-  for (auto &d : i2cDev) {
+  for (const auto &d : i2cDev) {
     long long pwr = readSysfsInt(d + "/power1_input");
     if (pwr > 0)
       return pwr / 1000;
@@ -264,7 +264,7 @@ TestOutput DeepLearningAcceleratorTesting::testDla2Functionality() {
   // Check via /sys/bus/usb/devices for vendor 18d1
   auto usbDirs = listDirWithPrefix("/sys/bus/usb/devices", "");
   bool coralFound = false;
-  for (auto &d : usbDirs) {
+  for (const auto &d : usbDirs) {
     std::string vid = readSysfsLine(d + "/idVendor");
     std::string pid = readSysfsLine(d + "/idProduct");
     if (vid == CORAL_USB_VENDOR &&
@@ -312,7 +312,7 @@ TestOutput DeepLearningAcceleratorTesting::testDualDlaConcurrentOperation() {
   // Detect Coral via USB
   bool coral = false;
   auto usbDirs = listDirWithPrefix("/sys/bus/usb/devices", "");
-  for (auto &d : usbDirs) {
+  for (const auto &d : usbDirs) {
     std::string vid = readSysfsLine(d + "/idVendor");
     if (vid == CORAL_USB_VENDOR) {
       coral = true;
@@ -388,7 +388,7 @@ TestOutput DeepLearningAcceleratorTesting::testDlaClockFrequency() {
 
   // Check PCIe link speed via sysfs
   auto pcieDevs = listDirWithPrefix("/sys/bus/pci/devices", "");
-  for (auto &d : pcieDevs) {
+  for (const auto &d : pcieDevs) {
     // Hailo-8 PCI device ID: 1e60:2864
     std::string vendor = readSysfsLine(d + "/vendor");
     std::string device = readSysfsLine(d + "/device");
@@ -445,7 +445,7 @@ TestOutput DeepLearningAcceleratorTesting::testDlaPowerConsumption() {
 
   // Hailo-8 PCIe slot power check
   auto pcieDevs = listDirWithPrefix("/sys/bus/pci/devices", "");
-  for (auto &d : pcieDevs) {
+  for (const auto &d : pcieDevs) {
     std::string vendor = readSysfsLine(d + "/vendor");
     if (vendor == "0x1e60") {
       data.push_back("Hailo-8 detected at PCI slot: " + d);
@@ -607,7 +607,7 @@ TestOutput DeepLearningAcceleratorTesting::testFullyConnectedLayers() {
   const int N = 3, M = 4;
   float W[N][M] = {
       {1, 0, 0, 0}, {0, 1, 0, 0}, {0, 0, 1, 0}}; // identity-like selection
-  float x[M] = {5.0f, 6.0f, 7.0f, 8.0f};
+  const float x[M] = {5.0f, 6.0f, 7.0f, 8.0f};
   float y[N] = {};
   for (int i = 0; i < N; ++i)
     for (int j = 0; j < M; ++j)
@@ -998,12 +998,10 @@ TestOutput DeepLearningAcceleratorTesting::testFp16Precision() {
   // max finite: 65504.0
   struct Fp16Check {
     float input;
-    float maxAbsErr;
   };
   const Fp16Check cases[] = {
-      {1.0f, 1e-3f},      {0.5f, 1e-3f},
-      {1000.0f, 1.0f},    {65000.0f, 32.0f}, // near FP16 max
-      {-3.14159f, 1e-2f},
+      {1.0f}, {0.5f}, {1000.0f}, {65000.0f}, // near FP16 max
+      {-3.14159f},
   };
   const int nC = 5;
   bool fp16Ok = true;
@@ -1146,7 +1144,7 @@ TestOutput DeepLearningAcceleratorTesting::testHardwareSchedulerOperation() {
   // Check Hailo devfreq governor (if bound)
   auto devfreqDirs = listDirWithPrefix("/sys/class/devfreq", "");
   std::string governor;
-  for (auto &d : devfreqDirs) {
+  for (const auto &d : devfreqDirs) {
     if (d.find("hailo") != std::string::npos ||
         d.find("pcie") != std::string::npos) {
       governor = readSysfsLine(d + "/governor");

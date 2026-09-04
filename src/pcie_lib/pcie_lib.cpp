@@ -525,9 +525,10 @@ TestOutput PcieTesting::testPcieReadBandwidth() {
     auto tStart = std::chrono::high_resolution_clock::now();
     for (int i = 0; i < iterations; ++i) {
       std::ifstream f(testDev + "/vendor");
-      char dummy[16];
-      if (f)
+      if (f) {
+        char dummy[16];
         f.read(dummy, sizeof(dummy));
+      }
     }
     auto tEnd = std::chrono::high_resolution_clock::now();
     double elapsed_us =
@@ -696,7 +697,6 @@ TestOutput PcieTesting::testPcieLatency() {
       "[INFO] Sampling sysfs vendor register read (500 samples per device)");
 
   bool anyMeasured = false;
-  bool overallPass = true;
 
   for (const auto &device : devices) {
     std::string devName = device.substr(device.find_last_of('/') + 1);
@@ -711,9 +711,10 @@ TestOutput PcieTesting::testPcieLatency() {
       auto t0 = std::chrono::high_resolution_clock::now();
       {
         std::ifstream f(device + "/vendor");
-        char dummy[16];
-        if (f)
+        if (f) {
+          char dummy[16];
           f.read(dummy, sizeof(dummy));
+        }
       }
       auto t1 = std::chrono::high_resolution_clock::now();
       double us = std::chrono::duration<double, std::micro>(t1 - t0).count();
@@ -755,6 +756,7 @@ TestOutput PcieTesting::testPcieLatency() {
   data.push_back("[INFO] Values include kernel/OS overhead on top of PCIe "
                  "config-space TLP round-trip");
   {
+    bool overallPass = true;
     TestOutput _out;
     _out.status = overallPass ? hal::Status::PASS : hal::Status::FAIL;
     _out.severity = overallPass ? hal::Severity::INFO : hal::Severity::ERROR;

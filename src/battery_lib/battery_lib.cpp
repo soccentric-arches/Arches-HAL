@@ -144,7 +144,7 @@ TestOutput BatteryTesting::testStatusRead() {
   const std::string status =
       readSysfs(sysfs_, "/sys/class/power_supply/" + bat + "/status");
   bool known = false;
-  for (const auto &s : kKnownStatuses) {
+  for (const char *s : kKnownStatuses) {
     if (status == s)
       known = true;
   }

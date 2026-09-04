@@ -51,7 +51,7 @@ long long parseYmdDays(const std::string &s) {
       return -1;
     // Howard Hinnant's civil_from_days inverse (days_from_civil).
     const long long yy = y - (m <= 2);
-    const long long era = (yy >= 0 ? yy : yy - 399) / 400;
+    const long long era = yy / 400; // yy >= 0: y >= 1970 enforced above
     const long long yoe = yy - era * 400;
     const long long doy = (153 * (m + (m > 2 ? -3 : 9)) + 2) / 5 + d - 1;
     const long long doe = yoe * 365 + yoe / 4 - yoe / 100 + doy;

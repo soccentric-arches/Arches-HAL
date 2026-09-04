@@ -817,9 +817,10 @@ TestOutput CpuTesting::testCacheLineInvalidation() {
   } unpadded{};
 
   // Padded: each counter on its own 64-byte cache line
+  // alignas(64) already pads the struct size to a full cache line, so each
+  // array element lands on its own line.
   struct alignas(64) PaddedVal {
     volatile uint64_t val;
-    uint8_t pad[56];
   };
   PaddedVal padded[4]{};
 

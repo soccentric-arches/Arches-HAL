@@ -112,20 +112,20 @@ Stm32Transport::Stm32Transport(Stm32TransportConfig config)
 Stm32TransportConfig Stm32Transport::fromEnvironment() {
   const Stm32TransportType type =
       parseTransportType(readEnv("ARCHES_STM32_TRANSPORT"));
-  Stm32TransportConfig config;
-  config.type = type;
-  config.devicePath = readEnv("ARCHES_STM32_DEVICE");
-  config.pinmuxPath = readEnv("ARCHES_TEGRA_PINMUX_PATH");
-  config.baudRate =
+  Stm32TransportConfig cfg;
+  cfg.type = type;
+  cfg.devicePath = readEnv("ARCHES_STM32_DEVICE");
+  cfg.pinmuxPath = readEnv("ARCHES_TEGRA_PINMUX_PATH");
+  cfg.baudRate =
       readIntEnv("ARCHES_STM32_BAUD", arches::platform::STM32_DEFAULT_BAUD);
-  config.spiClockHz =
+  cfg.spiClockHz =
       readIntEnv("ARCHES_STM32_SPI_HZ", arches::platform::STM32_DEFAULT_SPI_HZ);
-  config.timeoutMs = readIntEnv("ARCHES_STM32_TIMEOUT_MS",
+  cfg.timeoutMs = readIntEnv("ARCHES_STM32_TIMEOUT_MS",
                                 arches::platform::STM32_DEFAULT_TIMEOUT_MS);
-  config.mockMode = readEnv("ARCHES_STM32_MOCK").empty()
+  cfg.mockMode = readEnv("ARCHES_STM32_MOCK").empty()
                         ? true
                         : readBoolEnv("ARCHES_STM32_MOCK");
-  return config;
+  return cfg;
 }
 
 std::vector<std::uint8_t>

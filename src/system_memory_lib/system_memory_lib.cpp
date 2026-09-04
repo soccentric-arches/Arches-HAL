@@ -509,7 +509,7 @@ TestOutput SystemMemoryTesting::testRandomReadwritePerformance() {
                  " ns");
 
   // LPDDR4X typical random access latency: ~80–120 ns
-  if (latNs > 0 && latNs > 500.0) {
+  if (latNs > 500.0) {
     passed = false;
     data.push_back(
         "FAIL: Random access latency > 500 ns — possible memory issue.");

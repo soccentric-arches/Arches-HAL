@@ -31,8 +31,8 @@ std::uint8_t pullModeToByte(GpioPullMode mode) {
 /**
  * @brief Constructor for GpioTesting
  */
-GpioTesting::GpioTesting() {
-  transport_ = std::make_unique<Stm32Transport>();
+GpioTesting::GpioTesting()
+    : transport_(std::make_unique<Stm32Transport>()) {
   const Stm32ProbeResult probe = transport_->probe();
   transportBacked_ = probe.transportReady;
   transportSummary_ = probe.summary;
