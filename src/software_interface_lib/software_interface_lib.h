@@ -17,123 +17,122 @@
  * functionalities.
  */
 class SoftwareInterfaceTesting : public TestBase {
-public:
-  /**
-   * @brief Constructor for SoftwareInterfaceTesting
-   */
-  SoftwareInterfaceTesting();
+    public:
+    /**
+     * @brief Constructor for SoftwareInterfaceTesting
+     */
+    SoftwareInterfaceTesting();
 
-  /**
-   * @brief Destructor for SoftwareInterfaceTesting
-   */
-  ~SoftwareInterfaceTesting();
+    /**
+     * @brief Destructor for SoftwareInterfaceTesting
+     */
+    ~SoftwareInterfaceTesting();
 
-  /**
-   * @brief Tests Linux kernel boot
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testLinuxKernelBoot();
+    /**
+     * @brief Tests Linux kernel boot
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testLinuxKernelBoot();
 
-  /**
-   * @brief Tests device driver loading
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testDeviceDriverLoading();
+    /**
+     * @brief Tests device driver loading
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testDeviceDriverLoading();
 
-  /**
-   * @brief Tests system service startup
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testSystemServiceStartup();
+    /**
+     * @brief Tests system service startup
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testSystemServiceStartup();
 
-  /**
-   * @brief Tests application framework
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testApplicationFramework();
+    /**
+     * @brief Tests application framework
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testApplicationFramework();
 
-  /**
-   * @brief Tests multiuser support
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testMultiuserSupport();
+    /**
+     * @brief Tests multiuser support
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testMultiuserSupport();
 
-  /**
-   * @brief Tests CUDA runtime
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testCudaRuntime();
+    /**
+     * @brief Tests CUDA runtime
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testCudaRuntime();
 
-  /**
-   * @brief Tests cuDNN library
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testCudnnLibrary();
+    /**
+     * @brief Tests cuDNN library
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testCudnnLibrary();
 
-  /**
-   * @brief Tests TensorRT inference
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testTensorrtInference();
+    /**
+     * @brief Tests TensorRT inference
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testTensorrtInference();
 
-  /**
-   * @brief Tests VPI
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testVpi();
+    /**
+     * @brief Tests VPI
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testVpi();
 
-  /**
-   * @brief Tests multimedia API
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testMultimediaApi();
+    /**
+     * @brief Tests multimedia API
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testMultimediaApi();
 
-  /**
-   * @brief Tests sensor driver framework
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testSensorDriverFramework();
+    /**
+     * @brief Tests sensor driver framework
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testSensorDriverFramework();
 
-  /**
-   * @brief Get list of all available test names
-   * @return Vector of test names
-   */
-  std::vector<std::string> getAvailableTests() override;
+    /**
+     * @brief Get list of all available test names
+     * @return Vector of test names
+     */
+    std::vector<std::string> getAvailableTests() override;
 
-  /**
-   * @brief Run all software interface tests
-   * @return Vector of test results with timing
-   */
-  std::vector<TestResult> runAllTests() override;
+    /**
+     * @brief Run all software interface tests
+     * @return Vector of test results with timing
+     */
+    std::vector<TestResult> runAllTests() override;
 
-  /**
-   * @brief Get list of all available test names
-   * @return Vector of test names
-   */
+    /**
+     * @brief Get list of all available test names
+     * @return Vector of test names
+     */
 
-  /**
-   * @brief Run a single test by name
-   * @param testName Name of the test to run
-   * @return Test result with timing
-   */
-  /// @brief Constructor with injected providers for deterministic testing
-  explicit SoftwareInterfaceTesting(
-      std::shared_ptr<SysfsProvider> sysfs,
-      std::shared_ptr<CommandProvider> cmd = nullptr);
+    /**
+     * @brief Run a single test by name
+     * @param testName Name of the test to run
+     * @return Test result with timing
+     */
+    /// @brief Constructor with injected providers for deterministic testing
+    explicit SoftwareInterfaceTesting(std::shared_ptr<SysfsProvider> sysfs,
+                                      std::shared_ptr<CommandProvider> cmd = nullptr);
 
-  /// @brief Get periodic-safe test names (passive health checks only)
-  std::vector<std::string> getPeriodicSafeTests() const;
+    /// @brief Get periodic-safe test names (passive health checks only)
+    std::vector<std::string> getPeriodicSafeTests() const;
 
-  /// @brief Get one-shot only test names (destructive/state-changing)
-  std::vector<std::string> getOneShotOnlyTests() const;
+    /// @brief Get one-shot only test names (destructive/state-changing)
+    std::vector<std::string> getOneShotOnlyTests() const;
 
-private:
-  std::shared_ptr<SysfsProvider> sysfs_;
-  std::shared_ptr<CommandProvider> cmd_;
+    private:
+    std::shared_ptr<SysfsProvider> sysfs_;
+    std::shared_ptr<CommandProvider> cmd_;
 
-  TestResult runSingleTest(const std::string &testName) override;
+    TestResult runSingleTest(const std::string& testName) override;
 
-protected:
+    protected:
 };
 
 #endif // SOFTWAREINTERFACETESTING_H

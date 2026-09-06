@@ -20,38 +20,38 @@
  * deterministic CI runs; the default constructor uses real sysfs and commands.
  */
 class AnalogInputTesting : public TestBase {
-public:
-  AnalogInputTesting();
-  ~AnalogInputTesting();
+    public:
+    AnalogInputTesting();
+    ~AnalogInputTesting();
 
-  explicit AnalogInputTesting(std::shared_ptr<SysfsProvider> sysfs,
-                              std::shared_ptr<CommandProvider> cmd = nullptr);
+    explicit AnalogInputTesting(std::shared_ptr<SysfsProvider> sysfs,
+                                std::shared_ptr<CommandProvider> cmd = nullptr);
 
-  /// Enumerate IIO devices in /sys/bus/iio/devices.
-  TestOutput testIioDeviceEnumeration();
-  /// Detect in_voltage*_raw channels on the first IIO device.
-  TestOutput testAdcChannelDetection();
-  /// Read the first voltage channel raw value.
-  TestOutput testRawRead();
-  /// Read the channel scale factor.
-  TestOutput testScaleRead();
-  /// Sample the channel repeatedly and check for a stuck/railing input.
-  TestOutput testSaturationCheck();
+    /// Enumerate IIO devices in /sys/bus/iio/devices.
+    TestOutput testIioDeviceEnumeration();
+    /// Detect in_voltage*_raw channels on the first IIO device.
+    TestOutput testAdcChannelDetection();
+    /// Read the first voltage channel raw value.
+    TestOutput testRawRead();
+    /// Read the channel scale factor.
+    TestOutput testScaleRead();
+    /// Sample the channel repeatedly and check for a stuck/railing input.
+    TestOutput testSaturationCheck();
 
-  std::vector<std::string> getAvailableTests() override;
-  std::vector<std::string> getPeriodicSafeTests();
-  std::vector<std::string> getOneShotOnlyTests();
+    std::vector<std::string> getAvailableTests() override;
+    std::vector<std::string> getPeriodicSafeTests();
+    std::vector<std::string> getOneShotOnlyTests();
 
-private:
-  std::shared_ptr<SysfsProvider> sysfs_;
-  std::shared_ptr<CommandProvider> cmd_;
-  TestResult runSingleTest(const std::string &testName) override;
+    private:
+    std::shared_ptr<SysfsProvider> sysfs_;
+    std::shared_ptr<CommandProvider> cmd_;
+    TestResult runSingleTest(const std::string& testName) override;
 
-  /// First IIO device dir containing an in_voltage*_raw file ("" if none).
-  std::string firstAdcDeviceDir() const;
+    /// First IIO device dir containing an in_voltage*_raw file ("" if none).
+    std::string firstAdcDeviceDir() const;
 
-protected:
-  std::vector<TestResult> runAllTests() override;
+    protected:
+    std::vector<TestResult> runAllTests() override;
 };
 
 #endif // ANALOGINPUTTESTING_H

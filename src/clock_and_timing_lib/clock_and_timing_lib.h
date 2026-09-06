@@ -19,170 +19,169 @@
  * functionalities.
  */
 class ClockAndTimingTesting : public TestBase {
-public: /**
-         * @brief Constructor for ClockAndTimingTesting
-         * @return TestOutput with pass/fail and data
-         */
-        /**
-         * @brief Function ClockAndTimingTesting
-         * @return TestOutput with pass/fail and data
-         */
+    public: /**
+             * @brief Constructor for ClockAndTimingTesting
+             * @return TestOutput with pass/fail and data
+             */
+            /**
+             * @brief Function ClockAndTimingTesting
+             * @return TestOutput with pass/fail and data
+             */
 
-  ClockAndTimingTesting();
-  /**
-   * @brief Constructor for ClockAndTimingTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Destructor for class
+    ClockAndTimingTesting();
+    /**
+     * @brief Constructor for ClockAndTimingTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Destructor for class
 
-   */
-  ~ClockAndTimingTesting();
-  /**
-   * @brief Constructor for ClockAndTimingTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the systemclockaccuracy functionality
-   * @return TestOutput with pass/fail and data
-   */
+     */
+    ~ClockAndTimingTesting();
+    /**
+     * @brief Constructor for ClockAndTimingTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the systemclockaccuracy functionality
+     * @return TestOutput with pass/fail and data
+     */
 
-  TestOutput testSystemClockAccuracy();
-  /**
-   * @brief Constructor for ClockAndTimingTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the pciereferenceclock functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testPcieReferenceClock();
-  /**
-   * @brief Constructor for ClockAndTimingTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the usbreferenceclock functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testUsbReferenceClock();
-  /**
-   * @brief Constructor for ClockAndTimingTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the ethernetreferenceclock functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testEthernetReferenceClock();
-  /**
-   * @brief Constructor for ClockAndTimingTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the cameraclockoutput functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testCameraClockOutput();
-  /**
-   * @brief Constructor for ClockAndTimingTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the audioclock functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testAudioClock();
-  /**
-   * @brief Constructor for ClockAndTimingTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the plllockstatus functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testPllLockStatus();
-  /**
-   * @brief Constructor for ClockAndTimingTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the clockjittermeasurements functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testClockJitterMeasurements();
-  /**
-   * @brief Constructor for ClockAndTimingTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the rtcaccuracy functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testRtcAccuracy();
-  /**
-   * @brief Constructor for ClockAndTimingTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the rtcbatterybackup functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testRtcBatteryBackup();
-  /**
-   * @brief Constructor for ClockAndTimingTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the rtcalarmfunctionality functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testRtcAlarmFunctionality();
-  /**
-   * @brief Constructor for ClockAndTimingTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the rtctimepersistence functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testRtcTimePersistence();
+    TestOutput testSystemClockAccuracy();
+    /**
+     * @brief Constructor for ClockAndTimingTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the pciereferenceclock functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testPcieReferenceClock();
+    /**
+     * @brief Constructor for ClockAndTimingTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the usbreferenceclock functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testUsbReferenceClock();
+    /**
+     * @brief Constructor for ClockAndTimingTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the ethernetreferenceclock functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testEthernetReferenceClock();
+    /**
+     * @brief Constructor for ClockAndTimingTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the cameraclockoutput functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testCameraClockOutput();
+    /**
+     * @brief Constructor for ClockAndTimingTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the audioclock functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testAudioClock();
+    /**
+     * @brief Constructor for ClockAndTimingTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the plllockstatus functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testPllLockStatus();
+    /**
+     * @brief Constructor for ClockAndTimingTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the clockjittermeasurements functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testClockJitterMeasurements();
+    /**
+     * @brief Constructor for ClockAndTimingTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the rtcaccuracy functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testRtcAccuracy();
+    /**
+     * @brief Constructor for ClockAndTimingTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the rtcbatterybackup functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testRtcBatteryBackup();
+    /**
+     * @brief Constructor for ClockAndTimingTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the rtcalarmfunctionality functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testRtcAlarmFunctionality();
+    /**
+     * @brief Constructor for ClockAndTimingTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the rtctimepersistence functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testRtcTimePersistence();
 
-  /**
-   * @brief Get list of all available test names
-   * @return Vector of test names
-   */
-  std::vector<std::string> getAvailableTests() override;
+    /**
+     * @brief Get list of all available test names
+     * @return Vector of test names
+     */
+    std::vector<std::string> getAvailableTests() override;
 
-  /**
-   * @brief Get list of all available test names
-   * @return Vector of test names
-   */
+    /**
+     * @brief Get list of all available test names
+     * @return Vector of test names
+     */
 
-  /**
-   * @brief Run a single test by name
-   * @param testName Name of the test to run
-   * @return Test result with timing
-   */
-  /// @brief Constructor with injected providers for deterministic testing
-  explicit ClockAndTimingTesting(
-      std::shared_ptr<SysfsProvider> sysfs,
-      std::shared_ptr<CommandProvider> cmd = nullptr);
+    /**
+     * @brief Run a single test by name
+     * @param testName Name of the test to run
+     * @return Test result with timing
+     */
+    /// @brief Constructor with injected providers for deterministic testing
+    explicit ClockAndTimingTesting(std::shared_ptr<SysfsProvider> sysfs,
+                                   std::shared_ptr<CommandProvider> cmd = nullptr);
 
-  /// @brief Get periodic-safe test names (passive health checks only)
-  std::vector<std::string> getPeriodicSafeTests() const;
+    /// @brief Get periodic-safe test names (passive health checks only)
+    std::vector<std::string> getPeriodicSafeTests() const;
 
-  /// @brief Get one-shot only test names (destructive/state-changing)
-  std::vector<std::string> getOneShotOnlyTests() const;
+    /// @brief Get one-shot only test names (destructive/state-changing)
+    std::vector<std::string> getOneShotOnlyTests() const;
 
-private:
-  std::shared_ptr<SysfsProvider> sysfs_;
-  std::shared_ptr<CommandProvider> cmd_;
+    private:
+    std::shared_ptr<SysfsProvider> sysfs_;
+    std::shared_ptr<CommandProvider> cmd_;
 
-  TestResult runSingleTest(const std::string &testName) override;
+    TestResult runSingleTest(const std::string& testName) override;
 
-protected:
-  std::vector<TestResult> runAllTests() override;
+    protected:
+    std::vector<TestResult> runAllTests() override;
 };
 
 #endif // CLOCKANDTIMINGTESTING_H

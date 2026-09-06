@@ -43,43 +43,42 @@
  *   - testFanControl (fan state mutation)
  */
 class ThermalManagementTesting : public TestBase {
-public:
-  ThermalManagementTesting();
-  explicit ThermalManagementTesting(
-      std::shared_ptr<ThermalZoneProvider> thermalProvider,
-      std::shared_ptr<CommandProvider> cmdProvider = nullptr);
-  ~ThermalManagementTesting();
+    public:
+    ThermalManagementTesting();
+    explicit ThermalManagementTesting(std::shared_ptr<ThermalZoneProvider> thermalProvider,
+                                      std::shared_ptr<CommandProvider> cmdProvider = nullptr);
+    ~ThermalManagementTesting();
 
-  /// @brief Get periodic-safe test names (passive telemetry only)
-  std::vector<std::string> getPeriodicSafeTests() const;
+    /// @brief Get periodic-safe test names (passive telemetry only)
+    std::vector<std::string> getPeriodicSafeTests() const;
 
-  /// @brief Get one-shot only test names (destructive/state-changing)
-  std::vector<std::string> getOneShotOnlyTests() const;
+    /// @brief Get one-shot only test names (destructive/state-changing)
+    std::vector<std::string> getOneShotOnlyTests() const;
 
-  // Test methods
-  TestOutput testSocJunctionTemperature();
-  TestOutput testGpuTemperature();
-  TestOutput testCpuTemperature();
-  TestOutput testMemoryTemperature();
-  TestOutput testBoardAmbientTemperature();
-  TestOutput testAllThermalZones();
-  TestOutput testThermalThrottlingThresholds();
-  TestOutput testThermalShutdownTemperature();
-  TestOutput testCoolingSolutionEffectiveness();
-  TestOutput testTemperatureDistributionAcrossDie();
-  TestOutput testSustainedThermalPerformance();
-  TestOutput testThermalRecoveryTime();
-  TestOutput testFanControl();
+    // Test methods
+    TestOutput testSocJunctionTemperature();
+    TestOutput testGpuTemperature();
+    TestOutput testCpuTemperature();
+    TestOutput testMemoryTemperature();
+    TestOutput testBoardAmbientTemperature();
+    TestOutput testAllThermalZones();
+    TestOutput testThermalThrottlingThresholds();
+    TestOutput testThermalShutdownTemperature();
+    TestOutput testCoolingSolutionEffectiveness();
+    TestOutput testTemperatureDistributionAcrossDie();
+    TestOutput testSustainedThermalPerformance();
+    TestOutput testThermalRecoveryTime();
+    TestOutput testFanControl();
 
-  std::vector<std::string> getAvailableTests() override;
-  TestResult runSingleTest(const std::string &testName) override;
+    std::vector<std::string> getAvailableTests() override;
+    TestResult runSingleTest(const std::string& testName) override;
 
-protected:
-  std::vector<TestResult> runAllTests() override;
+    protected:
+    std::vector<TestResult> runAllTests() override;
 
-private:
-  std::shared_ptr<ThermalZoneProvider> thermal_;
-  std::shared_ptr<CommandProvider> cmd_;
+    private:
+    std::shared_ptr<ThermalZoneProvider> thermal_;
+    std::shared_ptr<CommandProvider> cmd_;
 };
 
 #endif // THERMALMANAGEMENTTESTING_H

@@ -21,42 +21,42 @@
  * Export/config/enable tests are state-changing and classified one-shot only.
  */
 class PwmOutputTesting : public TestBase {
-public:
-  PwmOutputTesting();
-  ~PwmOutputTesting();
+    public:
+    PwmOutputTesting();
+    ~PwmOutputTesting();
 
-  explicit PwmOutputTesting(std::shared_ptr<SysfsProvider> sysfs,
-                            std::shared_ptr<CommandProvider> cmd = nullptr);
+    explicit PwmOutputTesting(std::shared_ptr<SysfsProvider> sysfs,
+                              std::shared_ptr<CommandProvider> cmd = nullptr);
 
-  /// Enumerate pwmchip* entries in /sys/class/pwm.
-  TestOutput testPwmChipEnumeration();
-  /// Read npwm (channel count) of the first chip.
-  TestOutput testChannelCount();
-  /// Export then unexport channel 0 (one-shot).
-  TestOutput testExportUnexport();
-  /// Configure period/duty cycle and verify readback (one-shot).
-  TestOutput testPeriodDutyConfig();
-  /// Enable then disable the channel (one-shot).
-  TestOutput testEnableDisable();
+    /// Enumerate pwmchip* entries in /sys/class/pwm.
+    TestOutput testPwmChipEnumeration();
+    /// Read npwm (channel count) of the first chip.
+    TestOutput testChannelCount();
+    /// Export then unexport channel 0 (one-shot).
+    TestOutput testExportUnexport();
+    /// Configure period/duty cycle and verify readback (one-shot).
+    TestOutput testPeriodDutyConfig();
+    /// Enable then disable the channel (one-shot).
+    TestOutput testEnableDisable();
 
-  std::vector<std::string> getAvailableTests() override;
-  std::vector<std::string> getPeriodicSafeTests();
-  std::vector<std::string> getOneShotOnlyTests();
+    std::vector<std::string> getAvailableTests() override;
+    std::vector<std::string> getPeriodicSafeTests();
+    std::vector<std::string> getOneShotOnlyTests();
 
-private:
-  std::shared_ptr<SysfsProvider> sysfs_;
-  std::shared_ptr<CommandProvider> cmd_;
-  TestResult runSingleTest(const std::string &testName) override;
+    private:
+    std::shared_ptr<SysfsProvider> sysfs_;
+    std::shared_ptr<CommandProvider> cmd_;
+    TestResult runSingleTest(const std::string& testName) override;
 
-  /// Sysfs dir of the first PWM chip ("" if none).
-  std::string firstChipDir() const;
-  /// Export channel 0 of the first chip; returns chip dir + pwm node or "".
-  std::string exportChannel0(const std::string &chipDir) const;
-  /// Unexport channel 0 of the first chip.
-  void unexportChannel0(const std::string &chipDir) const;
+    /// Sysfs dir of the first PWM chip ("" if none).
+    std::string firstChipDir() const;
+    /// Export channel 0 of the first chip; returns chip dir + pwm node or "".
+    std::string exportChannel0(const std::string& chipDir) const;
+    /// Unexport channel 0 of the first chip.
+    void unexportChannel0(const std::string& chipDir) const;
 
-protected:
-  std::vector<TestResult> runAllTests() override;
+    protected:
+    std::vector<TestResult> runAllTests() override;
 };
 
 #endif // PWMOUTPUTTESTING_H

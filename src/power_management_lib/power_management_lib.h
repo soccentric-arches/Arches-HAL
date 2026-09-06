@@ -19,260 +19,259 @@
  * functionalities.
  */
 class PowerManagementTesting : public TestBase {
-public: /**
-         * @brief Constructor for PowerManagementTesting
-         * @return TestOutput with pass/fail and data
-         */
-        /**
-         * @brief Function PowerManagementTesting
-         * @return TestOutput with pass/fail and data
-         */
+    public: /**
+             * @brief Constructor for PowerManagementTesting
+             * @return TestOutput with pass/fail and data
+             */
+            /**
+             * @brief Function PowerManagementTesting
+             * @return TestOutput with pass/fail and data
+             */
 
-  PowerManagementTesting();
-  /**
-   * @brief Constructor for PowerManagementTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Destructor for class
+    PowerManagementTesting();
+    /**
+     * @brief Constructor for PowerManagementTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Destructor for class
 
-   */
-  ~PowerManagementTesting();
-  /**
-   * @brief Constructor for PowerManagementTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the maximumperformancemode functionality
-   * @return TestOutput with pass/fail and data
-   */
+     */
+    ~PowerManagementTesting();
+    /**
+     * @brief Constructor for PowerManagementTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the maximumperformancemode functionality
+     * @return TestOutput with pass/fail and data
+     */
 
-  TestOutput testMaximumPerformanceMode();
-  /**
-   * @brief Constructor for PowerManagementTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the poweroptimizedmodes functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testPoweroptimizedModes();
-  /**
-   * @brief Constructor for PowerManagementTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the idlepowerconsumption functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testIdlePowerConsumption();
-  /**
-   * @brief Constructor for PowerManagementTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the sleepstates functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testSleepStates();
-  /**
-   * @brief Constructor for PowerManagementTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the powerstatetransitions functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testPowerStateTransitions();
-  /**
-   * @brief Constructor for PowerManagementTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the wakeupsources functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testWakeupSources();
-  /**
-   * @brief Constructor for PowerManagementTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the powerbuttonfunctionality functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testPowerButtonFunctionality();
-  /**
-   * @brief Constructor for PowerManagementTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the 12vasilqslrail functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput test12vAsilQsLRail();
-  /**
-   * @brief Constructor for PowerManagementTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the 12vasilqsrrail functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput test12vAsilQsRRail();
-  /**
-   * @brief Constructor for PowerManagementTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the allinternalvoltagerails functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testAllInternalVoltageRails();
-  /**
-   * @brief Constructor for PowerManagementTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the powersequencing functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testPowerSequencing();
-  /**
-   * @brief Constructor for PowerManagementTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the poweronreset functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testPoweronReset();
-  /**
-   * @brief Constructor for PowerManagementTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the brownoutdetection functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testBrownoutDetection();
-  /**
-   * @brief Constructor for PowerManagementTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the overvoltageprotection functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testOvervoltageProtection();
-  /**
-   * @brief Constructor for PowerManagementTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the undervoltageprotection functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testUndervoltageProtection();
-  /**
-   * @brief Constructor for PowerManagementTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the overcurrentprotection functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testOvercurrentProtection();
-  /**
-   * @brief Constructor for PowerManagementTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the powersupplyrejection functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testPowerSupplyRejection();
-  /**
-   * @brief Constructor for PowerManagementTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the realtimepowerconsumption functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testRealtimePowerConsumption();
-  /**
-   * @brief Constructor for PowerManagementTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the percomponentpowermeasurement functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testPercomponentPowerMeasurement();
-  /**
-   * @brief Constructor for PowerManagementTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the powerefficiencycalculation functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testPowerEfficiencyCalculation();
-  /**
-   * @brief Constructor for PowerManagementTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the batterycharging functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testBatteryCharging();
-  /**
-   * @brief Constructor for PowerManagementTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the upsfunctionality functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testUpsFunctionality();
+    TestOutput testMaximumPerformanceMode();
+    /**
+     * @brief Constructor for PowerManagementTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the poweroptimizedmodes functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testPoweroptimizedModes();
+    /**
+     * @brief Constructor for PowerManagementTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the idlepowerconsumption functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testIdlePowerConsumption();
+    /**
+     * @brief Constructor for PowerManagementTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the sleepstates functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testSleepStates();
+    /**
+     * @brief Constructor for PowerManagementTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the powerstatetransitions functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testPowerStateTransitions();
+    /**
+     * @brief Constructor for PowerManagementTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the wakeupsources functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testWakeupSources();
+    /**
+     * @brief Constructor for PowerManagementTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the powerbuttonfunctionality functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testPowerButtonFunctionality();
+    /**
+     * @brief Constructor for PowerManagementTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the 12vasilqslrail functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput test12vAsilQsLRail();
+    /**
+     * @brief Constructor for PowerManagementTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the 12vasilqsrrail functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput test12vAsilQsRRail();
+    /**
+     * @brief Constructor for PowerManagementTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the allinternalvoltagerails functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testAllInternalVoltageRails();
+    /**
+     * @brief Constructor for PowerManagementTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the powersequencing functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testPowerSequencing();
+    /**
+     * @brief Constructor for PowerManagementTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the poweronreset functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testPoweronReset();
+    /**
+     * @brief Constructor for PowerManagementTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the brownoutdetection functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testBrownoutDetection();
+    /**
+     * @brief Constructor for PowerManagementTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the overvoltageprotection functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testOvervoltageProtection();
+    /**
+     * @brief Constructor for PowerManagementTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the undervoltageprotection functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testUndervoltageProtection();
+    /**
+     * @brief Constructor for PowerManagementTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the overcurrentprotection functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testOvercurrentProtection();
+    /**
+     * @brief Constructor for PowerManagementTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the powersupplyrejection functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testPowerSupplyRejection();
+    /**
+     * @brief Constructor for PowerManagementTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the realtimepowerconsumption functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testRealtimePowerConsumption();
+    /**
+     * @brief Constructor for PowerManagementTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the percomponentpowermeasurement functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testPercomponentPowerMeasurement();
+    /**
+     * @brief Constructor for PowerManagementTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the powerefficiencycalculation functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testPowerEfficiencyCalculation();
+    /**
+     * @brief Constructor for PowerManagementTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the batterycharging functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testBatteryCharging();
+    /**
+     * @brief Constructor for PowerManagementTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the upsfunctionality functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testUpsFunctionality();
 
-  /**
-   * @brief Get list of all available test names
-   * @return Vector of test names
-   */
-  std::vector<std::string> getAvailableTests() override;
+    /**
+     * @brief Get list of all available test names
+     * @return Vector of test names
+     */
+    std::vector<std::string> getAvailableTests() override;
 
-  /**
-   * @brief Get list of all available test names
-   * @return Vector of test names
-   */
+    /**
+     * @brief Get list of all available test names
+     * @return Vector of test names
+     */
 
-  /**
-   * @brief Run a single test by name
-   * @param testName Name of the test to run
-   * @return Test result with timing
-   */
-  /// @brief Constructor with injected providers for deterministic testing
-  explicit PowerManagementTesting(
-      std::shared_ptr<SysfsProvider> sysfs,
-      std::shared_ptr<CommandProvider> cmd = nullptr);
+    /**
+     * @brief Run a single test by name
+     * @param testName Name of the test to run
+     * @return Test result with timing
+     */
+    /// @brief Constructor with injected providers for deterministic testing
+    explicit PowerManagementTesting(std::shared_ptr<SysfsProvider> sysfs,
+                                    std::shared_ptr<CommandProvider> cmd = nullptr);
 
-  /// @brief Get periodic-safe test names (passive health checks only)
-  std::vector<std::string> getPeriodicSafeTests() const;
+    /// @brief Get periodic-safe test names (passive health checks only)
+    std::vector<std::string> getPeriodicSafeTests() const;
 
-  /// @brief Get one-shot only test names (destructive/state-changing)
-  std::vector<std::string> getOneShotOnlyTests() const;
+    /// @brief Get one-shot only test names (destructive/state-changing)
+    std::vector<std::string> getOneShotOnlyTests() const;
 
-private:
-  std::shared_ptr<SysfsProvider> sysfs_;
-  std::shared_ptr<CommandProvider> cmd_;
+    private:
+    std::shared_ptr<SysfsProvider> sysfs_;
+    std::shared_ptr<CommandProvider> cmd_;
 
-  TestResult runSingleTest(const std::string &testName) override;
+    TestResult runSingleTest(const std::string& testName) override;
 
-protected:
-  std::vector<TestResult> runAllTests() override;
+    protected:
+    std::vector<TestResult> runAllTests() override;
 };
 
 #endif // POWERMANAGEMENTTESTING_H

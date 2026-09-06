@@ -19,124 +19,124 @@
  * functionalities.
  */
 class EnvironmentalTesting : public TestBase {
-public: /**
-         * @brief Constructor for EnvironmentalTesting
-         * @return TestOutput with pass/fail and data
-         */
-        /**
-         * @brief Function EnvironmentalTesting
-         * @return TestOutput with pass/fail and data
-         */
+    public: /**
+             * @brief Constructor for EnvironmentalTesting
+             * @return TestOutput with pass/fail and data
+             */
+            /**
+             * @brief Function EnvironmentalTesting
+             * @return TestOutput with pass/fail and data
+             */
 
-  EnvironmentalTesting();
-  /**
-   * @brief Constructor for EnvironmentalTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Destructor for class
+    EnvironmentalTesting();
+    /**
+     * @brief Constructor for EnvironmentalTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Destructor for class
 
-   */
-  ~EnvironmentalTesting();
-  /**
-   * @brief Constructor for EnvironmentalTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the temperaturerange functionality
-   * @return TestOutput with pass/fail and data
-   */
+     */
+    ~EnvironmentalTesting();
+    /**
+     * @brief Constructor for EnvironmentalTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the temperaturerange functionality
+     * @return TestOutput with pass/fail and data
+     */
 
-  TestOutput testTemperatureRange();
-  /**
-   * @brief Constructor for EnvironmentalTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the humidityresistance functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testHumidityResistance();
-  /**
-   * @brief Constructor for EnvironmentalTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the vibrationresistance functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testVibrationResistance();
-  /**
-   * @brief Constructor for EnvironmentalTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the shockresistance functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testShockResistance();
-  /**
-   * @brief Constructor for EnvironmentalTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the emiemccompliance functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testEmiemcCompliance();
-  /**
-   * @brief Constructor for EnvironmentalTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the esdprotection functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testEsdProtection();
-  /**
-   * @brief Constructor for EnvironmentalTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the saltsprayresistance functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testSaltSprayResistance();
+    TestOutput testTemperatureRange();
+    /**
+     * @brief Constructor for EnvironmentalTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the humidityresistance functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testHumidityResistance();
+    /**
+     * @brief Constructor for EnvironmentalTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the vibrationresistance functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testVibrationResistance();
+    /**
+     * @brief Constructor for EnvironmentalTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the shockresistance functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testShockResistance();
+    /**
+     * @brief Constructor for EnvironmentalTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the emiemccompliance functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testEmiemcCompliance();
+    /**
+     * @brief Constructor for EnvironmentalTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the esdprotection functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testEsdProtection();
+    /**
+     * @brief Constructor for EnvironmentalTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the saltsprayresistance functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testSaltSprayResistance();
 
-  /**
-   * @brief Get list of all available test names
-   * @return Vector of test names
-   */
-  std::vector<std::string> getAvailableTests() override;
+    /**
+     * @brief Get list of all available test names
+     * @return Vector of test names
+     */
+    std::vector<std::string> getAvailableTests() override;
 
-  /**
-   * @brief Get list of all available test names
-   * @return Vector of test names
-   */
+    /**
+     * @brief Get list of all available test names
+     * @return Vector of test names
+     */
 
-  /**
-   * @brief Run a single test by name
-   * @param testName Name of the test to run
-   * @return Test result with timing
-   */
-  /// @brief Constructor with injected providers for deterministic testing
-  explicit EnvironmentalTesting(std::shared_ptr<SysfsProvider> sysfs,
-                                std::shared_ptr<CommandProvider> cmd = nullptr);
+    /**
+     * @brief Run a single test by name
+     * @param testName Name of the test to run
+     * @return Test result with timing
+     */
+    /// @brief Constructor with injected providers for deterministic testing
+    explicit EnvironmentalTesting(std::shared_ptr<SysfsProvider> sysfs,
+                                  std::shared_ptr<CommandProvider> cmd = nullptr);
 
-  /// @brief Get periodic-safe test names (passive health checks only)
-  std::vector<std::string> getPeriodicSafeTests() const;
+    /// @brief Get periodic-safe test names (passive health checks only)
+    std::vector<std::string> getPeriodicSafeTests() const;
 
-  /// @brief Get one-shot only test names (destructive/state-changing)
-  std::vector<std::string> getOneShotOnlyTests() const;
+    /// @brief Get one-shot only test names (destructive/state-changing)
+    std::vector<std::string> getOneShotOnlyTests() const;
 
-private:
-  std::shared_ptr<SysfsProvider> sysfs_;
-  std::shared_ptr<CommandProvider> cmd_;
+    private:
+    std::shared_ptr<SysfsProvider> sysfs_;
+    std::shared_ptr<CommandProvider> cmd_;
 
-  TestResult runSingleTest(const std::string &testName) override;
+    TestResult runSingleTest(const std::string& testName) override;
 
-protected:
-  std::vector<TestResult> runAllTests() override;
+    protected:
+    std::vector<TestResult> runAllTests() override;
 };
 
 #endif // ENVIRONMENTALTESTING_H

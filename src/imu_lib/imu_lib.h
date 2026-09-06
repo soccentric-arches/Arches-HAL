@@ -16,133 +16,133 @@
  * functionalities.
  */
 class ImuTesting : public TestBase {
-public: /**
-         * @brief Constructor for ImuTesting
-         * @return TestOutput with pass/fail and data
-         */
-        /**
-         * @brief Function ImuTesting
-         * @return TestOutput with pass/fail and data
-         */
+    public: /**
+             * @brief Constructor for ImuTesting
+             * @return TestOutput with pass/fail and data
+             */
+            /**
+             * @brief Function ImuTesting
+             * @return TestOutput with pass/fail and data
+             */
 
-  ImuTesting();
-  /**
-   * @brief Constructor for ImuTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Destructor for class
+    ImuTesting();
+    /**
+     * @brief Constructor for ImuTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Destructor for class
 
-   */
-  ~ImuTesting();
-  /**
-   * @brief Constructor for ImuTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the 3axisaccelerometer functionality
-   * @return TestOutput with pass/fail and data
-   */
+     */
+    ~ImuTesting();
+    /**
+     * @brief Constructor for ImuTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the 3axisaccelerometer functionality
+     * @return TestOutput with pass/fail and data
+     */
 
-  TestOutput test3axisAccelerometer();
-  /**
-   * @brief Constructor for ImuTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the 3axisgyroscope functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput test3axisGyroscope();
-  /**
-   * @brief Constructor for ImuTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the 3axismagnetometer functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput test3axisMagnetometer();
-  /**
-   * @brief Constructor for ImuTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the imudatarate functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testImuDataRate();
-  /**
-   * @brief Constructor for ImuTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the imuaccuracy functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testImuAccuracy();
-  /**
-   * @brief Constructor for ImuTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the imucalibration functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testImuCalibration();
-  /**
-   * @brief Constructor for ImuTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the imutemperaturecompensation functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testImuTemperatureCompensation();
-  /**
-   * @brief Constructor for ImuTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the imutoorininterface functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testImuToOrinInterface();
+    TestOutput test3axisAccelerometer();
+    /**
+     * @brief Constructor for ImuTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the 3axisgyroscope functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput test3axisGyroscope();
+    /**
+     * @brief Constructor for ImuTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the 3axismagnetometer functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput test3axisMagnetometer();
+    /**
+     * @brief Constructor for ImuTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the imudatarate functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testImuDataRate();
+    /**
+     * @brief Constructor for ImuTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the imuaccuracy functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testImuAccuracy();
+    /**
+     * @brief Constructor for ImuTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the imucalibration functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testImuCalibration();
+    /**
+     * @brief Constructor for ImuTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the imutemperaturecompensation functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testImuTemperatureCompensation();
+    /**
+     * @brief Constructor for ImuTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the imutoorininterface functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testImuToOrinInterface();
 
-  /**
-   * @brief Get list of all available test names
-   * @return Vector of test names
-   */
-  std::vector<std::string> getAvailableTests() override;
+    /**
+     * @brief Get list of all available test names
+     * @return Vector of test names
+     */
+    std::vector<std::string> getAvailableTests() override;
 
-  /**
-   * @brief Get list of all available test names
-   * @return Vector of test names
-   */
+    /**
+     * @brief Get list of all available test names
+     * @return Vector of test names
+     */
 
-  /**
-   * @brief Run a single test by name
-   * @param testName Name of the test to run
-   * @return Test result with timing
-   */
-  /// @brief Constructor with injected providers for deterministic testing
-  explicit ImuTesting(std::shared_ptr<SysfsProvider> sysfs,
-                      std::shared_ptr<CommandProvider> cmd = nullptr);
+    /**
+     * @brief Run a single test by name
+     * @param testName Name of the test to run
+     * @return Test result with timing
+     */
+    /// @brief Constructor with injected providers for deterministic testing
+    explicit ImuTesting(std::shared_ptr<SysfsProvider> sysfs,
+                        std::shared_ptr<CommandProvider> cmd = nullptr);
 
-  /// @brief Get periodic-safe test names (passive health checks only)
-  std::vector<std::string> getPeriodicSafeTests() const;
+    /// @brief Get periodic-safe test names (passive health checks only)
+    std::vector<std::string> getPeriodicSafeTests() const;
 
-  /// @brief Get one-shot only test names (destructive/state-changing)
-  std::vector<std::string> getOneShotOnlyTests() const;
+    /// @brief Get one-shot only test names (destructive/state-changing)
+    std::vector<std::string> getOneShotOnlyTests() const;
 
-private:
-  std::shared_ptr<SysfsProvider> sysfs_;
-  std::shared_ptr<CommandProvider> cmd_;
+    private:
+    std::shared_ptr<SysfsProvider> sysfs_;
+    std::shared_ptr<CommandProvider> cmd_;
 
-  TestResult runSingleTest(const std::string &testName) override;
+    TestResult runSingleTest(const std::string& testName) override;
 
-protected:
-  std::vector<TestResult> runAllTests() override;
+    protected:
+    std::vector<TestResult> runAllTests() override;
 };
 
 #endif // IMUTESTING_H

@@ -54,407 +54,392 @@ static void testRunnerSigHandler(int /*signal*/) { g_test_stop_flag = true; }
 // Utilities
 // ---------------------------------------------------------------------------
 
-static std::string trReadSysfs(const std::string &path) {
-  std::ifstream f(path);
-  if (!f.is_open()) {
-    return "";
-  }
-  std::string line;
-  std::getline(f, line);
-  while (!line.empty() &&
-         (line.back() == '\n' || line.back() == '\r' || line.back() == ' ')) {
-    line.pop_back();
-  }
-  return line;
+static std::string trReadSysfs(const std::string& path) {
+    std::ifstream f(path);
+    if (!f.is_open()) {
+        return "";
+    }
+    std::string line;
+    std::getline(f, line);
+    while (!line.empty() && (line.back() == '\n' || line.back() == '\r' || line.back() == ' ')) {
+        line.pop_back();
+    }
+    return line;
 }
 
 // Parse human-friendly duration string to milliseconds.
 // Accepted: "500ms"  "30s"  "5m"  "2h"  "1d"  or plain integer (treated as ms).
 // Returns -1 if the input cannot be parsed.
 // Rejects negative values and trailing characters after a valid parse.
-static long long trParseDuration(const std::string &s) {
-  try {
-    if (s.empty() || s[0] == '-') {
-      std::cerr << "[ERROR] Duration must be non-negative, got \"" << s
-                << "\"\n";
-      return -1LL;
-    }
-    if (s.size() >= 3 && s.substr(s.size() - 2) == "ms") {
-      std::string num = s.substr(0, s.size() - 2);
-      if (num.empty() || num[0] == '-')
+static long long trParseDuration(const std::string& s) {
+    try {
+        if (s.empty() || s[0] == '-') {
+            std::cerr << "[ERROR] Duration must be non-negative, got \"" << s << "\"\n";
+            return -1LL;
+        }
+        if (s.size() >= 3 && s.substr(s.size() - 2) == "ms") {
+            std::string num = s.substr(0, s.size() - 2);
+            if (num.empty() || num[0] == '-')
+                return -1LL;
+            std::size_t pos = 0;
+            long long val = std::stoll(num, &pos);
+            if (pos != num.size()) {
+                std::cerr << "[ERROR] Trailing characters in duration \"" << s << "\"\n";
+                return -1LL;
+            }
+            return val;
+        }
+        if (s.size() >= 2) {
+            char u = s.back();
+            std::string n = s.substr(0, s.size() - 1);
+            if (n.empty() || n[0] == '-')
+                return -1LL;
+            std::size_t pos = 0;
+            long long num = std::stoll(n, &pos);
+            if (pos != n.size()) {
+                std::cerr << "[ERROR] Trailing characters in duration \"" << s << "\"\n";
+                return -1LL;
+            }
+            if (u == 's')
+                return num * 1000LL;
+            if (u == 'm')
+                return num * 60000LL;
+            if (u == 'h')
+                return num * 3600000LL;
+            if (u == 'd')
+                return num * 86400000LL;
+        }
+        std::size_t pos = 0;
+        long long val = std::stoll(s, &pos);
+        if (pos != s.size()) {
+            std::cerr << "[ERROR] Trailing characters in duration \"" << s << "\"\n";
+            return -1LL;
+        }
+        return val; // plain integer → ms
+    } catch (...) {
+        std::cerr << "[ERROR] Invalid duration string: \"" << s << "\"\n";
         return -1LL;
-      std::size_t pos = 0;
-      long long val = std::stoll(num, &pos);
-      if (pos != num.size()) {
-        std::cerr << "[ERROR] Trailing characters in duration \"" << s
-                  << "\"\n";
-        return -1LL;
-      }
-      return val;
     }
-    if (s.size() >= 2) {
-      char u = s.back();
-      std::string n = s.substr(0, s.size() - 1);
-      if (n.empty() || n[0] == '-')
-        return -1LL;
-      std::size_t pos = 0;
-      long long num = std::stoll(n, &pos);
-      if (pos != n.size()) {
-        std::cerr << "[ERROR] Trailing characters in duration \"" << s
-                  << "\"\n";
-        return -1LL;
-      }
-      if (u == 's')
-        return num * 1000LL;
-      if (u == 'm')
-        return num * 60000LL;
-      if (u == 'h')
-        return num * 3600000LL;
-      if (u == 'd')
-        return num * 86400000LL;
-    }
-    std::size_t pos = 0;
-    long long val = std::stoll(s, &pos);
-    if (pos != s.size()) {
-      std::cerr << "[ERROR] Trailing characters in duration \"" << s << "\"\n";
-      return -1LL;
-    }
-    return val; // plain integer → ms
-  } catch (...) {
-    std::cerr << "[ERROR] Invalid duration string: \"" << s << "\"\n";
-    return -1LL;
-  }
 }
 
 // Helper: parse a strictly positive integer from a CLI argument.
 // Returns -1 on failure (negative, zero, trailing chars, or non-numeric).
-static int trParsePositiveInt(const std::string &s, const std::string &name) {
-  if (s.empty() || s[0] == '-') {
-    std::cerr << "[ERROR] " << name << " must be positive, got \"" << s
-              << "\"\n";
-    return -1;
-  }
-  try {
-    std::size_t pos = 0;
-    int val = std::stoi(s, &pos);
-    if (pos != s.size()) {
-      std::cerr << "[ERROR] Trailing characters in " << name << ": \"" << s
-                << "\"\n";
-      return -1;
+static int trParsePositiveInt(const std::string& s, const std::string& name) {
+    if (s.empty() || s[0] == '-') {
+        std::cerr << "[ERROR] " << name << " must be positive, got \"" << s << "\"\n";
+        return -1;
     }
-    if (val <= 0) {
-      std::cerr << "[ERROR] " << name << " must be positive, got " << val
-                << "\n";
-      return -1;
+    try {
+        std::size_t pos = 0;
+        int val = std::stoi(s, &pos);
+        if (pos != s.size()) {
+            std::cerr << "[ERROR] Trailing characters in " << name << ": \"" << s << "\"\n";
+            return -1;
+        }
+        if (val <= 0) {
+            std::cerr << "[ERROR] " << name << " must be positive, got " << val << "\n";
+            return -1;
+        }
+        return val;
+    } catch (...) {
+        std::cerr << "[ERROR] Invalid " << name << ": \"" << s << "\"\n";
+        return -1;
     }
-    return val;
-  } catch (...) {
-    std::cerr << "[ERROR] Invalid " << name << ": \"" << s << "\"\n";
-    return -1;
-  }
 }
 
 // ---------------------------------------------------------------------------
 // Built-in Arches (Jetson) hardware monitor items
 // ---------------------------------------------------------------------------
 
-static std::string trReadFirstExisting(const std::vector<std::string> &paths) {
-  for (const std::string &path : paths) {
-    const std::string value = trReadSysfs(path);
-    if (!value.empty()) {
-      return value;
+static std::string trReadFirstExisting(const std::vector<std::string>& paths) {
+    for (const std::string& path : paths) {
+        const std::string value = trReadSysfs(path);
+        if (!value.empty()) {
+            return value;
+        }
     }
-  }
-  return "";
+    return "";
 }
 
 static std::vector<MonitorItem> trArchesMonitorItems() {
-  return {
-      {"cpu_temp_C",
-       []() -> MonitorValue {
-         std::vector<std::string> paths;
-         for (const char *path : arches::platform::THERMAL_ZONE_PATHS) {
-           paths.emplace_back(path);
-         }
-         std::string v = trReadFirstExisting(paths);
-         if (v.empty()) {
-           return {std::string(""), MonitorAvailability::UNAVAILABLE,
-                   "No thermal zone found"};
-         }
-         try {
-           double tempC = std::stod(v) / 1000.0;
-           return {tempC, MonitorAvailability::AVAILABLE, ""};
-         } catch (...) {
-           return {std::string(""), MonitorAvailability::ERROR,
-                   "Failed to parse temperature: " + v};
-         }
-       }},
-      {"cpu0_freq_MHz",
-       []() -> MonitorValue {
-         std::string v = trReadSysfs(arches::platform::CPU_FREQ_PATH);
-         if (v.empty()) {
-           return {std::string(""), MonitorAvailability::UNAVAILABLE,
-                   "CPU freq sysfs not found"};
-         }
-         try {
-           long long freqMHz = std::stoll(v) / 1000;
-           return {freqMHz, MonitorAvailability::AVAILABLE, ""};
-         } catch (...) {
-           return {std::string(""), MonitorAvailability::ERROR,
-                   "Failed to parse CPU freq: " + v};
-         }
-       }},
-      {"gpu_freq_MHz",
-       []() -> MonitorValue {
-         std::vector<std::string> paths;
-         for (const char *path : arches::platform::GPU_FREQ_PATHS) {
-           paths.emplace_back(path);
-         }
-         std::string v = trReadFirstExisting(paths);
-         if (v.empty()) {
-           return {std::string(""), MonitorAvailability::UNAVAILABLE,
-                   "No GPU freq sysfs found"};
-         }
-         try {
-           long long freqMHz = std::stoll(v) / 1000000;
-           return {freqMHz, MonitorAvailability::AVAILABLE, ""};
-         } catch (...) {
-           return {std::string(""), MonitorAvailability::ERROR,
-                   "Failed to parse GPU freq: " + v};
-         }
-       }},
-      {"mem_avail_MB",
-       []() -> MonitorValue {
-         std::ifstream f("/proc/meminfo");
-         if (!f.is_open()) {
-           return {std::string(""), MonitorAvailability::UNAVAILABLE,
-                   "/proc/meminfo not found"};
-         }
-         std::string line;
-         while (std::getline(f, line)) {
-           if (line.rfind("MemAvailable:", 0) == 0) {
-             std::istringstream ss(line.substr(13));
-             long long kb = 0;
-             ss >> kb;
-             return {kb / 1024, MonitorAvailability::AVAILABLE, ""};
-           }
-         }
-         return {std::string(""), MonitorAvailability::UNAVAILABLE,
-                 "MemAvailable not found in /proc/meminfo"};
-       }},
-  };
+    return {
+        {"cpu_temp_C",
+         []() -> MonitorValue {
+             std::vector<std::string> paths;
+             for (const char* path : arches::platform::THERMAL_ZONE_PATHS) {
+                 paths.emplace_back(path);
+             }
+             std::string v = trReadFirstExisting(paths);
+             if (v.empty()) {
+                 return {std::string(""), MonitorAvailability::UNAVAILABLE,
+                         "No thermal zone found"};
+             }
+             try {
+                 double tempC = std::stod(v) / 1000.0;
+                 return {tempC, MonitorAvailability::AVAILABLE, ""};
+             } catch (...) {
+                 return {std::string(""), MonitorAvailability::ERROR,
+                         "Failed to parse temperature: " + v};
+             }
+         }},
+        {"cpu0_freq_MHz",
+         []() -> MonitorValue {
+             std::string v = trReadSysfs(arches::platform::CPU_FREQ_PATH);
+             if (v.empty()) {
+                 return {std::string(""), MonitorAvailability::UNAVAILABLE,
+                         "CPU freq sysfs not found"};
+             }
+             try {
+                 long long freqMHz = std::stoll(v) / 1000;
+                 return {freqMHz, MonitorAvailability::AVAILABLE, ""};
+             } catch (...) {
+                 return {std::string(""), MonitorAvailability::ERROR,
+                         "Failed to parse CPU freq: " + v};
+             }
+         }},
+        {"gpu_freq_MHz",
+         []() -> MonitorValue {
+             std::vector<std::string> paths;
+             for (const char* path : arches::platform::GPU_FREQ_PATHS) {
+                 paths.emplace_back(path);
+             }
+             std::string v = trReadFirstExisting(paths);
+             if (v.empty()) {
+                 return {std::string(""), MonitorAvailability::UNAVAILABLE,
+                         "No GPU freq sysfs found"};
+             }
+             try {
+                 long long freqMHz = std::stoll(v) / 1000000;
+                 return {freqMHz, MonitorAvailability::AVAILABLE, ""};
+             } catch (...) {
+                 return {std::string(""), MonitorAvailability::ERROR,
+                         "Failed to parse GPU freq: " + v};
+             }
+         }},
+        {"mem_avail_MB",
+         []() -> MonitorValue {
+             std::ifstream f("/proc/meminfo");
+             if (!f.is_open()) {
+                 return {std::string(""), MonitorAvailability::UNAVAILABLE,
+                         "/proc/meminfo not found"};
+             }
+             std::string line;
+             while (std::getline(f, line)) {
+                 if (line.rfind("MemAvailable:", 0) == 0) {
+                     std::istringstream ss(line.substr(13));
+                     long long kb = 0;
+                     ss >> kb;
+                     return {kb / 1024, MonitorAvailability::AVAILABLE, ""};
+                 }
+             }
+             return {std::string(""), MonitorAvailability::UNAVAILABLE,
+                     "MemAvailable not found in /proc/meminfo"};
+         }},
+    };
 }
 
 // ---------------------------------------------------------------------------
 // EventCriteria factory from a CLI keyword string
 // ---------------------------------------------------------------------------
 
-static EventCriteria trMakeCriteria(const std::string &spec) {
-  if (spec == "any-fail") {
-    return {"any test fails", [](const std::vector<TestResult> &r) {
-              for (const auto &t : r) {
-                if (t.output.status != hal::Status::PASS)
-                  return true;
-              }
-              return false;
-            }};
-  }
-  if (spec == "all-fail") {
-    return {"all tests fail", [](const std::vector<TestResult> &r) {
-              for (const auto &t : r) {
-                if (t.output.status == hal::Status::PASS)
-                  return false;
-              }
-              return !r.empty();
-            }};
-  }
-  if (spec == "all-pass") {
-    return {"all tests pass", [](const std::vector<TestResult> &r) {
-              for (const auto &t : r) {
-                if (t.output.status != hal::Status::PASS)
-                  return false;
-              }
-              return !r.empty();
-            }};
-  }
-  // fail-rate-above-N  (N is integer percentage 0–100)
-  if (spec.rfind("fail-rate-above-", 0) == 0) {
-    int threshold = 0;
-    try {
-      threshold = std::stoi(spec.substr(16));
-    } catch (...) {
-      std::cerr << "[ERROR] Invalid fail-rate threshold in '" << spec << "'\n";
-      return {spec, [](const std::vector<TestResult> &) { return false; }};
+static EventCriteria trMakeCriteria(const std::string& spec) {
+    if (spec == "any-fail") {
+        return {"any test fails", [](const std::vector<TestResult>& r) {
+                    for (const auto& t : r) {
+                        if (t.output.status != hal::Status::PASS)
+                            return true;
+                    }
+                    return false;
+                }};
     }
-    if (threshold < 0 || threshold > 100) {
-      std::cerr << "[ERROR] fail-rate-above-N threshold must be 0–100, got "
-                << threshold << "\n";
-      return {spec, [](const std::vector<TestResult> &) { return false; }};
+    if (spec == "all-fail") {
+        return {"all tests fail", [](const std::vector<TestResult>& r) {
+                    for (const auto& t : r) {
+                        if (t.output.status == hal::Status::PASS)
+                            return false;
+                    }
+                    return !r.empty();
+                }};
     }
-    return {"fail rate above " + std::to_string(threshold) + "%",
-            [threshold](const std::vector<TestResult> &r) {
-              if (r.empty())
-                return false;
-              int fails = 0;
-              for (const auto &t : r) {
-                if (t.output.status != hal::Status::PASS)
-                  ++fails;
-              }
-              return (fails * 100 / static_cast<int>(r.size())) > threshold;
-            }};
-  }
-  std::cerr << "[WARNING] Unknown event criteria '" << spec
-            << "'. Valid: any-fail | all-fail | all-pass | fail-rate-above-N\n";
-  return {spec, [](const std::vector<TestResult> &) { return false; }};
+    if (spec == "all-pass") {
+        return {"all tests pass", [](const std::vector<TestResult>& r) {
+                    for (const auto& t : r) {
+                        if (t.output.status != hal::Status::PASS)
+                            return false;
+                    }
+                    return !r.empty();
+                }};
+    }
+    // fail-rate-above-N  (N is integer percentage 0–100)
+    if (spec.rfind("fail-rate-above-", 0) == 0) {
+        int threshold = 0;
+        try {
+            threshold = std::stoi(spec.substr(16));
+        } catch (...) {
+            std::cerr << "[ERROR] Invalid fail-rate threshold in '" << spec << "'\n";
+            return {spec, [](const std::vector<TestResult>&) { return false; }};
+        }
+        if (threshold < 0 || threshold > 100) {
+            std::cerr << "[ERROR] fail-rate-above-N threshold must be 0–100, got " << threshold
+                      << "\n";
+            return {spec, [](const std::vector<TestResult>&) { return false; }};
+        }
+        return {"fail rate above " + std::to_string(threshold) + "%",
+                [threshold](const std::vector<TestResult>& r) {
+                    if (r.empty())
+                        return false;
+                    int fails = 0;
+                    for (const auto& t : r) {
+                        if (t.output.status != hal::Status::PASS)
+                            ++fails;
+                    }
+                    return (fails * 100 / static_cast<int>(r.size())) > threshold;
+                }};
+    }
+    std::cerr << "[WARNING] Unknown event criteria '" << spec
+              << "'. Valid: any-fail | all-fail | all-pass | fail-rate-above-N\n";
+    return {spec, [](const std::vector<TestResult>&) { return false; }};
 }
 
 // ---------------------------------------------------------------------------
 // Output helpers
 // ---------------------------------------------------------------------------
 
-static void trPrintTable(const std::vector<TestResult> &results) {
-  int passed = 0, failed = 0, errored = 0, skipped = 0;
-  std::chrono::duration<double> total{};
-  std::cout << "\n"
-            << std::left << std::setw(42) << "Test Name" << std::setw(9)
-            << "Result" << "Duration(s)\n"
-            << std::string(64, '-') << "\n";
-  for (const auto &r : results) {
-    const char *label = "FAIL";
-    switch (r.output.status) {
-    case hal::Status::PASS:
-      label = "PASS";
-      ++passed;
-      break;
-    case hal::Status::FAIL:
-      label = "FAIL";
-      ++failed;
-      break;
-    case hal::Status::ERROR:
-      label = "ERROR";
-      ++errored;
-      break;
-    case hal::Status::TIMEOUT:
-      label = "TIMEOUT";
-      ++errored;
-      break;
-    case hal::Status::SKIPPED:
-      label = "SKIP";
-      ++skipped;
-      break;
-    case hal::Status::ABORTED:
-      label = "ABORT";
-      ++errored;
-      break;
+static void trPrintTable(const std::vector<TestResult>& results) {
+    int passed = 0, failed = 0, errored = 0, skipped = 0;
+    std::chrono::duration<double> total{};
+    std::cout << "\n"
+              << std::left << std::setw(42) << "Test Name" << std::setw(9) << "Result"
+              << "Duration(s)\n"
+              << std::string(64, '-') << "\n";
+    for (const auto& r : results) {
+        const char* label = "FAIL";
+        switch (r.output.status) {
+        case hal::Status::PASS:
+            label = "PASS";
+            ++passed;
+            break;
+        case hal::Status::FAIL:
+            label = "FAIL";
+            ++failed;
+            break;
+        case hal::Status::ERROR:
+            label = "ERROR";
+            ++errored;
+            break;
+        case hal::Status::TIMEOUT:
+            label = "TIMEOUT";
+            ++errored;
+            break;
+        case hal::Status::SKIPPED:
+            label = "SKIP";
+            ++skipped;
+            break;
+        case hal::Status::ABORTED:
+            label = "ABORT";
+            ++errored;
+            break;
+        }
+        std::cout << std::left << std::setw(42) << r.name << std::setw(9) << label << std::fixed
+                  << std::setprecision(6) << std::chrono::duration<double>(r.duration).count()
+                  << "\n";
+        for (const auto& kv : r.output.reason) {
+            std::cout << "    [" << kv.first << "] " << kv.second << "\n";
+        }
+        if (!r.output.error_message.empty()) {
+            std::cout << "    [error] " << r.output.error_message << "\n";
+        }
+        total += r.duration;
     }
-    std::cout << std::left << std::setw(42) << r.name << std::setw(9) << label
-              << std::fixed << std::setprecision(6)
-              << std::chrono::duration<double>(r.duration).count() << "\n";
-    for (const auto &kv : r.output.reason) {
-      std::cout << "    [" << kv.first << "] " << kv.second << "\n";
-    }
-    if (!r.output.error_message.empty()) {
-      std::cout << "    [error] " << r.output.error_message << "\n";
-    }
-    total += r.duration;
-  }
-  std::cout << std::string(64, '-') << "\n"
-            << "Total: " << results.size() << "  Pass: " << passed
-            << "  Fail: " << failed;
-  if (errored > 0)
-    std::cout << "  Error: " << errored;
-  if (skipped > 0)
-    std::cout << "  Skip: " << skipped;
-  std::cout << "  Time: " << std::fixed << std::setprecision(4) << total.count()
-            << "s\n";
+    std::cout << std::string(64, '-') << "\n"
+              << "Total: " << results.size() << "  Pass: " << passed << "  Fail: " << failed;
+    if (errored > 0)
+        std::cout << "  Error: " << errored;
+    if (skipped > 0)
+        std::cout << "  Skip: " << skipped;
+    std::cout << "  Time: " << std::fixed << std::setprecision(4) << total.count() << "s\n";
 }
 
-static void trPrintCycleHeader(int cycle, const std::string &label,
-                               bool clear_screen) {
-  if (clear_screen) {
-    // Use ANSI escape sequence instead of system("clear") to avoid
-    // spawning a shell process and the associated OWASP A03 risk.
-    std::cout << "\033[2J\033[H";
-  }
-  std::cout << "\n[Cycle " << cycle << "] " << label << "\n";
+static void trPrintCycleHeader(int cycle, const std::string& label, bool clear_screen) {
+    if (clear_screen) {
+        // Use ANSI escape sequence instead of system("clear") to avoid
+        // spawning a shell process and the associated OWASP A03 risk.
+        std::cout << "\033[2J\033[H";
+    }
+    std::cout << "\n[Cycle " << cycle << "] " << label << "\n";
 }
 
 // Format a Value variant for display.
-static std::string trFormatValue(const Value &v) {
-  if (std::holds_alternative<bool>(v)) {
-    return std::get<bool>(v) ? "true" : "false";
-  }
-  if (std::holds_alternative<int64_t>(v)) {
-    return std::to_string(std::get<int64_t>(v));
-  }
-  if (std::holds_alternative<double>(v)) {
-    std::ostringstream ss;
-    ss << std::fixed << std::setprecision(1) << std::get<double>(v);
-    return ss.str();
-  }
-  return std::get<std::string>(v);
-}
-
-static void trPrintMonitorData(
-    const std::vector<std::pair<std::string, MonitorValue>> &data) {
-  if (data.empty())
-    return;
-  std::cout << "--- System Monitors ---\n";
-  for (const auto &kv : data) {
-    const auto &mv = kv.second;
-    std::cout << "  " << std::left << std::setw(20) << kv.first << ": ";
-    switch (mv.availability) {
-    case MonitorAvailability::AVAILABLE:
-      std::cout << trFormatValue(mv.value) << "\n";
-      break;
-    case MonitorAvailability::UNAVAILABLE:
-      std::cout << "UNAVAILABLE";
-      if (!mv.error_message.empty())
-        std::cout << " (" << mv.error_message << ")";
-      std::cout << "\n";
-      break;
-    case MonitorAvailability::ERROR:
-      std::cout << "ERROR";
-      if (!mv.error_message.empty())
-        std::cout << " (" << mv.error_message << ")";
-      std::cout << "\n";
-      break;
+static std::string trFormatValue(const Value& v) {
+    if (std::holds_alternative<bool>(v)) {
+        return std::get<bool>(v) ? "true" : "false";
     }
-  }
+    if (std::holds_alternative<int64_t>(v)) {
+        return std::to_string(std::get<int64_t>(v));
+    }
+    if (std::holds_alternative<double>(v)) {
+        std::ostringstream ss;
+        ss << std::fixed << std::setprecision(1) << std::get<double>(v);
+        return ss.str();
+    }
+    return std::get<std::string>(v);
 }
 
-static void trPrintUsage(const std::string &name) {
-  std::cout
-      << "Usage:\n"
-      << "  " << name
-      << "                                       one-shot (default)\n"
-      << "  " << name
-      << " one-shot                              run all tests once\n"
-      << "  " << name
-      << " monitoring [interval_ms]              run indefinitely (Ctrl+C "
-         "stops)\n"
-      << "  " << name
-      << " long-term  <interval_ms> <duration>   run for fixed duration\n"
-      << "  " << name
-      << " monitor-test <interval_ms> <duration> long-term + Arches hw "
-         "monitors\n"
-      << "  " << name
-      << " event <poll_ms> <criteria> [max_dur]  fire callback on criteria\n"
-      << "\nDuration: 500ms  30s  5m  2h  1d  (plain integer = ms)\n"
-      << "Criteria: any-fail | all-fail | all-pass | fail-rate-above-N\n"
-      << "\n--strict: exit 1 if any test FAIL/ERROR (SKIPPED does not fail)\n";
+static void trPrintMonitorData(const std::vector<std::pair<std::string, MonitorValue>>& data) {
+    if (data.empty())
+        return;
+    std::cout << "--- System Monitors ---\n";
+    for (const auto& kv : data) {
+        const auto& mv = kv.second;
+        std::cout << "  " << std::left << std::setw(20) << kv.first << ": ";
+        switch (mv.availability) {
+        case MonitorAvailability::AVAILABLE:
+            std::cout << trFormatValue(mv.value) << "\n";
+            break;
+        case MonitorAvailability::UNAVAILABLE:
+            std::cout << "UNAVAILABLE";
+            if (!mv.error_message.empty())
+                std::cout << " (" << mv.error_message << ")";
+            std::cout << "\n";
+            break;
+        case MonitorAvailability::ERROR:
+            std::cout << "ERROR";
+            if (!mv.error_message.empty())
+                std::cout << " (" << mv.error_message << ")";
+            std::cout << "\n";
+            break;
+        }
+    }
+}
+
+static void trPrintUsage(const std::string& name) {
+    std::cout << "Usage:\n"
+              << "  " << name << "                                       one-shot (default)\n"
+              << "  " << name << " one-shot                              run all tests once\n"
+              << "  " << name
+              << " monitoring [interval_ms]              run indefinitely (Ctrl+C "
+                 "stops)\n"
+              << "  " << name << " long-term  <interval_ms> <duration>   run for fixed duration\n"
+              << "  " << name
+              << " monitor-test <interval_ms> <duration> long-term + Arches hw "
+                 "monitors\n"
+              << "  " << name
+              << " event <poll_ms> <criteria> [max_dur]  fire callback on criteria\n"
+              << "\nDuration: 500ms  30s  5m  2h  1d  (plain integer = ms)\n"
+              << "Criteria: any-fail | all-fail | all-pass | fail-rate-above-N\n"
+              << "\n--strict: exit 1 if any test FAIL/ERROR (SKIPPED does not fail)\n";
 }
 
 // ---------------------------------------------------------------------------
 // Wait for a background test to finish (or Ctrl+C)
 // ---------------------------------------------------------------------------
 
-template <typename T> static void trWaitForCompletion(T &tester) {
-  while (!g_test_stop_flag && tester.isRunning()) {
-    std::this_thread::sleep_for(std::chrono::milliseconds(200));
-  }
-  tester.stop();
-  g_test_stop_flag = false;
+template <typename T> static void trWaitForCompletion(T& tester) {
+    while (!g_test_stop_flag && tester.isRunning()) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(200));
+    }
+    tester.stop();
+    g_test_stop_flag = false;
 }
 
 // ---------------------------------------------------------------------------
@@ -462,211 +447,202 @@ template <typename T> static void trWaitForCompletion(T &tester) {
 // SKIPPED tests do not count — absent hardware is an expected CI condition.
 // ---------------------------------------------------------------------------
 
-static bool trHasFailures(const std::vector<TestResult> &results) {
-  for (const auto &r : results) {
-    switch (r.output.status) {
-    case hal::Status::FAIL:
-    case hal::Status::ERROR:
-    case hal::Status::TIMEOUT:
-    case hal::Status::ABORTED:
-      return true;
-    default:
-      break;
+static bool trHasFailures(const std::vector<TestResult>& results) {
+    for (const auto& r : results) {
+        switch (r.output.status) {
+        case hal::Status::FAIL:
+        case hal::Status::ERROR:
+        case hal::Status::TIMEOUT:
+        case hal::Status::ABORTED:
+            return true;
+        default:
+            break;
+        }
     }
-  }
-  return false;
+    return false;
 }
 
 // ---------------------------------------------------------------------------
 // Main template entry point — instantiated once per test binary
 // ---------------------------------------------------------------------------
 
-template <typename T>
-int runTestApp(const std::string &appName, int argc, char *argv[]) {
-  // --strict: exit non-zero when any test FAILs/ERRORs (opt-in so existing
-  // CI flows keep their current contract). SKIPPED never fails the binary.
-  bool strict = false;
-  std::vector<const char *> effectiveArgv;
-  effectiveArgv.reserve(static_cast<std::size_t>(argc));
-  effectiveArgv.push_back(argv[0]);
-  for (int i = 1; i < argc; ++i) {
-    if (std::string(argv[i]) == "--strict") {
-      strict = true;
-    } else {
-      effectiveArgv.push_back(argv[i]);
+template <typename T> int runTestApp(const std::string& appName, int argc, char* argv[]) {
+    // --strict: exit non-zero when any test FAILs/ERRORs (opt-in so existing
+    // CI flows keep their current contract). SKIPPED never fails the binary.
+    bool strict = false;
+    std::vector<const char*> effectiveArgv;
+    effectiveArgv.reserve(static_cast<std::size_t>(argc));
+    effectiveArgv.push_back(argv[0]);
+    for (int i = 1; i < argc; ++i) {
+        if (std::string(argv[i]) == "--strict") {
+            strict = true;
+        } else {
+            effectiveArgv.push_back(argv[i]);
+        }
     }
-  }
-  const int effectiveArgc = static_cast<int>(effectiveArgv.size());
-  const char *const *args = effectiveArgv.data();
+    const int effectiveArgc = static_cast<int>(effectiveArgv.size());
+    const char* const* args = effectiveArgv.data();
 
-  std::string mode_str = (effectiveArgc > 1) ? effectiveArgv[1] : "one-shot";
+    std::string mode_str = (effectiveArgc > 1) ? effectiveArgv[1] : "one-shot";
 
-  if (mode_str == "--help" || mode_str == "-h") {
+    if (mode_str == "--help" || mode_str == "-h") {
+        trPrintUsage(appName);
+        return 0;
+    }
+
+    // ---- ONE SHOT ----------------------------------------------------------
+    if (mode_str == "one-shot" || mode_str == "SINGLE_SHOT") {
+        T tester;
+        bool failed = false;
+        std::cout << appName << " [one-shot]" << (strict ? " [strict]" : "") << "\n";
+        tester.runTests(TestMode::SINGLE_SHOT, [&failed](const std::vector<TestResult>& r) {
+            trPrintTable(r);
+            failed = trHasFailures(r);
+        });
+        std::cout << appName << " completed.\n";
+        return (strict && failed) ? 1 : 0;
+    }
+
+    // ---- MONITORING (indefinite) -------------------------------------------
+    if (mode_str == "monitoring") {
+        int interval_ms = 1000;
+        if (effectiveArgc > 2) {
+            interval_ms = trParsePositiveInt(args[2], "interval_ms");
+            if (interval_ms < 0)
+                return 1;
+        }
+        T tester;
+        int cycle = 0;
+        bool failed = false;
+        std::cout << appName << " [monitoring] interval=" << interval_ms << "ms"
+                  << (strict ? " [strict]" : "") << "  Ctrl+C to stop\n";
+        std::signal(SIGINT, testRunnerSigHandler);
+        tester.runTests(
+            TestMode::MONITORING,
+            [&cycle, &failed](const std::vector<TestResult>& r) {
+                trPrintCycleHeader(++cycle, "monitoring", true);
+                trPrintTable(r);
+                if (trHasFailures(r))
+                    failed = true;
+            },
+            interval_ms);
+        trWaitForCompletion(tester);
+        std::cout << "\n" << appName << " monitoring stopped.\n";
+        return (strict && failed) ? 1 : 0;
+    }
+
+    // ---- LONG TERM ---------------------------------------------------------
+    if (mode_str == "long-term") {
+        if (effectiveArgc < 4) {
+            std::cerr << "Usage: " << appName << " long-term <interval_ms> <duration>\n";
+            return 1;
+        }
+        int interval_ms = trParsePositiveInt(args[2], "interval_ms");
+        if (interval_ms < 0)
+            return 1;
+        long long duration_ms = trParseDuration(args[3]);
+        if (duration_ms < 0)
+            return 1;
+        T tester;
+        bool failed = false;
+        std::cout << appName << " [long-term] interval=" << interval_ms
+                  << "ms  duration=" << duration_ms << "ms" << (strict ? " [strict]" : "")
+                  << "  Ctrl+C to abort early\n";
+        std::signal(SIGINT, testRunnerSigHandler);
+        tester.runLongTerm(interval_ms, duration_ms,
+                           [&failed](const std::vector<TestResult>& r, int cycle) {
+                               trPrintCycleHeader(cycle, "long-term", false);
+                               trPrintTable(r);
+                               if (trHasFailures(r))
+                                   failed = true;
+                           });
+        trWaitForCompletion(tester);
+        std::cout << "\n" << appName << " long-term completed.\n";
+        return (strict && failed) ? 1 : 0;
+    }
+
+    // ---- MONITORING TEST ---------------------------------------------------
+    if (mode_str == "monitor-test") {
+        if (effectiveArgc < 4) {
+            std::cerr << "Usage: " << appName << " monitor-test <interval_ms> <duration>\n";
+            return 1;
+        }
+        int interval_ms = trParsePositiveInt(args[2], "interval_ms");
+        if (interval_ms < 0)
+            return 1;
+        long long duration_ms = trParseDuration(args[3]);
+        if (duration_ms < 0)
+            return 1;
+        T tester;
+        bool failed = false;
+        std::cout << appName << " [monitor-test] interval=" << interval_ms
+                  << "ms  duration=" << duration_ms << "ms" << (strict ? " [strict]" : "")
+                  << "  Ctrl+C to abort early\n";
+        std::signal(SIGINT, testRunnerSigHandler);
+        tester.runMonitoringTest(interval_ms, duration_ms, trArchesMonitorItems(),
+                                 [&failed](const MonitoringSnapshot& snap) {
+                                     trPrintCycleHeader(snap.cycle, "monitor-test", false);
+                                     trPrintMonitorData(snap.monitorData);
+                                     trPrintTable(snap.testResults);
+                                     if (trHasFailures(snap.testResults))
+                                         failed = true;
+                                 });
+        trWaitForCompletion(tester);
+        std::cout << "\n" << appName << " monitor-test completed.\n";
+        return (strict && failed) ? 1 : 0;
+    }
+
+    // ---- EVENT TEST --------------------------------------------------------
+    if (mode_str == "event") {
+        if (effectiveArgc < 4) {
+            std::cerr << "Usage: " << appName << " event <poll_ms> <criteria> [max_duration]\n";
+            trPrintUsage(appName);
+            return 1;
+        }
+        int poll_ms = trParsePositiveInt(args[2], "poll_ms");
+        if (poll_ms < 0)
+            return 1;
+        EventCriteria criteria = trMakeCriteria(args[3]);
+        long long max_dur_ms = 0;
+        if (effectiveArgc > 4) {
+            max_dur_ms = trParseDuration(args[4]);
+            if (max_dur_ms < 0)
+                return 1;
+        }
+        T tester;
+        int event_count = 0;
+        bool failed = false;
+        std::cout << appName << " [event] poll=" << poll_ms << "ms" << "  criteria='"
+                  << criteria.description << "'"
+                  << (max_dur_ms > 0 ? "  max=" + std::to_string(max_dur_ms) + "ms"
+                                     : "  no timeout")
+                  << (strict ? " [strict]" : "") << "  Ctrl+C to abort\n";
+        std::signal(SIGINT, testRunnerSigHandler);
+        tester.runEventTest(
+            poll_ms, criteria,
+            [&event_count, &failed](const std::vector<TestResult>& r) {
+                ++event_count;
+                std::cout << "\n*** EVENT FIRED #" << event_count << " ***\n";
+                trPrintTable(r);
+                if (trHasFailures(r))
+                    failed = true;
+            },
+            max_dur_ms);
+        trWaitForCompletion(tester);
+        std::cout << "\n"
+                  << appName << " event test completed." << "  Events fired: " << event_count
+                  << "\n";
+        return (strict && failed) ? 1 : 0;
+    }
+
+    // ---- FALLBACK: unknown argument → one-shot with warning ----------------
+    std::cerr << "[WARNING] Unknown mode '" << mode_str << "'. Running one-shot.\n";
     trPrintUsage(appName);
-    return 0;
-  }
-
-  // ---- ONE SHOT ----------------------------------------------------------
-  if (mode_str == "one-shot" || mode_str == "SINGLE_SHOT") {
     T tester;
     bool failed = false;
-    std::cout << appName << " [one-shot]" << (strict ? " [strict]" : "")
-              << "\n";
-    tester.runTests(TestMode::SINGLE_SHOT,
-                    [&failed](const std::vector<TestResult> &r) {
-                      trPrintTable(r);
-                      failed = trHasFailures(r);
-                    });
-    std::cout << appName << " completed.\n";
+    tester.runTests(TestMode::SINGLE_SHOT, [&failed](const std::vector<TestResult>& r) {
+        trPrintTable(r);
+        failed = trHasFailures(r);
+    });
     return (strict && failed) ? 1 : 0;
-  }
-
-  // ---- MONITORING (indefinite) -------------------------------------------
-  if (mode_str == "monitoring") {
-    int interval_ms = 1000;
-    if (effectiveArgc > 2) {
-      interval_ms = trParsePositiveInt(args[2], "interval_ms");
-      if (interval_ms < 0)
-        return 1;
-    }
-    T tester;
-    int cycle = 0;
-    bool failed = false;
-    std::cout << appName << " [monitoring] interval=" << interval_ms << "ms"
-              << (strict ? " [strict]" : "") << "  Ctrl+C to stop\n";
-    std::signal(SIGINT, testRunnerSigHandler);
-    tester.runTests(
-        TestMode::MONITORING,
-        [&cycle, &failed](const std::vector<TestResult> &r) {
-          trPrintCycleHeader(++cycle, "monitoring", true);
-          trPrintTable(r);
-          if (trHasFailures(r))
-            failed = true;
-        },
-        interval_ms);
-    trWaitForCompletion(tester);
-    std::cout << "\n" << appName << " monitoring stopped.\n";
-    return (strict && failed) ? 1 : 0;
-  }
-
-  // ---- LONG TERM ---------------------------------------------------------
-  if (mode_str == "long-term") {
-    if (effectiveArgc < 4) {
-      std::cerr << "Usage: " << appName
-                << " long-term <interval_ms> <duration>\n";
-      return 1;
-    }
-    int interval_ms = trParsePositiveInt(args[2], "interval_ms");
-    if (interval_ms < 0)
-      return 1;
-    long long duration_ms = trParseDuration(args[3]);
-    if (duration_ms < 0)
-      return 1;
-    T tester;
-    bool failed = false;
-    std::cout << appName << " [long-term] interval=" << interval_ms
-              << "ms  duration=" << duration_ms << "ms"
-              << (strict ? " [strict]" : "") << "  Ctrl+C to abort early\n";
-    std::signal(SIGINT, testRunnerSigHandler);
-    tester.runLongTerm(interval_ms, duration_ms,
-                       [&failed](const std::vector<TestResult> &r, int cycle) {
-                         trPrintCycleHeader(cycle, "long-term", false);
-                         trPrintTable(r);
-                         if (trHasFailures(r))
-                           failed = true;
-                       });
-    trWaitForCompletion(tester);
-    std::cout << "\n" << appName << " long-term completed.\n";
-    return (strict && failed) ? 1 : 0;
-  }
-
-  // ---- MONITORING TEST ---------------------------------------------------
-  if (mode_str == "monitor-test") {
-    if (effectiveArgc < 4) {
-      std::cerr << "Usage: " << appName
-                << " monitor-test <interval_ms> <duration>\n";
-      return 1;
-    }
-    int interval_ms = trParsePositiveInt(args[2], "interval_ms");
-    if (interval_ms < 0)
-      return 1;
-    long long duration_ms = trParseDuration(args[3]);
-    if (duration_ms < 0)
-      return 1;
-    T tester;
-    bool failed = false;
-    std::cout << appName << " [monitor-test] interval=" << interval_ms
-              << "ms  duration=" << duration_ms << "ms"
-              << (strict ? " [strict]" : "") << "  Ctrl+C to abort early\n";
-    std::signal(SIGINT, testRunnerSigHandler);
-    tester.runMonitoringTest(interval_ms, duration_ms, trArchesMonitorItems(),
-                             [&failed](const MonitoringSnapshot &snap) {
-                               trPrintCycleHeader(snap.cycle, "monitor-test",
-                                                  false);
-                               trPrintMonitorData(snap.monitorData);
-                               trPrintTable(snap.testResults);
-                               if (trHasFailures(snap.testResults))
-                                 failed = true;
-                             });
-    trWaitForCompletion(tester);
-    std::cout << "\n" << appName << " monitor-test completed.\n";
-    return (strict && failed) ? 1 : 0;
-  }
-
-  // ---- EVENT TEST --------------------------------------------------------
-  if (mode_str == "event") {
-    if (effectiveArgc < 4) {
-      std::cerr << "Usage: " << appName
-                << " event <poll_ms> <criteria> [max_duration]\n";
-      trPrintUsage(appName);
-      return 1;
-    }
-    int poll_ms = trParsePositiveInt(args[2], "poll_ms");
-    if (poll_ms < 0)
-      return 1;
-    EventCriteria criteria = trMakeCriteria(args[3]);
-    long long max_dur_ms = 0;
-    if (effectiveArgc > 4) {
-      max_dur_ms = trParseDuration(args[4]);
-      if (max_dur_ms < 0)
-        return 1;
-    }
-    T tester;
-    int event_count = 0;
-    bool failed = false;
-    std::cout << appName << " [event] poll=" << poll_ms << "ms"
-              << "  criteria='" << criteria.description << "'"
-              << (max_dur_ms > 0 ? "  max=" + std::to_string(max_dur_ms) + "ms"
-                                 : "  no timeout")
-              << (strict ? " [strict]" : "") << "  Ctrl+C to abort\n";
-    std::signal(SIGINT, testRunnerSigHandler);
-    tester.runEventTest(
-        poll_ms, criteria,
-        [&event_count, &failed](const std::vector<TestResult> &r) {
-          ++event_count;
-          std::cout << "\n*** EVENT FIRED #" << event_count << " ***\n";
-          trPrintTable(r);
-          if (trHasFailures(r))
-            failed = true;
-        },
-        max_dur_ms);
-    trWaitForCompletion(tester);
-    std::cout << "\n"
-              << appName << " event test completed."
-              << "  Events fired: " << event_count << "\n";
-    return (strict && failed) ? 1 : 0;
-  }
-
-  // ---- FALLBACK: unknown argument → one-shot with warning ----------------
-  std::cerr << "[WARNING] Unknown mode '" << mode_str
-            << "'. Running one-shot.\n";
-  trPrintUsage(appName);
-  T tester;
-  bool failed = false;
-  tester.runTests(TestMode::SINGLE_SHOT,
-                  [&failed](const std::vector<TestResult> &r) {
-                    trPrintTable(r);
-                    failed = trHasFailures(r);
-                  });
-  return (strict && failed) ? 1 : 0;
 }

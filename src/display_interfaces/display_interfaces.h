@@ -19,124 +19,124 @@
  * functionalities.
  */
 class DisplayInterfaces : public TestBase {
-public: /**
-         * @brief Constructor for DisplayInterfaces
-         * @return TestOutput with pass/fail and data
-         */
-        /**
-         * @brief Function DisplayInterfaces
-         * @return TestOutput with pass/fail and data
-         */
+    public: /**
+             * @brief Constructor for DisplayInterfaces
+             * @return TestOutput with pass/fail and data
+             */
+            /**
+             * @brief Function DisplayInterfaces
+             * @return TestOutput with pass/fail and data
+             */
 
-  DisplayInterfaces();
-  /**
-   * @brief Constructor for DisplayInterfaces
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Destructor for class
+    DisplayInterfaces();
+    /**
+     * @brief Constructor for DisplayInterfaces
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Destructor for class
 
-   */
-  ~DisplayInterfaces();
-  /**
-   * @brief Constructor for DisplayInterfaces
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the displayportoutput functionality
-   * @return TestOutput with pass/fail and data
-   */
+     */
+    ~DisplayInterfaces();
+    /**
+     * @brief Constructor for DisplayInterfaces
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the displayportoutput functionality
+     * @return TestOutput with pass/fail and data
+     */
 
-  TestOutput testDisplayPortOutput();
-  /**
-   * @brief Constructor for DisplayInterfaces
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the hdmioutput functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testHdmiOutput();
-  /**
-   * @brief Constructor for DisplayInterfaces
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the multidisplaysupport functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testMultiDisplaySupport();
-  /**
-   * @brief Constructor for DisplayInterfaces
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the variousresolutions functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testVariousResolutions();
-  /**
-   * @brief Constructor for DisplayInterfaces
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the variousrefreshrates functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testVariousRefreshRates();
-  /**
-   * @brief Constructor for DisplayInterfaces
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the hdrsupport functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testHdrSupport();
-  /**
-   * @brief Constructor for DisplayInterfaces
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the displayhotplugdetection functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testDisplayHotPlugDetection();
+    TestOutput testDisplayPortOutput();
+    /**
+     * @brief Constructor for DisplayInterfaces
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the hdmioutput functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testHdmiOutput();
+    /**
+     * @brief Constructor for DisplayInterfaces
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the multidisplaysupport functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testMultiDisplaySupport();
+    /**
+     * @brief Constructor for DisplayInterfaces
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the variousresolutions functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testVariousResolutions();
+    /**
+     * @brief Constructor for DisplayInterfaces
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the variousrefreshrates functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testVariousRefreshRates();
+    /**
+     * @brief Constructor for DisplayInterfaces
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the hdrsupport functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testHdrSupport();
+    /**
+     * @brief Constructor for DisplayInterfaces
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the displayhotplugdetection functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testDisplayHotPlugDetection();
 
-  /**
-   * @brief Get list of all available test names
-   * @return Vector of test names
-   */
-  std::vector<std::string> getAvailableTests() override;
+    /**
+     * @brief Get list of all available test names
+     * @return Vector of test names
+     */
+    std::vector<std::string> getAvailableTests() override;
 
-  /**
-   * @brief Get list of all available test names
-   * @return Vector of test names
-   */
+    /**
+     * @brief Get list of all available test names
+     * @return Vector of test names
+     */
 
-  /**
-   * @brief Run a single test by name
-   * @param testName Name of the test to run
-   * @return Test result with timing
-   */
-  /// @brief Constructor with injected providers for deterministic testing
-  explicit DisplayInterfaces(std::shared_ptr<SysfsProvider> sysfs,
-                             std::shared_ptr<CommandProvider> cmd = nullptr);
+    /**
+     * @brief Run a single test by name
+     * @param testName Name of the test to run
+     * @return Test result with timing
+     */
+    /// @brief Constructor with injected providers for deterministic testing
+    explicit DisplayInterfaces(std::shared_ptr<SysfsProvider> sysfs,
+                               std::shared_ptr<CommandProvider> cmd = nullptr);
 
-  /// @brief Get periodic-safe test names (passive health checks only)
-  std::vector<std::string> getPeriodicSafeTests() const;
+    /// @brief Get periodic-safe test names (passive health checks only)
+    std::vector<std::string> getPeriodicSafeTests() const;
 
-  /// @brief Get one-shot only test names (destructive/state-changing)
-  std::vector<std::string> getOneShotOnlyTests() const;
+    /// @brief Get one-shot only test names (destructive/state-changing)
+    std::vector<std::string> getOneShotOnlyTests() const;
 
-private:
-  std::shared_ptr<SysfsProvider> sysfs_;
-  std::shared_ptr<CommandProvider> cmd_;
+    private:
+    std::shared_ptr<SysfsProvider> sysfs_;
+    std::shared_ptr<CommandProvider> cmd_;
 
-  TestResult runSingleTest(const std::string &testName) override;
+    TestResult runSingleTest(const std::string& testName) override;
 
-protected:
-  std::vector<TestResult> runAllTests() override;
+    protected:
+    std::vector<TestResult> runAllTests() override;
 };
 
 #endif // DISPLAYINTERFACES_H

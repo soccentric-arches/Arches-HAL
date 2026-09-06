@@ -19,125 +19,124 @@
  * serializerdeserializertesting functionalities.
  */
 class SerializerDeserializerTesting : public TestBase {
-public: /**
-         * @brief Constructor for SerializerDeserializerTesting
-         * @return TestOutput with pass/fail and data
-         */
-        /**
-         * @brief Function SerializerDeserializerTesting
-         * @return TestOutput with pass/fail and data
-         */
+    public: /**
+             * @brief Constructor for SerializerDeserializerTesting
+             * @return TestOutput with pass/fail and data
+             */
+            /**
+             * @brief Function SerializerDeserializerTesting
+             * @return TestOutput with pass/fail and data
+             */
 
-  SerializerDeserializerTesting();
-  /**
-   * @brief Constructor for SerializerDeserializerTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Destructor for class
+    SerializerDeserializerTesting();
+    /**
+     * @brief Constructor for SerializerDeserializerTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Destructor for class
 
-   */
-  ~SerializerDeserializerTesting();
-  /**
-   * @brief Constructor for SerializerDeserializerTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the serializationfunctionality functionality
-   * @return TestOutput with pass/fail and data
-   */
+     */
+    ~SerializerDeserializerTesting();
+    /**
+     * @brief Constructor for SerializerDeserializerTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the serializationfunctionality functionality
+     * @return TestOutput with pass/fail and data
+     */
 
-  TestOutput testSerializationFunctionality();
-  /**
-   * @brief Constructor for SerializerDeserializerTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the dataintegrity functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testDataIntegrity();
-  /**
-   * @brief Constructor for SerializerDeserializerTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the linkspeed functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testLinkSpeed();
-  /**
-   * @brief Constructor for SerializerDeserializerTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the errordetection functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testErrorDetection();
-  /**
-   * @brief Constructor for SerializerDeserializerTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the deserializationfunctionality functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testDeserializationFunctionality();
-  /**
-   * @brief Constructor for SerializerDeserializerTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the clockrecovery functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testClockRecovery();
-  /**
-   * @brief Constructor for SerializerDeserializerTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the multistreamsupport functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testMultistreamSupport();
+    TestOutput testSerializationFunctionality();
+    /**
+     * @brief Constructor for SerializerDeserializerTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the dataintegrity functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testDataIntegrity();
+    /**
+     * @brief Constructor for SerializerDeserializerTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the linkspeed functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testLinkSpeed();
+    /**
+     * @brief Constructor for SerializerDeserializerTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the errordetection functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testErrorDetection();
+    /**
+     * @brief Constructor for SerializerDeserializerTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the deserializationfunctionality functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testDeserializationFunctionality();
+    /**
+     * @brief Constructor for SerializerDeserializerTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the clockrecovery functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testClockRecovery();
+    /**
+     * @brief Constructor for SerializerDeserializerTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the multistreamsupport functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testMultistreamSupport();
 
-  /**
-   * @brief Get list of all available test names
-   * @return Vector of test names
-   */
-  std::vector<std::string> getAvailableTests() override;
+    /**
+     * @brief Get list of all available test names
+     * @return Vector of test names
+     */
+    std::vector<std::string> getAvailableTests() override;
 
-  /**
-   * @brief Get list of all available test names
-   * @return Vector of test names
-   */
+    /**
+     * @brief Get list of all available test names
+     * @return Vector of test names
+     */
 
-  /**
-   * @brief Run a single test by name
-   * @param testName Name of the test to run
-   * @return Test result with timing
-   */
-  /// @brief Constructor with injected providers for deterministic testing
-  explicit SerializerDeserializerTesting(
-      std::shared_ptr<SysfsProvider> sysfs,
-      std::shared_ptr<CommandProvider> cmd = nullptr);
+    /**
+     * @brief Run a single test by name
+     * @param testName Name of the test to run
+     * @return Test result with timing
+     */
+    /// @brief Constructor with injected providers for deterministic testing
+    explicit SerializerDeserializerTesting(std::shared_ptr<SysfsProvider> sysfs,
+                                           std::shared_ptr<CommandProvider> cmd = nullptr);
 
-  /// @brief Get periodic-safe test names (passive health checks only)
-  std::vector<std::string> getPeriodicSafeTests() const;
+    /// @brief Get periodic-safe test names (passive health checks only)
+    std::vector<std::string> getPeriodicSafeTests() const;
 
-  /// @brief Get one-shot only test names (destructive/state-changing)
-  std::vector<std::string> getOneShotOnlyTests() const;
+    /// @brief Get one-shot only test names (destructive/state-changing)
+    std::vector<std::string> getOneShotOnlyTests() const;
 
-private:
-  std::shared_ptr<SysfsProvider> sysfs_;
-  std::shared_ptr<CommandProvider> cmd_;
+    private:
+    std::shared_ptr<SysfsProvider> sysfs_;
+    std::shared_ptr<CommandProvider> cmd_;
 
-  TestResult runSingleTest(const std::string &testName) override;
+    TestResult runSingleTest(const std::string& testName) override;
 
-protected:
-  std::vector<TestResult> runAllTests() override;
+    protected:
+    std::vector<TestResult> runAllTests() override;
 };
 
 #endif // SERIALIZERDESERIALIZERTESTING_H

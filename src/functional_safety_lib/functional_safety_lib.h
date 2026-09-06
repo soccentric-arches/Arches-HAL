@@ -16,134 +16,133 @@
  * functionalities.
  */
 class FunctionalSafetyTesting : public TestBase {
-public: /**
-         * @brief Constructor for FunctionalSafetyTesting
-         * @return TestOutput with pass/fail and data
-         */
-        /**
-         * @brief Function FunctionalSafetyTesting
-         * @return TestOutput with pass/fail and data
-         */
+    public: /**
+             * @brief Constructor for FunctionalSafetyTesting
+             * @return TestOutput with pass/fail and data
+             */
+            /**
+             * @brief Function FunctionalSafetyTesting
+             * @return TestOutput with pass/fail and data
+             */
 
-  FunctionalSafetyTesting();
-  /**
-   * @brief Constructor for FunctionalSafetyTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Destructor for class
+    FunctionalSafetyTesting();
+    /**
+     * @brief Constructor for FunctionalSafetyTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Destructor for class
 
-   */
-  ~FunctionalSafetyTesting();
-  /**
-   * @brief Constructor for FunctionalSafetyTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the lockstepcpuoperation functionality
-   * @return TestOutput with pass/fail and data
-   */
+     */
+    ~FunctionalSafetyTesting();
+    /**
+     * @brief Constructor for FunctionalSafetyTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the lockstepcpuoperation functionality
+     * @return TestOutput with pass/fail and data
+     */
 
-  TestOutput testLockstepCpuOperation();
-  /**
-   * @brief Constructor for FunctionalSafetyTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the ecconmemories functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testEccOnMemories();
-  /**
-   * @brief Constructor for FunctionalSafetyTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the redundantpowersupplies functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testRedundantPowerSupplies();
-  /**
-   * @brief Constructor for FunctionalSafetyTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the safetymonitoring functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testSafetyMonitoring();
-  /**
-   * @brief Constructor for FunctionalSafetyTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the diagnosticcoverage functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testDiagnosticCoverage();
-  /**
-   * @brief Constructor for FunctionalSafetyTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the faultinjectiontesting functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testFaultInjectionTesting();
-  /**
-   * @brief Constructor for FunctionalSafetyTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the failsafebehavior functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testFailsafeBehavior();
-  /**
-   * @brief Constructor for FunctionalSafetyTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the asilqslandrrailisolation functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testAsilQsLAndRRailIsolation();
+    TestOutput testLockstepCpuOperation();
+    /**
+     * @brief Constructor for FunctionalSafetyTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the ecconmemories functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testEccOnMemories();
+    /**
+     * @brief Constructor for FunctionalSafetyTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the redundantpowersupplies functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testRedundantPowerSupplies();
+    /**
+     * @brief Constructor for FunctionalSafetyTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the safetymonitoring functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testSafetyMonitoring();
+    /**
+     * @brief Constructor for FunctionalSafetyTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the diagnosticcoverage functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testDiagnosticCoverage();
+    /**
+     * @brief Constructor for FunctionalSafetyTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the faultinjectiontesting functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testFaultInjectionTesting();
+    /**
+     * @brief Constructor for FunctionalSafetyTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the failsafebehavior functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testFailsafeBehavior();
+    /**
+     * @brief Constructor for FunctionalSafetyTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the asilqslandrrailisolation functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testAsilQsLAndRRailIsolation();
 
-  /**
-   * @brief Get list of all available test names
-   * @return Vector of test names
-   */
-  std::vector<std::string> getAvailableTests() override;
+    /**
+     * @brief Get list of all available test names
+     * @return Vector of test names
+     */
+    std::vector<std::string> getAvailableTests() override;
 
-  /**
-   * @brief Get list of all available test names
-   * @return Vector of test names
-   */
+    /**
+     * @brief Get list of all available test names
+     * @return Vector of test names
+     */
 
-  /**
-   * @brief Run a single test by name
-   * @param testName Name of the test to run
-   * @return Test result with timing
-   */
-  /// @brief Constructor with injected providers for deterministic testing
-  explicit FunctionalSafetyTesting(
-      std::shared_ptr<SysfsProvider> sysfs,
-      std::shared_ptr<CommandProvider> cmd = nullptr);
+    /**
+     * @brief Run a single test by name
+     * @param testName Name of the test to run
+     * @return Test result with timing
+     */
+    /// @brief Constructor with injected providers for deterministic testing
+    explicit FunctionalSafetyTesting(std::shared_ptr<SysfsProvider> sysfs,
+                                     std::shared_ptr<CommandProvider> cmd = nullptr);
 
-  /// @brief Get periodic-safe test names (passive health checks only)
-  std::vector<std::string> getPeriodicSafeTests() const;
+    /// @brief Get periodic-safe test names (passive health checks only)
+    std::vector<std::string> getPeriodicSafeTests() const;
 
-  /// @brief Get one-shot only test names (destructive/state-changing)
-  std::vector<std::string> getOneShotOnlyTests() const;
+    /// @brief Get one-shot only test names (destructive/state-changing)
+    std::vector<std::string> getOneShotOnlyTests() const;
 
-private:
-  std::shared_ptr<SysfsProvider> sysfs_;
-  std::shared_ptr<CommandProvider> cmd_;
+    private:
+    std::shared_ptr<SysfsProvider> sysfs_;
+    std::shared_ptr<CommandProvider> cmd_;
 
-  TestResult runSingleTest(const std::string &testName) override;
+    TestResult runSingleTest(const std::string& testName) override;
 
-protected:
-  std::vector<TestResult> runAllTests() override;
+    protected:
+    std::vector<TestResult> runAllTests() override;
 };
 
 #endif // FUNCTIONALSAFETYTESTING_H

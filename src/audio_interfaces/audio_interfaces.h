@@ -39,43 +39,42 @@
  *   - testAudioLatency (active stream params)
  */
 class AudioInterfaces : public TestBase {
-public:
-  AudioInterfaces();
-  explicit AudioInterfaces(std::shared_ptr<SysfsProvider> sysfs,
-                           std::shared_ptr<CommandProvider> cmd = nullptr);
-  ~AudioInterfaces();
+    public:
+    AudioInterfaces();
+    explicit AudioInterfaces(std::shared_ptr<SysfsProvider> sysfs,
+                             std::shared_ptr<CommandProvider> cmd = nullptr);
+    ~AudioInterfaces();
 
-  /// @brief Get periodic-safe test names (enumeration/health only)
-  std::vector<std::string> getPeriodicSafeTests() const;
+    /// @brief Get periodic-safe test names (enumeration/health only)
+    std::vector<std::string> getPeriodicSafeTests() const;
 
-  /// @brief Get one-shot only test names (device access)
-  std::vector<std::string> getOneShotOnlyTests() const;
+    /// @brief Get one-shot only test names (device access)
+    std::vector<std::string> getOneShotOnlyTests() const;
 
-  TestOutput testI2sInterface();
-  TestOutput testAudioInput();
-  TestOutput testAudioOutput();
-  TestOutput testAudioSampleRates();
-  TestOutput testAudioBitDepths();
-  TestOutput testMultiChannelAudio();
-  TestOutput testAudioDmaTransfers();
-  TestOutput testAudioLatency();
+    TestOutput testI2sInterface();
+    TestOutput testAudioInput();
+    TestOutput testAudioOutput();
+    TestOutput testAudioSampleRates();
+    TestOutput testAudioBitDepths();
+    TestOutput testMultiChannelAudio();
+    TestOutput testAudioDmaTransfers();
+    TestOutput testAudioLatency();
 
-  std::vector<std::string> getAvailableTests() override;
-  TestResult runSingleTest(const std::string &testName) override;
+    std::vector<std::string> getAvailableTests() override;
+    TestResult runSingleTest(const std::string& testName) override;
 
-protected:
-  std::vector<TestResult> runAllTests() override;
+    protected:
+    std::vector<TestResult> runAllTests() override;
 
-private:
-  std::shared_ptr<SysfsProvider> sysfs_;
-  std::shared_ptr<CommandProvider> cmd_;
+    private:
+    std::shared_ptr<SysfsProvider> sysfs_;
+    std::shared_ptr<CommandProvider> cmd_;
 
-  // Internal helpers using injected providers
-  bool readFile(const std::string &path, std::string &out) const;
-  bool pathExists(const std::string &path) const;
-  std::vector<std::string> listDir(const std::string &dir,
-                                   const std::string &filter = "") const;
-  int countAlsaPcmDevices() const;
+    // Internal helpers using injected providers
+    bool readFile(const std::string& path, std::string& out) const;
+    bool pathExists(const std::string& path) const;
+    std::vector<std::string> listDir(const std::string& dir, const std::string& filter = "") const;
+    int countAlsaPcmDevices() const;
 };
 
 #endif // AUDIOINTERFACES_H

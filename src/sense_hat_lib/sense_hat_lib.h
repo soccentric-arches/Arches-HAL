@@ -24,54 +24,54 @@
  * is required.  Tests pass with an informational note if the HAT is absent.
  */
 class SenseHatTesting : public TestBase {
-public:
-  SenseHatTesting();
-  ~SenseHatTesting();
+    public:
+    SenseHatTesting();
+    ~SenseHatTesting();
 
-  /** @brief Detect Sense HAT on I2C bus (scans expected I2C addresses). */
-  TestOutput testSenseHatDetection();
+    /** @brief Detect Sense HAT on I2C bus (scans expected I2C addresses). */
+    TestOutput testSenseHatDetection();
 
-  /** @brief Verify 8×8 LED matrix framebuffer device exists and is writable. */
-  TestOutput testLedMatrix();
+    /** @brief Verify 8×8 LED matrix framebuffer device exists and is writable. */
+    TestOutput testLedMatrix();
 
-  /** @brief Read ambient temperature from HTS221 via IIO subsystem. */
-  TestOutput testTemperatureSensor();
+    /** @brief Read ambient temperature from HTS221 via IIO subsystem. */
+    TestOutput testTemperatureSensor();
 
-  /** @brief Read relative humidity from HTS221 via IIO subsystem. */
-  TestOutput testHumiditySensor();
+    /** @brief Read relative humidity from HTS221 via IIO subsystem. */
+    TestOutput testHumiditySensor();
 
-  /** @brief Read barometric pressure from LPS25H via IIO subsystem. */
-  TestOutput testPressureSensor();
+    /** @brief Read barometric pressure from LPS25H via IIO subsystem. */
+    TestOutput testPressureSensor();
 
-  /** @brief Read accelerometer / gyroscope / magnetometer from LSM9DS1 via IIO.
-   */
-  TestOutput testImuSensors();
+    /** @brief Read accelerometer / gyroscope / magnetometer from LSM9DS1 via IIO.
+     */
+    TestOutput testImuSensors();
 
-  /** @brief Detect 5-way joystick as an evdev input device. */
-  TestOutput testJoystick();
+    /** @brief Detect 5-way joystick as an evdev input device. */
+    TestOutput testJoystick();
 
-  /** @brief Verify I2C bus used by the HAT (/dev/i2c-1) is accessible. */
-  TestOutput testI2cBusIntegrity();
+    /** @brief Verify I2C bus used by the HAT (/dev/i2c-1) is accessible. */
+    TestOutput testI2cBusIntegrity();
 
-  std::vector<std::string> getAvailableTests() override;
-  /// @brief Constructor with injected providers for deterministic testing
-  explicit SenseHatTesting(std::shared_ptr<SysfsProvider> sysfs,
-                           std::shared_ptr<CommandProvider> cmd = nullptr);
+    std::vector<std::string> getAvailableTests() override;
+    /// @brief Constructor with injected providers for deterministic testing
+    explicit SenseHatTesting(std::shared_ptr<SysfsProvider> sysfs,
+                             std::shared_ptr<CommandProvider> cmd = nullptr);
 
-  /// @brief Get periodic-safe test names (passive health checks only)
-  std::vector<std::string> getPeriodicSafeTests() const;
+    /// @brief Get periodic-safe test names (passive health checks only)
+    std::vector<std::string> getPeriodicSafeTests() const;
 
-  /// @brief Get one-shot only test names (destructive/state-changing)
-  std::vector<std::string> getOneShotOnlyTests() const;
+    /// @brief Get one-shot only test names (destructive/state-changing)
+    std::vector<std::string> getOneShotOnlyTests() const;
 
-private:
-  std::shared_ptr<SysfsProvider> sysfs_;
-  std::shared_ptr<CommandProvider> cmd_;
+    private:
+    std::shared_ptr<SysfsProvider> sysfs_;
+    std::shared_ptr<CommandProvider> cmd_;
 
-  TestResult runSingleTest(const std::string &testName) override;
+    TestResult runSingleTest(const std::string& testName) override;
 
-protected:
-  std::vector<TestResult> runAllTests() override;
+    protected:
+    std::vector<TestResult> runAllTests() override;
 };
 
 #endif // SENSEHATTESTING_H

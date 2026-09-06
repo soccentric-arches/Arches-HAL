@@ -19,161 +19,160 @@
  * functionalities.
  */
 class SecurityFeaturesTesting : public TestBase {
-public: /**
-         * @brief Constructor for SecurityFeaturesTesting
-         * @return TestOutput with pass/fail and data
-         */
-        /**
-         * @brief Function SecurityFeaturesTesting
-         * @return TestOutput with pass/fail and data
-         */
+    public: /**
+             * @brief Constructor for SecurityFeaturesTesting
+             * @return TestOutput with pass/fail and data
+             */
+            /**
+             * @brief Function SecurityFeaturesTesting
+             * @return TestOutput with pass/fail and data
+             */
 
-  SecurityFeaturesTesting();
-  /**
-   * @brief Constructor for SecurityFeaturesTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Destructor for class
+    SecurityFeaturesTesting();
+    /**
+     * @brief Constructor for SecurityFeaturesTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Destructor for class
 
-   */
-  ~SecurityFeaturesTesting();
-  /**
-   * @brief Constructor for SecurityFeaturesTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the bootromexecution functionality
-   * @return TestOutput with pass/fail and data
-   */
+     */
+    ~SecurityFeaturesTesting();
+    /**
+     * @brief Constructor for SecurityFeaturesTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the bootromexecution functionality
+     * @return TestOutput with pass/fail and data
+     */
 
-  TestOutput testBootRomExecution();
-  /**
-   * @brief Constructor for SecurityFeaturesTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the bootloadersignatureverification functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testBootloaderSignatureVerification();
-  /**
-   * @brief Constructor for SecurityFeaturesTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the kernelsignatureverification functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testKernelSignatureVerification();
-  /**
-   * @brief Constructor for SecurityFeaturesTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the securebootchainoftrust functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testSecureBootChainOfTrust();
-  /**
-   * @brief Constructor for SecurityFeaturesTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the hardwarerootoftrust functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testHardwareRootOfTrust();
-  /**
-   * @brief Constructor for SecurityFeaturesTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the securestorage functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testSecureStorage();
-  /**
-   * @brief Constructor for SecurityFeaturesTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the cryptographicaccelerators functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testCryptographicAccelerators();
-  /**
-   * @brief Constructor for SecurityFeaturesTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the hardwarerandomnumbergenerator functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testHardwareRandomNumberGenerator();
-  /**
-   * @brief Constructor for SecurityFeaturesTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the memoryencryption functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testMemoryEncryption();
-  /**
-   * @brief Constructor for SecurityFeaturesTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the debugportsecurity functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testDebugPortSecurity();
-  /**
-   * @brief Constructor for SecurityFeaturesTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the jtagsecurity functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testJtagSecurity();
+    TestOutput testBootRomExecution();
+    /**
+     * @brief Constructor for SecurityFeaturesTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the bootloadersignatureverification functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testBootloaderSignatureVerification();
+    /**
+     * @brief Constructor for SecurityFeaturesTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the kernelsignatureverification functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testKernelSignatureVerification();
+    /**
+     * @brief Constructor for SecurityFeaturesTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the securebootchainoftrust functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testSecureBootChainOfTrust();
+    /**
+     * @brief Constructor for SecurityFeaturesTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the hardwarerootoftrust functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testHardwareRootOfTrust();
+    /**
+     * @brief Constructor for SecurityFeaturesTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the securestorage functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testSecureStorage();
+    /**
+     * @brief Constructor for SecurityFeaturesTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the cryptographicaccelerators functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testCryptographicAccelerators();
+    /**
+     * @brief Constructor for SecurityFeaturesTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the hardwarerandomnumbergenerator functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testHardwareRandomNumberGenerator();
+    /**
+     * @brief Constructor for SecurityFeaturesTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the memoryencryption functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testMemoryEncryption();
+    /**
+     * @brief Constructor for SecurityFeaturesTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the debugportsecurity functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testDebugPortSecurity();
+    /**
+     * @brief Constructor for SecurityFeaturesTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the jtagsecurity functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testJtagSecurity();
 
-  /**
-   * @brief Get list of all available test names
-   * @return Vector of test names
-   */
-  std::vector<std::string> getAvailableTests() override;
+    /**
+     * @brief Get list of all available test names
+     * @return Vector of test names
+     */
+    std::vector<std::string> getAvailableTests() override;
 
-  /**
-   * @brief Get list of all available test names
-   * @return Vector of test names
-   */
+    /**
+     * @brief Get list of all available test names
+     * @return Vector of test names
+     */
 
-  /**
-   * @brief Run a single test by name
-   * @param testName Name of the test to run
-   * @return Test result with timing
-   */
-  /// @brief Constructor with injected providers for deterministic testing
-  explicit SecurityFeaturesTesting(
-      std::shared_ptr<SysfsProvider> sysfs,
-      std::shared_ptr<CommandProvider> cmd = nullptr);
+    /**
+     * @brief Run a single test by name
+     * @param testName Name of the test to run
+     * @return Test result with timing
+     */
+    /// @brief Constructor with injected providers for deterministic testing
+    explicit SecurityFeaturesTesting(std::shared_ptr<SysfsProvider> sysfs,
+                                     std::shared_ptr<CommandProvider> cmd = nullptr);
 
-  /// @brief Get periodic-safe test names (passive health checks only)
-  std::vector<std::string> getPeriodicSafeTests() const;
+    /// @brief Get periodic-safe test names (passive health checks only)
+    std::vector<std::string> getPeriodicSafeTests() const;
 
-  /// @brief Get one-shot only test names (destructive/state-changing)
-  std::vector<std::string> getOneShotOnlyTests() const;
+    /// @brief Get one-shot only test names (destructive/state-changing)
+    std::vector<std::string> getOneShotOnlyTests() const;
 
-private:
-  std::shared_ptr<SysfsProvider> sysfs_;
-  std::shared_ptr<CommandProvider> cmd_;
+    private:
+    std::shared_ptr<SysfsProvider> sysfs_;
+    std::shared_ptr<CommandProvider> cmd_;
 
-  TestResult runSingleTest(const std::string &testName) override;
+    TestResult runSingleTest(const std::string& testName) override;
 
-protected:
-  std::vector<TestResult> runAllTests() override;
+    protected:
+    std::vector<TestResult> runAllTests() override;
 };
 
 #endif // SECURITYFEATURESTESTING_H

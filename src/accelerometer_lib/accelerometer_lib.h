@@ -20,38 +20,38 @@
  * deterministic CI runs; the default constructor uses real sysfs and commands.
  */
 class AccelerometerTesting : public TestBase {
-public:
-  AccelerometerTesting();
-  ~AccelerometerTesting();
+    public:
+    AccelerometerTesting();
+    ~AccelerometerTesting();
 
-  explicit AccelerometerTesting(std::shared_ptr<SysfsProvider> sysfs,
-                                std::shared_ptr<CommandProvider> cmd = nullptr);
+    explicit AccelerometerTesting(std::shared_ptr<SysfsProvider> sysfs,
+                                  std::shared_ptr<CommandProvider> cmd = nullptr);
 
-  /// Detect an IIO device exposing in_accel_* channels.
-  TestOutput testAccelDeviceDetection();
-  /// Read X/Y/Z raw acceleration samples.
-  TestOutput testAxisReads();
-  /// Read the scale factor (g per LSB).
-  TestOutput testScaleRead();
-  /// Read the configured sampling frequency.
-  TestOutput testSamplingFrequency();
-  /// Check the static gravity magnitude for sanity.
-  TestOutput testMagnitudeSanity();
+    /// Detect an IIO device exposing in_accel_* channels.
+    TestOutput testAccelDeviceDetection();
+    /// Read X/Y/Z raw acceleration samples.
+    TestOutput testAxisReads();
+    /// Read the scale factor (g per LSB).
+    TestOutput testScaleRead();
+    /// Read the configured sampling frequency.
+    TestOutput testSamplingFrequency();
+    /// Check the static gravity magnitude for sanity.
+    TestOutput testMagnitudeSanity();
 
-  std::vector<std::string> getAvailableTests() override;
-  std::vector<std::string> getPeriodicSafeTests();
-  std::vector<std::string> getOneShotOnlyTests();
+    std::vector<std::string> getAvailableTests() override;
+    std::vector<std::string> getPeriodicSafeTests();
+    std::vector<std::string> getOneShotOnlyTests();
 
-private:
-  std::shared_ptr<SysfsProvider> sysfs_;
-  std::shared_ptr<CommandProvider> cmd_;
-  TestResult runSingleTest(const std::string &testName) override;
+    private:
+    std::shared_ptr<SysfsProvider> sysfs_;
+    std::shared_ptr<CommandProvider> cmd_;
+    TestResult runSingleTest(const std::string& testName) override;
 
-  /// Sysfs dir of the first accelerometer IIO device ("" if none).
-  std::string firstAccelDeviceDir() const;
+    /// Sysfs dir of the first accelerometer IIO device ("" if none).
+    std::string firstAccelDeviceDir() const;
 
-protected:
-  std::vector<TestResult> runAllTests() override;
+    protected:
+    std::vector<TestResult> runAllTests() override;
 };
 
 #endif // ACCELEROMETERTTESTING_H

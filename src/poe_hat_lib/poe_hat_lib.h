@@ -25,54 +25,54 @@
  * to verify PoE negotiation, power delivery, and thermal management.
  */
 class PoeHatTesting : public TestBase {
-public:
-  PoeHatTesting();
-  ~PoeHatTesting();
+    public:
+    PoeHatTesting();
+    ~PoeHatTesting();
 
-  /** @brief Detect PoE HAT hardware (I2C controller + hwmon). */
-  TestOutput testPoeHatDetection();
+    /** @brief Detect PoE HAT hardware (I2C controller + hwmon). */
+    TestOutput testPoeHatDetection();
 
-  /** @brief Verify PoE power negotiation via ethtool PoE tlv / sysfs. */
-  TestOutput testPoePowerNegotiation();
+    /** @brief Verify PoE power negotiation via ethtool PoE tlv / sysfs. */
+    TestOutput testPoePowerNegotiation();
 
-  /** @brief Measure input voltage and current (INA219/INA226 hwmon if present).
-   */
-  TestOutput testPowerMonitoring();
+    /** @brief Measure input voltage and current (INA219/INA226 hwmon if present).
+     */
+    TestOutput testPowerMonitoring();
 
-  /** @brief Verify onboard fan presence and PWM control via sysfs hwmon. */
-  TestOutput testFanControl();
+    /** @brief Verify onboard fan presence and PWM control via sysfs hwmon. */
+    TestOutput testFanControl();
 
-  /** @brief Read fan tachometer (RPM) via hwmon. */
-  TestOutput testFanSpeed();
+    /** @brief Read fan tachometer (RPM) via hwmon. */
+    TestOutput testFanSpeed();
 
-  /** @brief Check thermal trip point that triggers fan speed increase. */
-  TestOutput testThermalProtection();
+    /** @brief Check thermal trip point that triggers fan speed increase. */
+    TestOutput testThermalProtection();
 
-  /** @brief Verify 5V rail stability via vcgencmd / power_supply sysfs. */
-  TestOutput testVoltageRegulator();
+    /** @brief Verify 5V rail stability via vcgencmd / power_supply sysfs. */
+    TestOutput testVoltageRegulator();
 
-  /** @brief End-to-end power delivery: verify Pi runs under load from PoE. */
-  TestOutput testPowerDelivery();
+    /** @brief End-to-end power delivery: verify Pi runs under load from PoE. */
+    TestOutput testPowerDelivery();
 
-  std::vector<std::string> getAvailableTests() override;
-  /// @brief Constructor with injected providers for deterministic testing
-  explicit PoeHatTesting(std::shared_ptr<SysfsProvider> sysfs,
-                         std::shared_ptr<CommandProvider> cmd = nullptr);
+    std::vector<std::string> getAvailableTests() override;
+    /// @brief Constructor with injected providers for deterministic testing
+    explicit PoeHatTesting(std::shared_ptr<SysfsProvider> sysfs,
+                           std::shared_ptr<CommandProvider> cmd = nullptr);
 
-  /// @brief Get periodic-safe test names (passive health checks only)
-  std::vector<std::string> getPeriodicSafeTests() const;
+    /// @brief Get periodic-safe test names (passive health checks only)
+    std::vector<std::string> getPeriodicSafeTests() const;
 
-  /// @brief Get one-shot only test names (destructive/state-changing)
-  std::vector<std::string> getOneShotOnlyTests() const;
+    /// @brief Get one-shot only test names (destructive/state-changing)
+    std::vector<std::string> getOneShotOnlyTests() const;
 
-private:
-  std::shared_ptr<SysfsProvider> sysfs_;
-  std::shared_ptr<CommandProvider> cmd_;
+    private:
+    std::shared_ptr<SysfsProvider> sysfs_;
+    std::shared_ptr<CommandProvider> cmd_;
 
-  TestResult runSingleTest(const std::string &testName) override;
+    TestResult runSingleTest(const std::string& testName) override;
 
-protected:
-  std::vector<TestResult> runAllTests() override;
+    protected:
+    std::vector<TestResult> runAllTests() override;
 };
 
 #endif // POEHATTESTING_H

@@ -16,134 +16,133 @@
  * functionalities.
  */
 class SystemIntegrationTesting : public TestBase {
-public: /**
-         * @brief Constructor for SystemIntegrationTesting
-         * @return TestOutput with pass/fail and data
-         */
-        /**
-         * @brief Function SystemIntegrationTesting
-         * @return TestOutput with pass/fail and data
-         */
+    public: /**
+             * @brief Constructor for SystemIntegrationTesting
+             * @return TestOutput with pass/fail and data
+             */
+            /**
+             * @brief Function SystemIntegrationTesting
+             * @return TestOutput with pass/fail and data
+             */
 
-  SystemIntegrationTesting();
-  /**
-   * @brief Constructor for SystemIntegrationTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Destructor for class
+    SystemIntegrationTesting();
+    /**
+     * @brief Constructor for SystemIntegrationTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Destructor for class
 
-   */
-  ~SystemIntegrationTesting();
-  /**
-   * @brief Constructor for SystemIntegrationTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the concurrentoperationofallsubsystems functionality
-   * @return TestOutput with pass/fail and data
-   */
+     */
+    ~SystemIntegrationTesting();
+    /**
+     * @brief Constructor for SystemIntegrationTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the concurrentoperationofallsubsystems functionality
+     * @return TestOutput with pass/fail and data
+     */
 
-  TestOutput testConcurrentOperationOfAllSubsystems();
-  /**
-   * @brief Constructor for SystemIntegrationTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the resourcecontentionhandling functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testResourceContentionHandling();
-  /**
-   * @brief Constructor for SystemIntegrationTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the systembottleneckidentification functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testSystemBottleneckIdentification();
-  /**
-   * @brief Constructor for SystemIntegrationTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the endtoendlatency functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testEndtoendLatency();
-  /**
-   * @brief Constructor for SystemIntegrationTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the systemthroughput functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testSystemThroughput();
-  /**
-   * @brief Constructor for SystemIntegrationTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the multimodalaiworkloads functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testMultimodalAiWorkloads();
-  /**
-   * @brief Constructor for SystemIntegrationTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the autonomousdrivingstack functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testAutonomousDrivingStack();
-  /**
-   * @brief Constructor for SystemIntegrationTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the sensorfusionpipeline functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testSensorFusionPipeline();
+    TestOutput testConcurrentOperationOfAllSubsystems();
+    /**
+     * @brief Constructor for SystemIntegrationTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the resourcecontentionhandling functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testResourceContentionHandling();
+    /**
+     * @brief Constructor for SystemIntegrationTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the systembottleneckidentification functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testSystemBottleneckIdentification();
+    /**
+     * @brief Constructor for SystemIntegrationTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the endtoendlatency functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testEndtoendLatency();
+    /**
+     * @brief Constructor for SystemIntegrationTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the systemthroughput functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testSystemThroughput();
+    /**
+     * @brief Constructor for SystemIntegrationTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the multimodalaiworkloads functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testMultimodalAiWorkloads();
+    /**
+     * @brief Constructor for SystemIntegrationTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the autonomousdrivingstack functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testAutonomousDrivingStack();
+    /**
+     * @brief Constructor for SystemIntegrationTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the sensorfusionpipeline functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testSensorFusionPipeline();
 
-  /**
-   * @brief Get list of all available test names
-   * @return Vector of test names
-   */
-  std::vector<std::string> getAvailableTests() override;
+    /**
+     * @brief Get list of all available test names
+     * @return Vector of test names
+     */
+    std::vector<std::string> getAvailableTests() override;
 
-  /**
-   * @brief Get list of all available test names
-   * @return Vector of test names
-   */
+    /**
+     * @brief Get list of all available test names
+     * @return Vector of test names
+     */
 
-  /**
-   * @brief Run a single test by name
-   * @param testName Name of the test to run
-   * @return Test result with timing
-   */
-  /// @brief Constructor with injected providers for deterministic testing
-  explicit SystemIntegrationTesting(
-      std::shared_ptr<SysfsProvider> sysfs,
-      std::shared_ptr<CommandProvider> cmd = nullptr);
+    /**
+     * @brief Run a single test by name
+     * @param testName Name of the test to run
+     * @return Test result with timing
+     */
+    /// @brief Constructor with injected providers for deterministic testing
+    explicit SystemIntegrationTesting(std::shared_ptr<SysfsProvider> sysfs,
+                                      std::shared_ptr<CommandProvider> cmd = nullptr);
 
-  /// @brief Get periodic-safe test names (passive health checks only)
-  std::vector<std::string> getPeriodicSafeTests() const;
+    /// @brief Get periodic-safe test names (passive health checks only)
+    std::vector<std::string> getPeriodicSafeTests() const;
 
-  /// @brief Get one-shot only test names (destructive/state-changing)
-  std::vector<std::string> getOneShotOnlyTests() const;
+    /// @brief Get one-shot only test names (destructive/state-changing)
+    std::vector<std::string> getOneShotOnlyTests() const;
 
-private:
-  std::shared_ptr<SysfsProvider> sysfs_;
-  std::shared_ptr<CommandProvider> cmd_;
+    private:
+    std::shared_ptr<SysfsProvider> sysfs_;
+    std::shared_ptr<CommandProvider> cmd_;
 
-  TestResult runSingleTest(const std::string &testName) override;
+    TestResult runSingleTest(const std::string& testName) override;
 
-protected:
-  std::vector<TestResult> runAllTests() override;
+    protected:
+    std::vector<TestResult> runAllTests() override;
 };
 
 #endif // SYSTEMINTEGRATIONTESTING_H

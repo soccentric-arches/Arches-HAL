@@ -20,35 +20,35 @@
  * deterministic CI runs; the default constructor uses real sysfs and commands.
  */
 class BluetoothTesting : public TestBase {
-public:
-  BluetoothTesting();
-  ~BluetoothTesting();
+    public:
+    BluetoothTesting();
+    ~BluetoothTesting();
 
-  explicit BluetoothTesting(std::shared_ptr<SysfsProvider> sysfs,
-                            std::shared_ptr<CommandProvider> cmd = nullptr);
+    explicit BluetoothTesting(std::shared_ptr<SysfsProvider> sysfs,
+                              std::shared_ptr<CommandProvider> cmd = nullptr);
 
-  /// Enumerate hci* adapters in /sys/class/bluetooth.
-  TestOutput testAdapterEnumeration();
-  /// Read the adapter MAC address.
-  TestOutput testAdapterAddress();
-  /// Inspect rfkill state for bluetooth devices.
-  TestOutput testRfkillState();
-  /// Check adapter power state via hciconfig (if installed).
-  TestOutput testPoweredState();
-  /// Check the BlueZ daemon status (if systemctl available).
-  TestOutput testBluezDaemon();
+    /// Enumerate hci* adapters in /sys/class/bluetooth.
+    TestOutput testAdapterEnumeration();
+    /// Read the adapter MAC address.
+    TestOutput testAdapterAddress();
+    /// Inspect rfkill state for bluetooth devices.
+    TestOutput testRfkillState();
+    /// Check adapter power state via hciconfig (if installed).
+    TestOutput testPoweredState();
+    /// Check the BlueZ daemon status (if systemctl available).
+    TestOutput testBluezDaemon();
 
-  std::vector<std::string> getAvailableTests() override;
-  std::vector<std::string> getPeriodicSafeTests();
-  std::vector<std::string> getOneShotOnlyTests();
+    std::vector<std::string> getAvailableTests() override;
+    std::vector<std::string> getPeriodicSafeTests();
+    std::vector<std::string> getOneShotOnlyTests();
 
-private:
-  std::shared_ptr<SysfsProvider> sysfs_;
-  std::shared_ptr<CommandProvider> cmd_;
-  TestResult runSingleTest(const std::string &testName) override;
+    private:
+    std::shared_ptr<SysfsProvider> sysfs_;
+    std::shared_ptr<CommandProvider> cmd_;
+    TestResult runSingleTest(const std::string& testName) override;
 
-protected:
-  std::vector<TestResult> runAllTests() override;
+    protected:
+    std::vector<TestResult> runAllTests() override;
 };
 
 #endif // BLUETOOTHTESTING_H

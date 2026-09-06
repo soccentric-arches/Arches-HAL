@@ -20,35 +20,35 @@
  * deterministic CI runs; the default constructor uses real sysfs and commands.
  */
 class MipiDsiTesting : public TestBase {
-public:
-  MipiDsiTesting();
-  ~MipiDsiTesting();
+    public:
+    MipiDsiTesting();
+    ~MipiDsiTesting();
 
-  explicit MipiDsiTesting(std::shared_ptr<SysfsProvider> sysfs,
-                          std::shared_ptr<CommandProvider> cmd = nullptr);
+    explicit MipiDsiTesting(std::shared_ptr<SysfsProvider> sysfs,
+                            std::shared_ptr<CommandProvider> cmd = nullptr);
 
-  /// Enumerate DRM cards in /sys/class/drm.
-  TestOutput testDrmCardEnumeration();
-  /// Detect DSI connectors (cardN-DSI-*).
-  TestOutput testDsiConnectorDetection();
-  /// Read connector status (connected/disconnected).
-  TestOutput testConnectorStatus();
-  /// Enumerate backlight devices.
-  TestOutput testBacklightEnumeration();
-  /// Resolve the DSI host driver binding.
-  TestOutput testDsiHostDriverBinding();
+    /// Enumerate DRM cards in /sys/class/drm.
+    TestOutput testDrmCardEnumeration();
+    /// Detect DSI connectors (cardN-DSI-*).
+    TestOutput testDsiConnectorDetection();
+    /// Read connector status (connected/disconnected).
+    TestOutput testConnectorStatus();
+    /// Enumerate backlight devices.
+    TestOutput testBacklightEnumeration();
+    /// Resolve the DSI host driver binding.
+    TestOutput testDsiHostDriverBinding();
 
-  std::vector<std::string> getAvailableTests() override;
-  std::vector<std::string> getPeriodicSafeTests();
-  std::vector<std::string> getOneShotOnlyTests();
+    std::vector<std::string> getAvailableTests() override;
+    std::vector<std::string> getPeriodicSafeTests();
+    std::vector<std::string> getOneShotOnlyTests();
 
-private:
-  std::shared_ptr<SysfsProvider> sysfs_;
-  std::shared_ptr<CommandProvider> cmd_;
-  TestResult runSingleTest(const std::string &testName) override;
+    private:
+    std::shared_ptr<SysfsProvider> sysfs_;
+    std::shared_ptr<CommandProvider> cmd_;
+    TestResult runSingleTest(const std::string& testName) override;
 
-protected:
-  std::vector<TestResult> runAllTests() override;
+    protected:
+    std::vector<TestResult> runAllTests() override;
 };
 
 #endif // MIPIDSITESTING_H

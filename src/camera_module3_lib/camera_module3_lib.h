@@ -23,54 +23,54 @@
  *   - libcamera pipeline: RPi (Raspberry Pi)
  */
 class CameraModule3Testing : public TestBase {
-public:
-  CameraModule3Testing();
-  ~CameraModule3Testing();
+    public:
+    CameraModule3Testing();
+    ~CameraModule3Testing();
 
-  /** @brief Detect IMX708 sensor via libcamera / media-ctl / V4L2 sysfs. */
-  TestOutput testCameraDetection();
+    /** @brief Detect IMX708 sensor via libcamera / media-ctl / V4L2 sysfs. */
+    TestOutput testCameraDetection();
 
-  /** @brief Verify sensor reports 4608×2592 maximum resolution. */
-  TestOutput testSensorResolution();
+    /** @brief Verify sensor reports 4608×2592 maximum resolution. */
+    TestOutput testSensorResolution();
 
-  /** @brief Check PDAF (phase-detection autofocus) availability via libcamera
-   * controls. */
-  TestOutput testAutofocus();
+    /** @brief Check PDAF (phase-detection autofocus) availability via libcamera
+     * controls. */
+    TestOutput testAutofocus();
 
-  /** @brief Verify HDR mode support (staggered capture / tonemapping). */
-  TestOutput testHdrMode();
+    /** @brief Verify HDR mode support (staggered capture / tonemapping). */
+    TestOutput testHdrMode();
 
-  /** @brief Attempt a single still capture via libcamera-still or v4l2-ctl. */
-  TestOutput testStillCapture();
+    /** @brief Attempt a single still capture via libcamera-still or v4l2-ctl. */
+    TestOutput testStillCapture();
 
-  /** @brief Verify MIPI CSI-2 interface via RP1 Unicam sysfs / dmesg. */
-  TestOutput testMipiCsiInterface();
+    /** @brief Verify MIPI CSI-2 interface via RP1 Unicam sysfs / dmesg. */
+    TestOutput testMipiCsiInterface();
 
-  /** @brief Check supported pixel formats (RAW10, RGB888, YUV420, etc.). */
-  TestOutput testPixelFormats();
+    /** @brief Check supported pixel formats (RAW10, RGB888, YUV420, etc.). */
+    TestOutput testPixelFormats();
 
-  /** @brief Verify camera video streaming at 1080p30 via libcamera-vid. */
-  TestOutput testVideoStreaming();
+    /** @brief Verify camera video streaming at 1080p30 via libcamera-vid. */
+    TestOutput testVideoStreaming();
 
-  std::vector<std::string> getAvailableTests() override;
-  /// @brief Constructor with injected providers for deterministic testing
-  explicit CameraModule3Testing(std::shared_ptr<SysfsProvider> sysfs,
-                                std::shared_ptr<CommandProvider> cmd = nullptr);
+    std::vector<std::string> getAvailableTests() override;
+    /// @brief Constructor with injected providers for deterministic testing
+    explicit CameraModule3Testing(std::shared_ptr<SysfsProvider> sysfs,
+                                  std::shared_ptr<CommandProvider> cmd = nullptr);
 
-  /// @brief Get periodic-safe test names (passive health checks only)
-  std::vector<std::string> getPeriodicSafeTests() const;
+    /// @brief Get periodic-safe test names (passive health checks only)
+    std::vector<std::string> getPeriodicSafeTests() const;
 
-  /// @brief Get one-shot only test names (destructive/state-changing)
-  std::vector<std::string> getOneShotOnlyTests() const;
+    /// @brief Get one-shot only test names (destructive/state-changing)
+    std::vector<std::string> getOneShotOnlyTests() const;
 
-private:
-  std::shared_ptr<SysfsProvider> sysfs_;
-  std::shared_ptr<CommandProvider> cmd_;
+    private:
+    std::shared_ptr<SysfsProvider> sysfs_;
+    std::shared_ptr<CommandProvider> cmd_;
 
-  TestResult runSingleTest(const std::string &testName) override;
+    TestResult runSingleTest(const std::string& testName) override;
 
-protected:
-  std::vector<TestResult> runAllTests() override;
+    protected:
+    std::vector<TestResult> runAllTests() override;
 };
 
 #endif // CAMERAMODULE3TESTING_H

@@ -16,215 +16,214 @@
  * functionalities.
  */
 class VisionAcceleratorTesting : public TestBase {
-public: /**
-         * @brief Constructor for VisionAcceleratorTesting
-         * @return TestOutput with pass/fail and data
-         */
-        /**
-         * @brief Function VisionAcceleratorTesting
-         * @return TestOutput with pass/fail and data
-         */
+    public: /**
+             * @brief Constructor for VisionAcceleratorTesting
+             * @return TestOutput with pass/fail and data
+             */
+            /**
+             * @brief Function VisionAcceleratorTesting
+             * @return TestOutput with pass/fail and data
+             */
 
-  VisionAcceleratorTesting();
-  /**
-   * @brief Constructor for VisionAcceleratorTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Destructor for class
+    VisionAcceleratorTesting();
+    /**
+     * @brief Constructor for VisionAcceleratorTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Destructor for class
 
-   */
-  ~VisionAcceleratorTesting();
-  /**
-   * @brief Constructor for VisionAcceleratorTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the dualvectorprocessingunits functionality
-   * @return TestOutput with pass/fail and data
-   */
+     */
+    ~VisionAcceleratorTesting();
+    /**
+     * @brief Constructor for VisionAcceleratorTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the dualvectorprocessingunits functionality
+     * @return TestOutput with pass/fail and data
+     */
 
-  TestOutput testDualVectorProcessingUnits();
-  /**
-   * @brief Constructor for VisionAcceleratorTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the vectorcoresineachvpu functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testVectorCoresInEachVpu();
-  /**
-   * @brief Constructor for VisionAcceleratorTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the vliwslots functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testVliwSlots();
-  /**
-   * @brief Constructor for VisionAcceleratorTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the scalarexecutionunits functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testScalarExecutionUnits();
-  /**
-   * @brief Constructor for VisionAcceleratorTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the vectorexecutionunits functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testVectorExecutionUnits();
-  /**
-   * @brief Constructor for VisionAcceleratorTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the dmaengine1functionality functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testDmaEngine1Functionality();
-  /**
-   * @brief Constructor for VisionAcceleratorTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the dmaengine2functionality functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testDmaEngine2Functionality();
-  /**
-   * @brief Constructor for VisionAcceleratorTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the 5dimensionaladdressing functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput test5dimensionalAddressing();
-  /**
-   * @brief Constructor for VisionAcceleratorTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the 16hardwarechannelsperengine functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput test16HardwareChannelsPerEngine();
-  /**
-   * @brief Constructor for VisionAcceleratorTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the dmabandwidthtesting functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testDmaBandwidthTesting();
-  /**
-   * @brief Constructor for VisionAcceleratorTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the dmalatencytesting functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testDmaLatencyTesting();
-  /**
-   * @brief Constructor for VisionAcceleratorTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the computervisionalgorithms functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testComputerVisionAlgorithms();
-  /**
-   * @brief Constructor for VisionAcceleratorTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the imageprocessingpipelines functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testImageProcessingPipelines();
-  /**
-   * @brief Constructor for VisionAcceleratorTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the featuredetection functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testFeatureDetection();
-  /**
-   * @brief Constructor for VisionAcceleratorTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the opticalflow functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testOpticalFlow();
-  /**
-   * @brief Constructor for VisionAcceleratorTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the stereodisparity functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testStereoDisparity();
-  /**
-   * @brief Constructor for VisionAcceleratorTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the pvapowerconsumption functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testPvaPowerConsumption();
+    TestOutput testDualVectorProcessingUnits();
+    /**
+     * @brief Constructor for VisionAcceleratorTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the vectorcoresineachvpu functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testVectorCoresInEachVpu();
+    /**
+     * @brief Constructor for VisionAcceleratorTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the vliwslots functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testVliwSlots();
+    /**
+     * @brief Constructor for VisionAcceleratorTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the scalarexecutionunits functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testScalarExecutionUnits();
+    /**
+     * @brief Constructor for VisionAcceleratorTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the vectorexecutionunits functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testVectorExecutionUnits();
+    /**
+     * @brief Constructor for VisionAcceleratorTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the dmaengine1functionality functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testDmaEngine1Functionality();
+    /**
+     * @brief Constructor for VisionAcceleratorTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the dmaengine2functionality functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testDmaEngine2Functionality();
+    /**
+     * @brief Constructor for VisionAcceleratorTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the 5dimensionaladdressing functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput test5dimensionalAddressing();
+    /**
+     * @brief Constructor for VisionAcceleratorTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the 16hardwarechannelsperengine functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput test16HardwareChannelsPerEngine();
+    /**
+     * @brief Constructor for VisionAcceleratorTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the dmabandwidthtesting functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testDmaBandwidthTesting();
+    /**
+     * @brief Constructor for VisionAcceleratorTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the dmalatencytesting functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testDmaLatencyTesting();
+    /**
+     * @brief Constructor for VisionAcceleratorTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the computervisionalgorithms functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testComputerVisionAlgorithms();
+    /**
+     * @brief Constructor for VisionAcceleratorTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the imageprocessingpipelines functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testImageProcessingPipelines();
+    /**
+     * @brief Constructor for VisionAcceleratorTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the featuredetection functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testFeatureDetection();
+    /**
+     * @brief Constructor for VisionAcceleratorTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the opticalflow functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testOpticalFlow();
+    /**
+     * @brief Constructor for VisionAcceleratorTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the stereodisparity functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testStereoDisparity();
+    /**
+     * @brief Constructor for VisionAcceleratorTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the pvapowerconsumption functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testPvaPowerConsumption();
 
-  /**
-   * @brief Get list of all available test names
-   * @return Vector of test names
-   */
-  std::vector<std::string> getAvailableTests() override;
+    /**
+     * @brief Get list of all available test names
+     * @return Vector of test names
+     */
+    std::vector<std::string> getAvailableTests() override;
 
-  /**
-   * @brief Get list of all available test names
-   * @return Vector of test names
-   */
+    /**
+     * @brief Get list of all available test names
+     * @return Vector of test names
+     */
 
-  /**
-   * @brief Run a single test by name
-   * @param testName Name of the test to run
-   * @return Test result with timing
-   */
-  /// @brief Constructor with injected providers for deterministic testing
-  explicit VisionAcceleratorTesting(
-      std::shared_ptr<SysfsProvider> sysfs,
-      std::shared_ptr<CommandProvider> cmd = nullptr);
+    /**
+     * @brief Run a single test by name
+     * @param testName Name of the test to run
+     * @return Test result with timing
+     */
+    /// @brief Constructor with injected providers for deterministic testing
+    explicit VisionAcceleratorTesting(std::shared_ptr<SysfsProvider> sysfs,
+                                      std::shared_ptr<CommandProvider> cmd = nullptr);
 
-  /// @brief Get periodic-safe test names (passive health checks only)
-  std::vector<std::string> getPeriodicSafeTests() const;
+    /// @brief Get periodic-safe test names (passive health checks only)
+    std::vector<std::string> getPeriodicSafeTests() const;
 
-  /// @brief Get one-shot only test names (destructive/state-changing)
-  std::vector<std::string> getOneShotOnlyTests() const;
+    /// @brief Get one-shot only test names (destructive/state-changing)
+    std::vector<std::string> getOneShotOnlyTests() const;
 
-private:
-  std::shared_ptr<SysfsProvider> sysfs_;
-  std::shared_ptr<CommandProvider> cmd_;
+    private:
+    std::shared_ptr<SysfsProvider> sysfs_;
+    std::shared_ptr<CommandProvider> cmd_;
 
-  TestResult runSingleTest(const std::string &testName) override;
+    TestResult runSingleTest(const std::string& testName) override;
 
-protected:
-  std::vector<TestResult> runAllTests() override;
+    protected:
+    std::vector<TestResult> runAllTests() override;
 };
 
 #endif // VISIONACCELERATORTESTING_H

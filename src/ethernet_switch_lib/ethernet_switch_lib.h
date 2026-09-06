@@ -19,134 +19,133 @@
  * functionalities.
  */
 class EthernetSwitchTesting : public TestBase {
-public: /**
-         * @brief Constructor for EthernetSwitchTesting
-         * @return TestOutput with pass/fail and data
-         */
-        /**
-         * @brief Function EthernetSwitchTesting
-         * @return TestOutput with pass/fail and data
-         */
+    public: /**
+             * @brief Constructor for EthernetSwitchTesting
+             * @return TestOutput with pass/fail and data
+             */
+            /**
+             * @brief Function EthernetSwitchTesting
+             * @return TestOutput with pass/fail and data
+             */
 
-  EthernetSwitchTesting();
-  /**
-   * @brief Constructor for EthernetSwitchTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Destructor for class
+    EthernetSwitchTesting();
+    /**
+     * @brief Constructor for EthernetSwitchTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Destructor for class
 
-   */
-  ~EthernetSwitchTesting();
-  /**
-   * @brief Constructor for EthernetSwitchTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the switchportfunctionality functionality
-   * @return TestOutput with pass/fail and data
-   */
+     */
+    ~EthernetSwitchTesting();
+    /**
+     * @brief Constructor for EthernetSwitchTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the switchportfunctionality functionality
+     * @return TestOutput with pass/fail and data
+     */
 
-  TestOutput testSwitchPortFunctionality();
-  /**
-   * @brief Constructor for EthernetSwitchTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the switchforwardingtable functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testSwitchForwardingTable();
-  /**
-   * @brief Constructor for EthernetSwitchTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the switchvlansupport functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testSwitchVlanSupport();
-  /**
-   * @brief Constructor for EthernetSwitchTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the switchqos functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testSwitchQos();
-  /**
-   * @brief Constructor for EthernetSwitchTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the switchportmirroring functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testSwitchPortMirroring();
-  /**
-   * @brief Constructor for EthernetSwitchTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the switchstatistics functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testSwitchStatistics();
-  /**
-   * @brief Constructor for EthernetSwitchTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the redundantswitchoperation functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testRedundantSwitchOperation();
-  /**
-   * @brief Constructor for EthernetSwitchTesting
-   * @return TestOutput with pass/fail and data
-   */
-  /**
-   * @brief Tests the switchfailover functionality
-   * @return TestOutput with pass/fail and data
-   */
-  TestOutput testSwitchFailover();
+    TestOutput testSwitchPortFunctionality();
+    /**
+     * @brief Constructor for EthernetSwitchTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the switchforwardingtable functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testSwitchForwardingTable();
+    /**
+     * @brief Constructor for EthernetSwitchTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the switchvlansupport functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testSwitchVlanSupport();
+    /**
+     * @brief Constructor for EthernetSwitchTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the switchqos functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testSwitchQos();
+    /**
+     * @brief Constructor for EthernetSwitchTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the switchportmirroring functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testSwitchPortMirroring();
+    /**
+     * @brief Constructor for EthernetSwitchTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the switchstatistics functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testSwitchStatistics();
+    /**
+     * @brief Constructor for EthernetSwitchTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the redundantswitchoperation functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testRedundantSwitchOperation();
+    /**
+     * @brief Constructor for EthernetSwitchTesting
+     * @return TestOutput with pass/fail and data
+     */
+    /**
+     * @brief Tests the switchfailover functionality
+     * @return TestOutput with pass/fail and data
+     */
+    TestOutput testSwitchFailover();
 
-  /**
-   * @brief Get list of all available test names
-   * @return Vector of test names
-   */
-  std::vector<std::string> getAvailableTests() override;
+    /**
+     * @brief Get list of all available test names
+     * @return Vector of test names
+     */
+    std::vector<std::string> getAvailableTests() override;
 
-  /**
-   * @brief Get list of all available test names
-   * @return Vector of test names
-   */
+    /**
+     * @brief Get list of all available test names
+     * @return Vector of test names
+     */
 
-  /**
-   * @brief Run a single test by name
-   * @param testName Name of the test to run
-   * @return Test result with timing
-   */
-  /// @brief Constructor with injected providers for deterministic testing
-  explicit EthernetSwitchTesting(
-      std::shared_ptr<SysfsProvider> sysfs,
-      std::shared_ptr<CommandProvider> cmd = nullptr);
+    /**
+     * @brief Run a single test by name
+     * @param testName Name of the test to run
+     * @return Test result with timing
+     */
+    /// @brief Constructor with injected providers for deterministic testing
+    explicit EthernetSwitchTesting(std::shared_ptr<SysfsProvider> sysfs,
+                                   std::shared_ptr<CommandProvider> cmd = nullptr);
 
-  /// @brief Get periodic-safe test names (passive health checks only)
-  std::vector<std::string> getPeriodicSafeTests() const;
+    /// @brief Get periodic-safe test names (passive health checks only)
+    std::vector<std::string> getPeriodicSafeTests() const;
 
-  /// @brief Get one-shot only test names (destructive/state-changing)
-  std::vector<std::string> getOneShotOnlyTests() const;
+    /// @brief Get one-shot only test names (destructive/state-changing)
+    std::vector<std::string> getOneShotOnlyTests() const;
 
-private:
-  std::shared_ptr<SysfsProvider> sysfs_;
-  std::shared_ptr<CommandProvider> cmd_;
+    private:
+    std::shared_ptr<SysfsProvider> sysfs_;
+    std::shared_ptr<CommandProvider> cmd_;
 
-  TestResult runSingleTest(const std::string &testName) override;
+    TestResult runSingleTest(const std::string& testName) override;
 
-protected:
-  std::vector<TestResult> runAllTests() override;
+    protected:
+    std::vector<TestResult> runAllTests() override;
 };
 
 #endif // ETHERNETSWITCHTESTING_H
