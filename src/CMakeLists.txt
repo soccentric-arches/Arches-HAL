@@ -1,7 +1,23 @@
 # Create lib_base library
-add_library(lib_base lib_base.cpp lib_base.h)
+#
+# hal_instrumentation.cpp is part of THIS library, not a separate one: the 36
+# standalone test binaries link lib_base directly rather than the aggregate
+# acu_full_test, and lib_base's fault path calls into it. Keeping it in another
+# target left every one of them with undefined references.
+add_library(lib_base
+  lib_base.cpp lib_base.h
+  instrumentation/hal_instrumentation.cpp instrumentation/hal_instrumentation.h)
 target_include_directories(lib_base PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(lib_base Threads::Threads)
+
+# Optional alarm reporting (Task.md E-05). QUIET and optional: without the
+# package the no-op branch compiles and every consumer is unchanged.
+find_package(instrumentation QUIET)
+if(instrumentation_FOUND)
+  instrumentation_generate_client(lib_base PROTOS istate.proto)
+  target_link_libraries(lib_base instrumentation::client_deps)
+  target_compile_definitions(lib_base PRIVATE ARCHES_WITH_INSTRUMENTATION)
+endif()
 install(
   TARGETS lib_base
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}

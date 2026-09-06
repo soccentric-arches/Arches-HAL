@@ -5,6 +5,7 @@
  * @copyright (C) Soccentric LLC */
 
 #include "lib_base.h"
+#include "instrumentation/hal_instrumentation.h"
 #include <chrono>
 #include <iostream>
 #include <stdexcept>
@@ -25,6 +26,9 @@ std::vector<TestResult> TestBase::runAllTestsSafe() {
         for (auto& r : results) {
             prepareResult(r);
         }
+        // The module ran without faulting, so clear any fault alarm it raised
+        // earlier. Same id and owner as the raise, or it does not clear.
+        arches::hal::instrumentation::clear(arches::hal::instrumentation::kModuleFault);
         return results;
     } catch (const std::exception& ex) {
         TestResult err;
@@ -35,6 +39,10 @@ std::vector<TestResult> TestBase::runAllTestsSafe() {
         err.output.error_message = std::string("Exception in runAllTests: ") + ex.what();
         prepareResult(err);
         std::cerr << "[TestBase] " << err.output.error_message << "\n";
+        // R5: a module fault is a condition an application declares. Non-fatal
+        // and a no-op when instrumentation is absent (Task.md E-05).
+        arches::hal::instrumentation::raise(arches::hal::instrumentation::kModuleFault,
+                                            err.output.error_message);
         return {err};
     } catch (...) {
         TestResult err;
@@ -45,6 +53,8 @@ std::vector<TestResult> TestBase::runAllTestsSafe() {
         err.output.error_message = "Unknown exception in runAllTests";
         prepareResult(err);
         std::cerr << "[TestBase] " << err.output.error_message << "\n";
+        arches::hal::instrumentation::raise(arches::hal::instrumentation::kModuleFault,
+                                            err.output.error_message);
         return {err};
     }
 }

@@ -168,6 +168,27 @@ set_target_properties(
   acu_full_test_shared PROPERTIES VERSION ${PROJECT_VERSION}
                                   SOVERSION ${PROJECT_VERSION_MAJOR})
 
+# ---------------------------------------------------------------------------
+# Optional Arches-Instrumentation alarm reporting (Task.md E-05)
+#
+# QUIET and optional on purpose. HAL is linked by Arches-Client and by 36
+# standalone test binaries; none of them may gain a hard dependency on the
+# instrumentation package being installed. Without it,
+# src/instrumentation/hal_instrumentation.cpp compiles its no-op branch and
+# every call site is unchanged.
+# ---------------------------------------------------------------------------
+find_package(instrumentation QUIET)
+if(instrumentation_FOUND)
+  message(STATUS "Arches-Instrumentation found: HAL alarm reporting enabled")
+  foreach(_hal_target acu_full_test acu_full_test_shared)
+    instrumentation_generate_client(${_hal_target} PROTOS istate.proto)
+    target_link_libraries(${_hal_target} instrumentation::client_deps)
+    target_compile_definitions(${_hal_target} PRIVATE ARCHES_WITH_INSTRUMENTATION)
+  endforeach()
+else()
+  message(STATUS "Arches-Instrumentation not found: HAL alarm reporting compiled out")
+endif()
+
 # Install rules for aggregate libraries and headers
 install(TARGETS acu_full_test ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
 install(TARGETS acu_full_test_shared
