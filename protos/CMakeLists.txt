@@ -42,7 +42,14 @@ find_package(gRPC CONFIG QUIET)
 if(gRPC_FOUND)
   message(STATUS "[hal_protos] gRPC ${gRPC_VERSION} via CMake config")
   set(HAL_GRPC_LIBRARIES gRPC::grpc++ gRPC::grpc)
-  get_target_property(GRPC_CPP_PLUGIN gRPC::grpc_cpp_plugin LOCATION)
+  # Cross builds (Yocto) never define gRPC::grpc_cpp_plugin because
+  # gRPCConfig.cmake skips the plugin targets when CMAKE_CROSSCOMPILING; use
+  # -DGRPC_CPP_PLUGIN=<native plugin> or search the host PATH instead.
+  if(TARGET gRPC::grpc_cpp_plugin)
+    get_target_property(GRPC_CPP_PLUGIN gRPC::grpc_cpp_plugin LOCATION)
+  elseif(NOT GRPC_CPP_PLUGIN)
+    find_program(GRPC_CPP_PLUGIN grpc_cpp_plugin REQUIRED)
+  endif()
 else()
   find_package(PkgConfig REQUIRED)
   pkg_check_modules(GRPCPP REQUIRED grpc++)
